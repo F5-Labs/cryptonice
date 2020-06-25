@@ -3,11 +3,11 @@
 
 import json, socket, ipaddress
 
-from f5labsscanner.modules.gettls import tls_scan
-from f5labsscanner.modules.gethttp import get_http
-from f5labsscanner.modules.getdns import get_dns
-from f5labsscanner.modules.gethttp2 import check_http2
-from f5labsscanner.checkport import port_open
+from cryptonice.modules.gettls import tls_scan
+from cryptonice.modules.gethttp import get_http
+from cryptonice.modules.getdns import get_dns
+from cryptonice.modules.gethttp2 import check_http2
+from cryptonice.checkport import port_open
 from datetime import datetime
 
 import psutil, os
