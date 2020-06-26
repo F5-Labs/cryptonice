@@ -3,14 +3,14 @@ Built using the sslyze API and ssl, http-client and dns libraries, _cryptonice_ 
 
 ### User Guide
 
-_cryptonice_ requires a domain name (like www.github.com) and either a _DEFAULT_ or _CUSTOM_ tag to run. 
+_cryptonice_ requires a domain name (like www.github.com).
 
-_DEFAULT_ will result in the following dictionary of commands being run.
+Providing only a domain name and no other command line input will result in the following default dictionary of commands being run.
    
     {
-	    "id": "test.py",
+	    "id": "default",
 	    "port": 443,
-	    "scans": ["TLS", "HTTP", "DNS"],
+	    "scans": ["TLS", "HTTP", "HTTP2", "DNS"],
 	    "tls_params": ["certificate_information", "ssl_2_0_cipher_suites", "ssl_3_0_cipher_suites","tls_1_0_cipher_suites", "tls_1_1_cipher_suites", "tls_1_2_cipher_suites","tls_1_3_cipher_suites", "http_headers"],
 	    "http_body": false,
 	    "force_redirect": true,
@@ -18,10 +18,11 @@ _DEFAULT_ will result in the following dictionary of commands being run.
 	    "targets": ["www.github.com"]
     }
 
-_CUSTOM_ allows the user to further specify the commands to their liking. The optional commands are:
+The user can also choose to specify custom commands. Each custom command must be preceded with the name of the option (ex: to specify the scans TLS and HTTP to run, the user must add _--scans TLS HTTP_ to the command line parameters)
 - _--PORT_: port to perform the scan on (default = 443)
-- _--SCANS_: scans to perform (options: "TLS" scan, "HTTP" headers, "HTTP2" check, "DNS" data)
-- _--TLS_PARAMETERS_: TLS specific scans to perform:
+- _--SCANS_: scans to perform 
+    - _TLS_ scan, _HTTP_ headers, _HTTP2_ check, _DNS_ data
+- _--TLS_PARAMETERS_: TLS specific scans to perform (should be listed as specified below, with no commas between options):
     - all, no_vuln_tests, certificate_info, ssl_2_0_cipher_suites, ssl_3_0_cipher_suites, tls_1_0_cipher_suites,
       tls_1_1_cipher_suites, tls_1_2_cipher_suites, tls_1_3_cipher_suites, tls_compression,
       tls_1_3_early_data, openssl_ccs_injection, heartbleed, robot, tls_fallback_scsv,
@@ -35,6 +36,11 @@ _CUSTOM_ allows the user to further specify the commands to their liking. The op
 
 ### Output
 _cryptonice_ generates a JSON output file with the information requested by the input parameters. Output files will be named after the domain name and port provided (ex: target = www.github.com, port = 443, output = www.github.com-443.json)
+
+
+### Utilizing the library in your own code
+_cryptonice_ can be used within other projects as well. An example of this functionality can be found in the simple test.py script. In that short script, the program input is a JSON file with the necessary commands. The data is read into a dictionary and sent to the scanner_driver function in cryptonice/scanner. Individual modules can also be called from outside functions, and will return a dictionary of the results. Further information on function parameters can be found in the code comments for each function.
+
 
 ### Limitations
 This code does not currently have the capability to scan a server based on an IP address and an SNI. Instead, the user must supply a hostname and internally the code will do a DNS resolution. This may lead to discrepancies in the IP address scanned in the TLS portions and the HTTP headers section. 

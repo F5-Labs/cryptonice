@@ -10,10 +10,6 @@ from cryptonice.modules.gethttp2 import check_http2
 from cryptonice.checkport import port_open
 from datetime import datetime
 
-import psutil, os
-
-process = psutil.Process(os.getpid())
-
 tls_command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
                     'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
@@ -308,7 +304,6 @@ def scanner_driver(input_data):
         print('\nScans complete')
         print('-------------------------------------')
         print(f'Total run time: {end_time - start_time}')
-        print(f'Memory consumed: {process.memory_info().rss / 1024} MB')
 
     return scan_data, hostname
 
