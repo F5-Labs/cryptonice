@@ -8,6 +8,7 @@ default_dict = {'id': 'default',
                                "tls_1_0_cipher_suites", "tls_1_1_cipher_suites", "tls_1_2_cipher_suites",
                                "tls_1_3_cipher_suites", "http_headers"],
                 'http_body': False,
+                'print_out': True,
                 'force_redirect': True
                 }
 
@@ -23,7 +24,6 @@ no_vuln_tests = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_su
 def main():
     parser = argparse.ArgumentParser(description="Supply commands to f5labsscanner")
     parser.add_argument("domain", nargs='+', help="Domain name to scan", type=str)
-    parser.add_argument("scan_type", help="DEFAULT/default or CUSTOM/custom", type=str)
     parser.add_argument("--port", help="port to perform scans on (TLS=443)", type=int)
     parser.add_argument("--scans", nargs='+', help="scans to run: TLS, HTTP, DNS, HTTP2")
     parser.add_argument("--tls_parameters", nargs='+',
@@ -41,19 +41,16 @@ def main():
 
     args = parser.parse_args()
     domain_name = args.domain
-    scan_type = args.scan_type
+    if not domain_name:
+        parser.error('domain (like www.google.com or f5.com) is required')
 
-    print_to_console = True
-    if args.print_out == "N" or args.print_out == "n":
-        print_to_console = False
-
-    if scan_type == "DEFAULT" or scan_type == "default":
+    # if only domain name was supplied, run a default scan
+    if not args.port and not args.scans and not args.tls_parameters and not args.http_body \
+            and not args.force_redirect and not args.print_out and not args.json_out:
         input_data = default_dict
-        input_data.update({'print_out': print_to_console})
         input_data.update({'targets': domain_name})
         output_data, hostname = scanner_driver(input_data)
-
-    elif scan_type == "CUSTOM" or scan_type == "custom":
+    else:
         input_data = {}
         input_data.update({'id': 'custom'})
 
@@ -62,7 +59,10 @@ def main():
             port = 443
         input_data.update({'port': port})
 
-        input_data.update({'scans': args.scans})
+        if not args.scans:
+            input_data.update({'scans': []})
+        else:
+            input_data.update({'scans': args.scans})
 
         tls_parameters = args.tls_parameters
         if not tls_parameters:
@@ -86,13 +86,14 @@ def main():
         else:
             input_data.update({'force_redirect': True})
 
+        print_to_console = True
+        if args.print_out == "N" or args.print_out == "n":
+            print_to_console = False
         input_data.update({'print_out': print_to_console})
+
         input_data.update({'targets': domain_name})
 
         output_data, hostname = scanner_driver(input_data)
-
-    else:
-        print('ERROR: Incorrect scan type. Options are DEFAULT/default or CUSTOM/custom')
 
     generate_json = True
     if args.json_out == "N" or args.json_out == "n":

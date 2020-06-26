@@ -3,16 +3,12 @@
 
 import json, socket, ipaddress
 
-from f5labsscanner.modules.gettls import tls_scan
-from f5labsscanner.modules.gethttp import get_http
-from f5labsscanner.modules.getdns import get_dns
-from f5labsscanner.modules.gethttp2 import check_http2
-from f5labsscanner.checkport import port_open
+from cryptonice.modules.gettls import tls_scan
+from cryptonice.modules.gethttp import get_http
+from cryptonice.modules.getdns import get_dns
+from cryptonice.modules.gethttp2 import check_http2
+from cryptonice.checkport import port_open
 from datetime import datetime
-
-import psutil, os
-
-process = psutil.Process(os.getpid())
 
 tls_command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
@@ -308,7 +304,6 @@ def scanner_driver(input_data):
         print('\nScans complete')
         print('-------------------------------------')
         print(f'Total run time: {end_time - start_time}')
-        print(f'Memory consumed: {process.memory_info().rss / 1024} MB')
 
     return scan_data, hostname
 
