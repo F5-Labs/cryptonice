@@ -16,17 +16,28 @@ tls_command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher
                     'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
 
 
-def writeToJSONFile(filename, data):
+def writeToJSONFile(path, filename, data):
     """
     Write contents of dictionary with hostname: certificate key-value pairs to a json file
-    :param filename: name of destination file
+    :param path: path to destination file
+    :param filename: name of destination filegit ad
     :param data: dictionary with key value pairs
     :return: None
     """
-    filePathNameWExt = './' + filename + '.json'
+    if "/" in filename:
+        filename = filename.split("/", 1)[0]
+
+    filePathNameWExt = './' + path + '/' + filename + '.json'
     with open(filePathNameWExt, 'w') as fp:
-        json.dump(data, fp)
-    print(f'Outputting data to {filePathNameWExt}')
+        json.dump(data, fp, default=print_errors)
+    print(f'\nOutputting data to {filePathNameWExt}')
+
+
+def print_errors(error):
+    try:
+        return error.__str__()
+    except:
+        return "Not JSON serializable"
 
 
 def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_httptohttps, force_redirect):
