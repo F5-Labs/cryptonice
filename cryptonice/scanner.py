@@ -16,7 +16,7 @@ tls_command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher
                     'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
 
 
-def writeToJSONFile(path, filename, data):
+def writeToJSONFile(filename, data):
     """
     Write contents of dictionary with hostname: certificate key-value pairs to a json file
     :param path: path to destination file
@@ -27,7 +27,7 @@ def writeToJSONFile(path, filename, data):
     if "/" in filename:
         filename = filename.split("/", 1)[0]
 
-    filePathNameWExt = './' + path + '/' + filename + '.json'
+    filePathNameWExt = './' + filename + '.json'
     with open(filePathNameWExt, 'w') as fp:
         json.dump(data, fp, default=print_errors)
     print(f'\nOutputting data to {filePathNameWExt}')
@@ -55,7 +55,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
         if isinstance(http2_data, str):
             print(http2_data)
         elif http2_data:
-            print(f'HTTP/2 Supported {http2_data.get("http2")}')
+            print(f'HTTP/2 Supported: {http2_data.get("http2")}')
         print('')
 
         try:
