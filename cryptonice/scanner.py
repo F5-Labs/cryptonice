@@ -49,6 +49,9 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
     if tls_data == "Port closed - no TLS data available":
         print('***TLS Results***')
         print(f'Port closed - no TLS data available')
+    elif tls_data == "No TLS scan parameters provided":
+        print('***TLS Results***')
+        print('No TLS scan parameters provided')
     elif tls_data:
         print(f'Selected Cipher Suite: {tls_data.get("cipher_suite_supported")}')
         print(f'Selected TLS Version: {tls_data.get("highest_tls_version_supported")}')
@@ -297,15 +300,15 @@ def scanner_driver(input_data):
                     # List to hold desired ScanCommands for later
                     commands_to_run = []
                     # Read in command list
-                    if input_data['tls_params'] is not None:
-                        for param in input_data['tls_params']:
+                    try:
+                        tls_params = input_data['tls_params']
+                        for param in tls_params:
                             if param in tls_command_list:
                                 commands_to_run.append(str(param))
                         tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
-                    else:
+                    except KeyError:
                         tls_data = "No TLS scan parameters provided"
                 else:
-                    print("Port closed - no TLS data available")
                     tls_data = "Port closed - no TLS data available"
 
             if 'HTTP2' in input_data['scans']:
