@@ -99,8 +99,12 @@ def main():
     if args.json_out == "N" or args.json_out == "n":
         generate_json = False
 
-    if generate_json:
-        writeToJSONFile(hostname, output_data)
+    # The command line version of cryptonice should never get None back
+    if output_data is not None and hostname is not None:
+        if generate_json:
+            writeToJSONFile(hostname, output_data)
+    else:
+        print("Error with input - scan was not completed")
 
 
 if __name__ == "__main__":

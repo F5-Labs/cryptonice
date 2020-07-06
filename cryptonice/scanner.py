@@ -164,7 +164,8 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
 
         print(f'Valid From:\t\t {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t {cert_0.get("valid_until")}')
-        print(f'Certificate is valid:\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+        print(
+            f'Certificate is valid:\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
         print('')
 
         try:
@@ -192,11 +193,22 @@ def scanner_driver(input_data):
     if port is None:
         port = 443  # default to 443 if none is supplied in input file
 
+    try:
+        targets_present = input_data['targets']
+    except KeyError:
+        print("ERROR: No target specified")
+        return None, None
+    try:
+        scans_supplied = input_data['scans']
+    except KeyError:
+        print("ERROR: No scan commands supplied")
+        return None, None
+
     # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
     # HTTP redirect checks
     try:
         host_sni = input_data['sni']
-    except:
+    except KeyError:
         host_sni = ""
 
     tls_data = {}
@@ -249,7 +261,10 @@ def scanner_driver(input_data):
         # Now we begin the proper scans based on the port we've been asked to connect to
         target_portopen, target_tlsopen = port_open(ip_address, port)
 
-        force_redirect = input_data['force_redirect']
+        try:
+            force_redirect = input_data['force_redirect']
+        except KeyError:
+            force_redirect = True
 
         if target_portopen:
             print(f'{ip_address}:{port}: OPEN')
@@ -260,8 +275,13 @@ def scanner_driver(input_data):
             #     # Now we also pass in whether TLS is available so we know whether to try TLS regardless of the port
             #     redirection_results = redirect_hostname(hostname, port, target_tlsopen)
 
-            http_body = input_data['http_body']  # boolean variable for HTTP pages info
-            redirection_results, http_data = get_http(ip_address, host_sni, port, target_tlsopen, http_body, force_redirect)
+            try:
+                http_body = input_data['http_body']  # boolean variable for HTTP pages info
+            except KeyError:
+                http_body = False
+
+            redirection_results, http_data = get_http(ip_address, host_sni, port, target_tlsopen, http_body,
+                                                      force_redirect)
 
             if redirection_results == 'ERROR: Connection failed':
                 str_host = hostname  # default to original hostname if redirects failed
@@ -277,10 +297,13 @@ def scanner_driver(input_data):
                     # List to hold desired ScanCommands for later
                     commands_to_run = []
                     # Read in command list
-                    for param in input_data['tls_params']:  # this currently assumes that params are only given for tls
-                        if param in tls_command_list:
-                            commands_to_run.append(str(param))
-                    tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
+                    if input_data['tls_params'] is not None:
+                        for param in input_data['tls_params']:
+                            if param in tls_command_list:
+                                commands_to_run.append(str(param))
+                        tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
+                    else:
+                        tls_data = "No TLS scan parameters provided"
                 else:
                     print("Port closed - no TLS data available")
                     tls_data = "Port closed - no TLS data available"
