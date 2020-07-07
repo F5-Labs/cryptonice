@@ -141,7 +141,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
             pass
 
         print(
-            f'Certificate is valid:\t\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+            f'Certificate is valid:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
         print(f'Valid From:\t\t\t  {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t\t  {cert_0.get("valid_until")}')
         print(
@@ -162,63 +162,55 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
             print(f'\t  {name}')
 
         # Results from vulnerability tests (note: early data test captured in TLS 1.3 section)
-        vuln_tests = tls_data.get('tests')
-        if vuln_tests != {}:
-            print('\nVulnerability Tests')
-            try:
+
+        try:
+            vuln_tests = tls_data.get('tests')
+            print('\nVulnerability Tests:')
+            if vuln_tests.get("compression_supported") is not None:
                 print(f'Supports TLS Compression:\t  {vuln_tests.get("compression_supported")}')
-            except KeyError:
-                pass
-            try:
+            if vuln_tests.get("CVE-2014-0224_vulnerable") is not None:
                 print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
-            except KeyError:
-                pass
-            try:
+            if vuln_tests.get("supports_tls_fallback") is not None:
                 print(f'Supports TLS Fallback:\t\t  {vuln_tests.get("supports_tls_fallback")}')
-            except KeyError:
-                pass
-            try:
+            if vuln_tests.get("vulnerable_to_heartbleed") is not None:
                 print(f'Vulnerable to Heartbleed:\t  {vuln_tests.get("vulnerable_to_heartbleed")}')
-            except KeyError:
-                pass
-            try:
+            if vuln_tests.get('vulnerable_to_robot') is not None:
                 robot = vuln_tests.get('vulnerable_to_robot')
-                if robot:
-                    print(f'Vulnerable to ROBOT:\t\t  {robot[0]}')
-                    print(f'ROBOT Test Result:\t\t  {robot[1]}')
-            except KeyError:
-                pass
+                print(f'Vulnerable to ROBOT:\t\t  {robot[0]}')
+                print(f'ROBOT Test Result:\t\t  {robot[1]}')
+        except:
+            pass
     except:
         pass
 
     # Print HTTP Data
     if force_redirect:
-        print(f'\nHTTP to HTTPS redirect:\t\t {True if b_httptohttps else False}')
+        print(f'\nHTTP to HTTPS redirect:\t\t  {True if b_httptohttps else False}')
 
     if http_data:
         try:
             strict_transport_security = http_data.get("Headers").get("Strict-Transport-Security")
             if strict_transport_security is not None:
-                print(f'HTTP Strict Transport Security:\t True ({strict_transport_security})')
+                print(f'HTTP Strict Transport Security:\t  True ({strict_transport_security})')
             else:
-                print(f'HTTP Strict Transport Security:\t False')
+                print(f'HTTP Strict Transport Security:\t  False')
         except:
             pass
 
         try:
             public_key_pins = http_data.get("Headers").get("Public-Key-Pins")
             if public_key_pins is not None:
-                print(f'HTTP Public Key Pinning:\t True')
+                print(f'HTTP Public Key Pinning:\t  True')
                 for pin in public_key_pins:
                     print(f'\t\t {pin}')
             else:
-                print(f'HTTP Public Key Pinning:\t False')
+                print(f'HTTP Public Key Pinning:\t  False')
             print('')
         except:
             pass
 
         try:
-            print(f'Secure Cookies:\t\t\t {True if http_data.get("Cookies") != "" else False}\n')
+            print(f'Secure Cookies:\t\t\t  {True if http_data.get("Cookies") != "" else False}\n')
         except:
             pass
 
@@ -226,7 +218,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
     try:
         if dns_data.get("DNS").get("CAA"):
             for record in dns_data.get("DNS").get("CAA"):
-                print(f'\t{record}')
+                print(f'\t {record}')
         else:
             print('None')
     except:
