@@ -44,7 +44,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
     print('\n')
     print('RESULTS')
     print('-------------------------------------')
-    print(f'Hostname:\t\t\t\t{str_host}\n')
+    print(f'Hostname:\t\t\t {str_host}\n')
 
     if tls_data == "Port closed - no TLS data available":
         print('***TLS Results***')
@@ -108,7 +108,6 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
             print(f'\nHTTP/2 supported:\t\t  {http2_data.get("http2")}')
         print('')
 
-
     # Print certificate data if it was collected
     try:
         cert_0 = tls_data.get("certificate_info").get("certificate_0")
@@ -141,10 +140,12 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
         except KeyError:
             pass
 
-        print(f'Certificate is valid:\t\t\t{True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+        print(
+            f'Certificate is valid:\t\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
         print(f'Valid From:\t\t\t  {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t\t  {cert_0.get("valid_until")}')
-        print(f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
+        print(
+            f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
         print('')
 
         try:
@@ -158,37 +159,35 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
 
         print(f'Subject Alternative Names:')
         for name in cert_0.get("subject_alt_names"):
-            print(f'\t\t{name}')
+            print(f'\t  {name}')
 
-        try:
-            # Results from vulnerability tests (note: early data test captured in TLS 1.3 section)
-            vuln_tests = tls_data.get('tests')
+        # Results from vulnerability tests (note: early data test captured in TLS 1.3 section)
+        vuln_tests = tls_data.get('tests')
+        if vuln_tests != {}:
             print('\nVulnerability Tests')
             try:
-                print(f'Supports TLS Compression:\t\t {vuln_tests.get("compression_supported")}')
+                print(f'Supports TLS Compression:\t  {vuln_tests.get("compression_supported")}')
             except KeyError:
                 pass
             try:
-                print(f'Vulnerable to CVE-2014-0224:\t\t {vuln_tests.get("CVE-2014-0224_vulnerable")}')
+                print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
             except KeyError:
                 pass
             try:
-                print(f'Supports TLS Fallback:\t\t {vuln_tests.get("supports_tls_fallback")}')
+                print(f'Supports TLS Fallback:\t\t  {vuln_tests.get("supports_tls_fallback")}')
             except KeyError:
                 pass
             try:
-                print(f'Vulnerable to Heartbleed:\t\t {vuln_tests.get("vulnerable_to_heartbleed")}')
+                print(f'Vulnerable to Heartbleed:\t  {vuln_tests.get("vulnerable_to_heartbleed")}')
             except KeyError:
                 pass
             try:
                 robot = vuln_tests.get('vulnerable_to_robot')
                 if robot:
-                    print(f'Vulnerable to ROBOT:\t\t {robot[0]}')
-                    print(f'ROBOT Test Result:\t\t {robot[1]}')
+                    print(f'Vulnerable to ROBOT:\t\t  {robot[0]}')
+                    print(f'ROBOT Test Result:\t\t  {robot[1]}')
             except KeyError:
                 pass
-        except KeyError:
-            pass
     except:
         pass
 
@@ -274,7 +273,6 @@ def scanner_driver(input_data):
         hostname = hostname.replace("http://", "")
         hostname = hostname.replace("https://", "")
         hostname = hostname.replace("/", "")
-
 
         host_path = hostname  # all functions should use host_path for consistency
         if host_sni == "":
