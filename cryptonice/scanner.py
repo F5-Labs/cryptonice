@@ -128,8 +128,8 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
         print('')
 
         try:
-            #Grab the common name from cert_1 (which is the issuer of cert_0)
-            #For some sites, however, only a single cert is returned to the dictionary object
+            # Grab the common name from cert_1 (which is the issuer of cert_0)
+            # For some sites, however, only a single cert is returned to the dictionary object
             print(f'Certificate signed by:\t\t  {cert_1.get("common_name")}')
         except:
             pass
@@ -137,9 +137,8 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
         cert_errors = cert_0.get("certificate_errors")
         print(f'Certificate is trusted:\t\t  {cert_errors.get("cert_trusted")}')
         try:
-            if {cert_errors.get("cert_error")} is not None:
-                print(f'Certificate trust error:\t  {cert_errors.get("cert_error")}')
-        except:
+            print(f'Certificate trust error:\t  {cert_errors.get("cert_error")}')
+        except KeyError:
             pass
 
         print(f'Certificate is in date:\t\t{True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
