@@ -13,7 +13,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="cryptonice",
-    version="0.1.2",
+    version="0.1.3",
     description="Perform TLS scan of single domain",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -32,7 +32,7 @@ setup(
                       "cryptography>=2.6",
                       "nassl>=3.0.0",
                       "dnspython>=1.16.0",
-                      "http-client>=0.1.22",
+                      "http-client>=0.1.21",
                       "tls-parser>=1.2.1",
                       "urllib3>=1.25.9",
                       "ipaddress>=1.0.22"
