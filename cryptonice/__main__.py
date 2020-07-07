@@ -59,11 +59,6 @@ def main():
             port = 443
         input_data.update({'port': port})
 
-        if not args.scans:
-            input_data.update({'scans': []})
-        else:
-            input_data.update({'scans': args.scans})
-
         tls_parameters = args.tls_parameters
         if not tls_parameters:
             input_data.update({'tls_params': []})
@@ -73,6 +68,13 @@ def main():
             input_data.update({'tls_params': no_vuln_tests})
         else:
             input_data.update({'tls_params': tls_parameters})
+
+        if not args.scans and tls_parameters:  # if user provided TLS parameters, perform TLS scan
+            input_data.update({'scans': ["TLS"]})
+        elif not args.scans:  # if nothing was provided, queue no scans
+            input_data.update({'scans': []})
+        else:  # queue scans provided in command line
+            input_data.update({'scans': args.scans})
 
         http_body = args.http_body
         if http_body == 'y' or http_body == 'Y':
