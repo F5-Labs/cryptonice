@@ -80,7 +80,8 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
                     str_host = str_location[1]
                     str_path = str_location[2]
             else:
-                print(f'{int_redirect}: Finished. Status = {int_status}')
+                pass
+                #print(f'{int_redirect}: Finished. Status = {int_status}')
 
             conn.close()
             """
@@ -107,15 +108,19 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
         prev_path = str_path
 
         #DEBUG
-        print(f'{int_redirect}: Checking {str_host} at {str_path}')
+        #print(f'{int_redirect}: Checking {str_host} at {str_path}')
 
         if usetls:
             # print(f'Attemping HTTPS connection to {ip_address} using SNI of {str_host}')
-            conn = http.client.HTTPSConnection(str_host, int_port, timeout=5, context=ssl._create_unverified_context())
-            conn.request("GET", str_path)
-            res = conn.getresponse()
-            conn.close()
-
+            try:
+                conn = http.client.HTTPSConnection(str_host, int_port, timeout=5, context=ssl._create_unverified_context())
+                conn.request("GET", str_path)
+                res = conn.getresponse()
+                conn.close()
+            except ssl.SSLError:
+                # If we get legacy and unsupported ciphers then for these HTTP checks we're just going to fail
+                # The SSLyze functions will catch and report on legacy and broken protocols...
+                return [str_host, str_path, b_httptohttps], []
         else:
             # print(f'Attemping HTTP connection to {ip_address} using HOST header of {str_host}')
             conn = http.client.HTTPConnection(ip_address, int_port, timeout=5)
@@ -129,7 +134,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
         if 300 < int_status < 400:
             str_location = res.getheader('Location')
             # DEBUG
-            print(f'{int_redirect}: Found new location at {str_location}')
+            # print(f'{int_redirect}: Found new location at {str_location}')
             str_location = split_location(res.getheader('Location'))
 
             # if our split function only returns 1 element it's because there has been an error,
@@ -238,4 +243,3 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     conn.close()
 
     return [str_host, str_path, b_httptohttps], connection_data
-

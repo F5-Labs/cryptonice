@@ -167,8 +167,12 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
 
         print(f'Valid From:\t\t {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t {cert_0.get("valid_until")}')
-        print(
-            f'Certificate is valid:\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+        print(f'Certificate in date:\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+
+        print(f'Certificate is trusted:\t ')
+        cert_errors = cert_0.get("certificate_errors")
+        print(cert_errors.get("cert_trusted"))
+
         print('')
 
         try:
@@ -221,6 +225,16 @@ def scanner_driver(input_data):
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
+
+        """
+        Quick and dirty checks to strip out protocol and any remaining slashes.
+        This should be replaced with comprehensive function.
+        """
+        hostname = hostname.replace("http://", "")
+        hostname = hostname.replace("https://", "")
+        hostname = hostname.replace("/", "")
+
+
         host_path = hostname  # all functions should use host_path for consistency
         if host_sni == "":
             host_sni = hostname

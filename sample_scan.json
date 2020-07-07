@@ -6,5 +6,5 @@
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
-	"targets": ["www.gmail.com"]
+	"targets": ["https://self-signed.badssl.com/"]
 }
