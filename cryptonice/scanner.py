@@ -40,11 +40,16 @@ def print_errors(error):
         return "Not JSON serializable"
 
 
-def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_httptohttps, force_redirect):
+def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('\n')
     print('RESULTS')
     print('-------------------------------------')
     print(f'Hostname:\t\t\t {str_host}\n')
+
+    tls_data = scan_data.get('tls_scan')
+    http2_data = scan_data.get('http2')
+    http_data = scan_data.get('http_headers')
+    dns_data = scan_data.get('dns')
 
     if tls_data == "Port closed - no TLS data available":
         print('***TLS Results***')
@@ -196,7 +201,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
     if force_redirect:
         print(f'\nHTTP to HTTPS redirect:\t\t  {True if b_httptohttps else False}')
 
-    if http_data:
+    if http_data != {}:
         try:
             strict_transport_security = http_data.get("Headers").get("Strict-Transport-Security")
             if strict_transport_security is not None:
@@ -390,7 +395,7 @@ def scanner_driver(input_data):
             scan_data.update({'http2': http2_data})
 
         if input_data['print_out']:
-            print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_httptohttps, force_redirect)
+            print_to_console(str_host, scan_data, b_httptohttps, force_redirect)
 
         print('\nScans complete')
         print('-------------------------------------')
