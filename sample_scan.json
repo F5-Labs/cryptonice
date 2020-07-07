@@ -2,7 +2,7 @@
 	"id": "test.py",
 	"port": 443,
 	"scans": ["TLS", "HTTP", "DNS", "HTTP2"],
-	"tls_params": ["certificate_info", "ssl_2_0_cipher_suites", "ssl_3_0_cipher_suites","tls_1_0_cipher_suites", "tls_1_1_cipher_suites", "tls_1_2_cipher_suites","tls_1_3_cipher_suites", "http_headers"],
+	"tls_params": ["certificate_info", "ssl_2_0_cipher_suites", "ssl_3_0_cipher_suites", "tls_1_0_cipher_suites", "tls_1_1_cipher_suites", "tls_1_2_cipher_suites", "tls_1_3_cipher_suites", "tls_compression", "tls_1_3_early_data", "openssl_ccs_injection", "heartbleed", "robot", "tls_fallback_scsv", "session_renegotiation", "session_resumption", "session_resumption_rate", "http_headers"],
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
