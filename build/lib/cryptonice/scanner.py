@@ -165,19 +165,28 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
 
         try:
             vuln_tests = tls_data.get('tests')
+            other_test_run = False
             print('\nVulnerability Tests:')
             if vuln_tests.get("compression_supported") is not None:
+                other_test_run = True
                 print(f'Supports TLS Compression:\t  {vuln_tests.get("compression_supported")}')
             if vuln_tests.get("CVE-2014-0224_vulnerable") is not None:
+                other_test_run = True
                 print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
             if vuln_tests.get("supports_tls_fallback") is not None:
+                other_test_run = True
                 print(f'Supports TLS Fallback:\t\t  {vuln_tests.get("supports_tls_fallback")}')
             if vuln_tests.get("vulnerable_to_heartbleed") is not None:
+                other_test_run = True
                 print(f'Vulnerable to Heartbleed:\t  {vuln_tests.get("vulnerable_to_heartbleed")}')
             if vuln_tests.get('vulnerable_to_robot') is not None:
+                other_test_run = True
                 robot = vuln_tests.get('vulnerable_to_robot')
                 print(f'Vulnerable to ROBOT:\t\t  {robot[0]}')
                 print(f'ROBOT Test Result:\t\t  {robot[1]}')
+
+            if not other_test_run:
+                print("No vulnerability tests were run")
         except:
             pass
     except:
