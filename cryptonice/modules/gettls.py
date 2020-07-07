@@ -50,7 +50,7 @@ def addScanRequests(scanner, servers_to_scan, commands):
     :param commands: set of string scan commands (like 'certificate_info' and 'tls_1_0_cipher_suites'
     :return: None
     """
-    print('Queueing scan commands (don\'t worry yet!, this can take a while...)')
+    print('Queueing scan commands (this can take a little while...)')
     for server_info in servers_to_scan:
         server_scan_req = ServerScanRequest(
             server_info=server_info, scan_commands=commands
@@ -209,14 +209,21 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     # Check for certificate errors
                     certificate_errors = {}
                     path_validation = cert_deployment.path_validation_results[count]
+
                     if path_validation.openssl_error_string is not None:
+                        certificate_errors.update({'cert_trusted': False})
                         certificate_errors.update({'cert_error': path_validation.openssl_error_string})
+                    else:
+                        certificate_errors.update({'cert_trusted': True})
+
+                    """
                     if path_validation.trust_store is not None:
-                        # Only set up to trust Windows or Mozilla, and not others (inlcluding Android, Apple, Java)
+                        # Only set up to trust Windows or Mozilla, and not others (including Android, Apple, Java)
                         if path_validation.trust_store.name == "Windows" or path_validation.trust_store.name == "Mozilla":
                             certificate_errors.update({'cert_trusted': True})
                         else:
                             certificate_errors.update({'cert_trusted': False})
+                    """
 
                     # Collect certificate (returns a string literal from CertificateDeploymentAnalysisResult class)
                     certificate = cert_deployment.received_certificate_chain_as_pem[count]

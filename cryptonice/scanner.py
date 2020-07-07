@@ -156,6 +156,12 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
     # Print certificate data if it was collected
     try:
         cert_0 = tls_data.get("certificate_info").get("certificate_0")
+        try:
+            # Unless this is a self-signed cert, there should be at least 1 more cert in the chain
+            cert_1 = tls_data.get("certificate_info").get("certificate_1")
+        except:
+            pass
+
         print(f'\nLEAF CERTIFICATE')
         print(f'Common Name:\t\t {cert_0.get("common_name")}')
         print(f'Public Key Algorithm:\t {cert_0.get("public_key_algorithm")}')
@@ -165,14 +171,22 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
         print(f'Signature Algorithm:\t {cert_0.get("signature_algorithm")}')
         print('')
 
+        try:
+            print(f'Signed by:\t\t {cert_1.get("common_name")}')
+        except:
+            print('Signed by:\t\t CERTIFICATE IS SELF-SIGNED')
+
+        cert_errors = cert_0.get("certificate_errors")
+        print(f'Certificate is trusted:\t {cert_errors.get("cert_trusted")}')
+        try:
+            print(f'Certificate trust error: {cert_errors.get("cert_error")}')
+        except:
+            pass
+
+        print('')
         print(f'Valid From:\t\t {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t {cert_0.get("valid_until")}')
         print(f'Certificate in date:\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
-
-        print(f'Certificate is trusted:\t ')
-        cert_errors = cert_0.get("certificate_errors")
-        print(cert_errors.get("cert_trusted"))
-
         print('')
 
         try:

@@ -6,5 +6,5 @@
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
-	"targets": ["https://self-signed.badssl.com/"]
+	"targets": ["f5.com"]
 }
