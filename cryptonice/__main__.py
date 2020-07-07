@@ -62,18 +62,14 @@ def main():
         if not args.scans:
             input_data.update({'scans': []})
         else:
-            print('adding scans')
             input_data.update({'scans': args.scans})
 
         tls_parameters = args.tls_parameters
         if not tls_parameters:
-            print('no parameters provided')
             input_data.update({'tls_params': []})
         elif 'all' in tls_parameters:
-            print('adding all parameters')
             input_data.update({'tls_params': all_tls_options})
         elif 'no_vuln_tests' in tls_parameters:
-            print('adding no tests')
             input_data.update({'tls_params': no_vuln_tests})
         else:
             input_data.update({'tls_params': tls_parameters})
