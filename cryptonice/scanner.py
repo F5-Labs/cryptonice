@@ -44,7 +44,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
     print('\n')
     print('RESULTS')
     print('-------------------------------------')
-    print(f'Hostname: {str_host}\n')
+    print(f'Hostname:\t\t\t {str_host}\n')
 
     if tls_data == "Port closed - no TLS data available":
         print('***TLS Results***')
@@ -142,7 +142,7 @@ def print_to_console(str_host, tls_data, http_data, http2_data, dns_data, b_http
         except:
             pass
 
-        print(f'Certificate is in date:\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+        print(f'Certificate is in date:\t\t {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
         print(f'Valid From:\t\t\t  {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t\t  {cert_0.get("valid_until")}')
         print(f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
