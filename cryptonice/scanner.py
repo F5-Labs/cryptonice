@@ -142,10 +142,13 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         cert_error = ""
         try:
             cert_error = cert_errors.get("cert_error")
+            if cert_error is None:
+                cert_error = "No errors"
         except KeyError:
             pass
 
         print(f'Certificate is trusted:\t\t  {cert_errors.get("cert_trusted")} ({cert_error})')
+        print(f'Hostname Validation:\t\t  {"OK - Certificate matches server hostname" if cert_errors.get("hostname_matches") else "FAILED - Certificate does NOT match server hostname"}')
         print(f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
         print(f'Certificate is in date:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
 

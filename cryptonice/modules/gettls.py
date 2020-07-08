@@ -206,24 +206,23 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                         all_certificates_info.update(
                             {'ocsp_response_is_trusted': cert_deployment.ocsp_response_is_trusted})
 
-                    # Check for certificate errors
+                    # Create a dictionary with the path validation results for each validated trust store
+                    trust_store_checks = {}
+                    for path_validation_result in cert_deployment.path_validation_results:
+                        trust_store_checks.update(
+                            {path_validation_result.trust_store.name: path_validation_result.openssl_error_string})
+
+                    # Check for certificate errors (using Mozilla as the trust store to check against)
                     certificate_errors = {}
-                    path_validation = cert_deployment.path_validation_results[count]
-
-                    if path_validation.openssl_error_string is not None:
-                        certificate_errors.update({'cert_trusted': False})
-                        certificate_errors.update({'cert_error': path_validation.openssl_error_string})
-                    else:
+                    if "Mozilla" in trust_store_checks.keys() and trust_store_checks.get("Mozilla") is None:
                         certificate_errors.update({'cert_trusted': True})
-
-                    """
-                    if path_validation.trust_store is not None:
-                        # Only set up to trust Windows or Mozilla, and not others (including Android, Apple, Java)
-                        if path_validation.trust_store.name == "Windows" or path_validation.trust_store.name == "Mozilla":
-                            certificate_errors.update({'cert_trusted': True})
-                        else:
-                            certificate_errors.update({'cert_trusted': False})
-                    """
+                    elif "Mozilla" in trust_store_checks.keys():
+                        certificate_errors.update({'cert_trusted': False})
+                        certificate_errors.update({'cert_error': trust_store_checks.get("Mozilla")})
+                    else:
+                        certificate_errors.update({'cert_trusted': False})
+                        certificate_errors.update({'cert_error': "Mozilla not trusted"})
+                    certificate_errors.update({'hostname_matches': cert_deployment.leaf_certificate_subject_matches_hostname})
 
                     # Collect certificate (returns a string literal from CertificateDeploymentAnalysisResult class)
                     certificate = cert_deployment.received_certificate_chain_as_pem[count]
