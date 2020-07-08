@@ -16,12 +16,12 @@ from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec, ed448, ed255
 from datetime import datetime
 from typing import List, cast
 
-"""Dictionary of boolean variables to track which commands to run"""
+"""Dictionary of boolean variables to track which commands to run
 command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                 'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
                 'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
                 'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
-
+"""
 
 def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan):
     """

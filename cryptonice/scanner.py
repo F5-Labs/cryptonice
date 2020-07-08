@@ -10,10 +10,10 @@ from cryptonice.modules.gethttp2 import check_http2
 from cryptonice.checkport import port_open
 from datetime import datetime
 
-tls_command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
+tls_command_list = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
                     'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
-                    'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
+                    'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers']
 
 
 def writeToJSONFile(filename, data):
@@ -44,7 +44,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('\n')
     print('RESULTS')
     print('-------------------------------------')
-    print(f'Hostname:\t\t\t {str_host}\n')
+    print(f'Hostname:\t\t\t  {str_host}\n')
 
     tls_data = scan_data.get('tls_scan')
     http2_data = scan_data.get('http2')
@@ -139,18 +139,20 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
             pass
 
         cert_errors = cert_0.get("certificate_errors")
-        print(f'Certificate is trusted:\t\t  {cert_errors.get("cert_trusted")}')
+        cert_error = ""
         try:
-            print(f'Certificate trust error:\t  {cert_errors.get("cert_error")}')
+            cert_error = cert_errors.get("cert_error")
         except KeyError:
             pass
 
-        print(
-            f'Certificate is valid:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+        print(f'Certificate is trusted:\t\t  {cert_errors.get("cert_trusted")} ({cert_error})')
+        print(f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
+        print(f'Certificate is in date:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+
+        cert_date = datetime.strptime(cert_0.get("valid_until"), '%Y-%m-%d %H:%M:%S')
+        print(f'Days until expiry:\t\t  {cert_date - datetime.today()}')
         print(f'Valid From:\t\t\t  {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t\t  {cert_0.get("valid_until")}')
-        print(
-            f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
         print('')
 
         try:
@@ -175,20 +177,19 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
             if vuln_tests.get("compression_supported") is not None:
                 other_test_run = True
                 print(f'Supports TLS Compression:\t  {vuln_tests.get("compression_supported")}')
-            if vuln_tests.get("CVE-2014-0224_vulnerable") is not None:
-                other_test_run = True
-                print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
             if vuln_tests.get("supports_tls_fallback") is not None:
                 other_test_run = True
                 print(f'Supports TLS Fallback:\t\t  {vuln_tests.get("supports_tls_fallback")}')
+            if vuln_tests.get("CVE-2014-0224_vulnerable") is not None:
+                other_test_run = True
+                print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
             if vuln_tests.get("vulnerable_to_heartbleed") is not None:
                 other_test_run = True
                 print(f'Vulnerable to Heartbleed:\t  {vuln_tests.get("vulnerable_to_heartbleed")}')
             if vuln_tests.get('vulnerable_to_robot') is not None:
                 other_test_run = True
                 robot = vuln_tests.get('vulnerable_to_robot')
-                print(f'Vulnerable to ROBOT:\t\t  {robot[0]}')
-                print(f'ROBOT Test Result:\t\t  {robot[1]}')
+                print(f'Vulnerable to ROBOT:\t\t  {robot[0]} ({robot[1]})')
 
             if not other_test_run:
                 print("No vulnerability tests were run")
@@ -362,8 +363,12 @@ def scanner_driver(input_data):
                     try:
                         tls_params = input_data['tls_params']
                         for param in tls_params:
-                            if param in tls_command_list:
-                                commands_to_run.append(str(param))
+                            # If the tls_params value in the JSON input file is 'all' then apply every TLS scan function automatically
+                            if param.upper() == "ALL":
+                                commands_to_run = tls_command_list
+                            else:
+                                if param in tls_command_list:
+                                    commands_to_run.append(str(param))
                         tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
                     except KeyError:
                         tls_data = "No TLS scan parameters provided"
