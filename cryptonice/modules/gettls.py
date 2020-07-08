@@ -212,6 +212,13 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                         trust_store_checks.update(
                             {path_validation_result.trust_store.name: path_validation_result.openssl_error_string})
 
+                    # Code from sslyze for reference (we can use the was_validation_successful variable if needed)
+                    # for path_validation_result in all_path_validation_results:
+                    #     if path_validation_result.was_validation_successful:
+                    #         trust_store_that_can_build_verified_chain = path_validation_result.trust_store
+                    #         verified_certificate_chain = path_validation_result.verified_certificate_chain
+                    #         break
+
                     # Check for certificate errors (using Mozilla as the trust store to check against)
                     certificate_errors = {}
                     if "Mozilla" in trust_store_checks.keys() and trust_store_checks.get("Mozilla") is None:
