@@ -209,8 +209,9 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     # Create a dictionary with the path validation results for each validated trust store
                     trust_store_checks = {}
                     for path_validation_result in cert_deployment.path_validation_results:
-                        trust_store_checks.update(
-                            {path_validation_result.trust_store.name: path_validation_result.openssl_error_string})
+                        if path_validation_result.was_validation_successful:
+                            trust_store_checks.update(
+                                {path_validation_result.trust_store.name: path_validation_result.openssl_error_string})
 
                     # Code from sslyze for reference (we can use the was_validation_successful variable if needed)
                     # for path_validation_result in all_path_validation_results:
