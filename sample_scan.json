@@ -1,11 +1,11 @@
 {
 	"id": "test.py",
 	"port": 443,
-	"scans": ["TLS", "HTTP", "DNS", "HTTP2"],
-	"tls_params": ["all"],
+	"scans": ["TLS"],
+	"tls_params": ["certificate_info"],
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"targets": ["www.google.com", "www.cloudflare.com"]
+	"targets": ["f5.com"]
 }
