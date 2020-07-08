@@ -111,7 +111,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
         #print(f'{int_redirect}: Checking {str_host} at {str_path}')
 
         if usetls:
-            # print(f'Attemping HTTPS connection to {ip_address} using SNI of {str_host}')
+            # print(f'Attempting HTTPS connection to {ip_address} using SNI of {str_host}')
             try:
                 conn = http.client.HTTPSConnection(str_host, int_port, timeout=5, context=ssl._create_unverified_context())
                 conn.request("GET", str_path)

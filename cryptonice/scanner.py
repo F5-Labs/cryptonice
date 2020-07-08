@@ -258,13 +258,6 @@ def scanner_driver(input_data):
         print("ERROR: No scan commands supplied")
         return None, None
 
-    # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
-    # HTTP redirect checks
-    try:
-        host_sni = input_data['sni']
-    except KeyError:
-        host_sni = ""
-
     tls_data = {}
     http_data = {}
     dns_data = {}
@@ -272,6 +265,12 @@ def scanner_driver(input_data):
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
+        # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
+        # HTTP redirect checks
+        try:
+            host_sni = input_data['sni']
+        except KeyError:
+            host_sni = ""
 
         """
         Quick and dirty checks to strip out protocol and any remaining slashes.
@@ -405,6 +404,9 @@ def scanner_driver(input_data):
         print('\nScans complete')
         print('-------------------------------------')
         print(f'Total run time: {end_time - start_time}')
+
+        if input_data['generate_json']:
+            writeToJSONFile(str_host, scan_data)
 
     return scan_data, hostname
 

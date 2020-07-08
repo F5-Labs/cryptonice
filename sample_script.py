@@ -13,11 +13,8 @@ def main():
         input_data = json.load(f)
 
     output_data, hostname = scanner.scanner_driver(input_data)
-
-    if output_data is not None and hostname is not None:
-        scanner.writeToJSONFile(hostname, output_data)
-    else:
-        print("Error with input - scan was not completed")
+    if output_data is None and hostname is None:
+        print('Error with input - scan was not completed')
 
 
 if __name__ == "__main__":

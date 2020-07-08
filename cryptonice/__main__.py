@@ -9,6 +9,7 @@ default_dict = {'id': 'default',
                                "tls_1_3_cipher_suites", "http_headers"],
                 'http_body': False,
                 'print_out': True,
+                'generate_json': True,
                 'force_redirect': True
                 }
 
@@ -93,20 +94,16 @@ def main():
             print_to_console = False
         input_data.update({'print_out': print_to_console})
 
+        generate_json = True
+        if args.json_out == "N" or args.json_out == "n":
+            generate_json = False
+        input_data.update({'generate_json': generate_json})
+
         input_data.update({'targets': domain_name})
 
         output_data, hostname = scanner_driver(input_data)
-
-    generate_json = True
-    if args.json_out == "N" or args.json_out == "n":
-        generate_json = False
-
-    # The command line version of cryptonice should never get None back
-    if output_data is not None and hostname is not None:
-        if generate_json:
-            writeToJSONFile(hostname, output_data)
-    else:
-        print("Error with input - scan was not completed")
+        if output_data is None and hostname is None:
+            print('Error with input - scan was not completed')
 
 
 if __name__ == "__main__":

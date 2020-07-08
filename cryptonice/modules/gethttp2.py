@@ -21,7 +21,6 @@ def check_http2(domain_name, conn_port):
         # We will need to check for this and either add HTTPS:// manually, or remove the dependency on it
         updated_dom = 'https://' + domain_name
         HOST = urlparse(updated_dom).netloc
-        print('host:', updated_dom)
         PORT = conn_port
 
         ctx = ssl.create_default_context()

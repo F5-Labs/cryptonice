@@ -15,6 +15,7 @@ Providing only a domain name and no other command line input will result in the 
 	    "http_body": false,
 	    "force_redirect": true,
 	    "print_out": true,
+	    "generate_json": true,
 	    "targets": ["www.github.com"]
     }
 
