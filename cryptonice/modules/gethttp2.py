@@ -16,6 +16,7 @@ headers = {"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KH
 
 
 def check_http2(domain_name, conn_port):
+    print('Looking for HTTP/2')
     try:
         # This fails if HOST does not include HTTPS://
         # We will need to check for this and either add HTTPS:// manually, or remove the dependency on it

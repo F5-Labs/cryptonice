@@ -27,8 +27,8 @@ def split_location(location):
 
 
 def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect):
-    print('\nRedirection and HTTP Checks')
-    print('-------------------------------------')
+    #print('\nRedirection and HTTP Checks')
+    #print('-------------------------------------')
     if usetls:
         print(f'Connecting to port {int_port} using HTTPS')
     else:

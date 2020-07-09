@@ -17,8 +17,8 @@ def getDNSRecord(hostname, record_type):
 
 
 def get_dns(hostname, all_checks):
-    print('\nDNS Checks')
-    print('-------------------------------------')
+    #print('\nDNS Checks')
+    #print('-------------------------------------')
     print(f'Analyzing DNS data for {hostname}')
     connection_data = {}
     host_data = {}

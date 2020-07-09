@@ -254,7 +254,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
     tls_recommendations = tls_data.get('recommendations')
     for key, value in tls_recommendations.items():
-        print (f'{key.upper()}:\t\t\t   {value}')
+        print (f'{key.upper()}:\t\t\t  {value}')
 
 
 def scanner_driver(input_data):
@@ -282,6 +282,7 @@ def scanner_driver(input_data):
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
+        print ('Pre-scan checks\n-------------------------------------')
         # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
         # HTTP redirect checks
         try:
@@ -302,7 +303,7 @@ def scanner_driver(input_data):
             host_sni = hostname
         ip_address = ""
 
-        print(f'\nScanning {hostname} on port {port}...')
+        print(f'Scanning {hostname} on port {port}...')
 
         start_time = datetime.today()  # added to scan metadata later
         scan_data = {}  # final dictionary with metadata and scan results

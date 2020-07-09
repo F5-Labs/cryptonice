@@ -51,7 +51,7 @@ def addScanRequests(scanner, servers_to_scan, commands):
     :param commands: set of string scan commands (like 'certificate_info' and 'tls_1_0_cipher_suites'
     :return: None
     """
-    print('Queueing scan commands (this can take a little while...)')
+    print('Queueing TLS scans (this might take a little while...)')
     for server_info in servers_to_scan:
         server_scan_req = ServerScanRequest(
             server_info=server_info, scan_commands=commands
@@ -123,8 +123,8 @@ def getCertificateResults(certificate):
 
 
 def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
-    print('\nPerforming TLS tests')
-    print('-------------------------------------')
+    #print('\nPerforming TLS tests')
+    #print('-------------------------------------')
     servers_to_scan = []
     start_date = datetime.today()
 

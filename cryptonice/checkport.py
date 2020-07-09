@@ -7,8 +7,8 @@ import ssl
 
 
 def port_open(hostname, port):
-    print('\nOpen port checks')
-    print('------------------------------')
+    #print('\nOpen port checks')
+    #print('------------------------------')
     """
     Check status of a port and return simple True/False
     Also check for TLS handshake
