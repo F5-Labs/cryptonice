@@ -47,7 +47,8 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     str_host = hostname
     str_path = '/'
 
-    if force_redirect:
+    # DW Changed default behaviour to always perform HTTP > HTTPS redirect check
+    if True:
         ###############################################################################################
         # First check for HTTP > HTTPS redirects (so we force port 80 regardless of what the target is)
         #print(f'Checking for HTTP > HTTPS redirects...')
@@ -128,31 +129,36 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
             res = conn.getresponse()
             conn.close()
 
-        # If we get a redirection the update the new path (str_path) to wherever we're being told to go by the
-        # LOCATION header Need to make sure we close the connection so we can then re-open it to the new site
-        int_status = res.status
-        if 300 < int_status < 400:
-            str_location = res.getheader('Location')
-            # DEBUG
-            # print(f'{int_redirect}: Found new location at {str_location}')
-            str_location = split_location(res.getheader('Location'))
+        if force_redirect:
+            # If we get a redirection then update the new path (str_path) to wherever we're being told to go by the
+            # LOCATION header Need to make sure we close the connection so we can then re-open it to the new site
+            int_status = res.status
+            if 300 < int_status < 400:
+                str_location = res.getheader('Location')
+                # DEBUG
+                # print(f'{int_redirect}: Found new location at {str_location}')
+                str_location = split_location(res.getheader('Location'))
 
-            # if our split function only returns 1 element it's because there has been an error,
-            # probably caused by a lack of protocol prefix or domain name in the new location
-            if len(str_location) == 1:
-                str_host = prev_host
-                str_path = str_location[0]
-            else:
-                str_protocol = str_location[0]
-                str_host = str_location[1]
-                str_path = str_location[2]
+                # if our split function only returns 1 element it's because there has been an error,
+                # probably caused by a lack of protocol prefix or domain name in the new location
+                if len(str_location) == 1:
+                    str_host = prev_host
+                    str_path = str_location[0]
+                else:
+                    str_protocol = str_location[0]
+                    str_host = str_location[1]
+                    str_path = str_location[2]
 
-            # Some redirects will not specify a new domain name
-            # This prevents us having an empty host if only a new path is specified
-            if str_host == "":
-                str_host = prev_host
+                # Some redirects will not specify a new domain name
+                # This prevents us having an empty host if only a new path is specified
+                if str_host == "":
+                    str_host = prev_host
 
-        if str_host == prev_host and str_path == prev_path:
+            # If for some reason we keep getting redirects to the same host and path, then lets exit this loop early...
+            if str_host == prev_host and str_path == prev_path:
+                int_redirect = 10
+
+        else:
             int_redirect = 10
 
     ######################################################################################
