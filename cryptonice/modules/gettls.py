@@ -23,6 +23,10 @@ command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_sui
                 'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
 """
 
+warning_bad_ciphers = {"_RC4_": ["HIGH - RC4", "The RC4 symmetric cipher is considered weak and should not be used"],
+                        "_MD5": ["HIGH - MD5", "The MD5 message authentication code is considered weak and should not be used"],
+                        "_3DES_": ["HIGH - 3DES", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
+
 def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan):
     """
     Create connections to each server in ip_list, store connection results in servers_to_scan list
@@ -84,16 +88,16 @@ def getCertificateResults(certificate):
     # Certificate public key
     public_key = cert.public_key()
     if isinstance(public_key, rsa.RSAPublicKey):
-        cert_data.update({'public_key_algorithm': "RSAPublicKey"})
+        cert_data.update({'public_key_algorithm': "RSA"})
     elif isinstance(public_key, dsa.DSAPublicKey):
-        cert_data.update({'public_key_algorithm': "DSAPublicKey"})
+        cert_data.update({'public_key_algorithm': "DSA"})
     elif isinstance(public_key, ec.EllipticCurvePublicKey):
-        cert_data.update({'public_key_algorithm': "EllipticCurvePublicKey"})
+        cert_data.update({'public_key_algorithm': "EllipticCurve"})
         cert_data.update({'curve_algorithm': public_key.curve.name})
     elif isinstance(public_key, ed25519.Ed25519PublicKey):
-        cert_data.update({'public_key_algorithm': "Ed25519PublicKey"})
+        cert_data.update({'public_key_algorithm': "Ed25519"})
     elif isinstance(public_key, ed448.Ed448PublicKey):
-        cert_data.update({'public_key_algorithm': "Ed448PublicKey"})
+        cert_data.update({'public_key_algorithm': "Ed448"})
     else:
         cert_data.update({'public_key_algorithm': "UNKNOWN"})
     # Certificate public key size (attribute of public key object)
@@ -267,7 +271,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
                 ssl2_data.update({'accepted_ssl_2_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_2_0': ssl2_data})
-                recommendations_data.update({'CRITICAL': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
+                recommendations_data.update({'CRITICAL - SSLv2': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
             except KeyError:
                 pass
 
@@ -287,7 +291,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
                 ssl3_data.update({'accepted_ssl_3_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_3_0': ssl3_data})
-                recommendations_data.update({'CRITICAL': 'SSLv3 is vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
+                recommendations_data.update({'CRITICAL - SSLv3': 'You may be vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
             except KeyError:
                 pass
 
@@ -303,8 +307,16 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     tls1_0_data.update({'preferred_cipher_suite': None})
 
                 cipher_suite_list = []
+                cipher_suite_warning = []
                 for accepted_cipher_suite in tls1_0_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    # See if this cipher suite is in the dictionary of weak ciphers
+                    for key, dict_warning in warning_bad_ciphers.items():
+                        # Check if a bad cipher is in the list of ciphers support, but ignore if we've already come across it
+                        if (key in accepted_cipher_suite.cipher_suite.name) and not (key in cipher_suite_warning):
+                            cipher_suite_warning.append(key)
+                            recommendations_data.update({dict_warning[0]: dict_warning[1]})
+
                 tls1_0_data.update({'accepted_tls_1_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'tls_1_0': tls1_0_data})
             except KeyError:
@@ -437,7 +449,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     test_results.update({'vulnerable_to_robot': [False, '']})
                 else:
                     test_results.update({'vulnerable_to_robot': [False, 'Test failed']})
-                recommendations_data.update({'CRITICAL': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
+                recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
             except KeyError:
                 pass
 
