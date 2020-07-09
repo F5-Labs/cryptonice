@@ -2,10 +2,10 @@
 	"id": "test.py",
 	"port": 443,
 	"scans": ["TLS", "DNS", "HTTP2", "HTTP"],
-	"tls_params": [],
+	"tls_params": ["all"],
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"targets": ["001ru.ru"]
+	"targets": ["https://expired.badssl.com/"]
 }

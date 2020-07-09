@@ -38,4 +38,5 @@ def check_http2(domain_name, conn_port):
         else:
             return {"http2": False}
     except Exception as e:
-        return f'Error with HTTP/2 support check: {e.__str__()}'
+#        return f'Error with HTTP/2 support check: {e.__str__()}'
+        return f'\nError with HTTP/2 test'

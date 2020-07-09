@@ -155,8 +155,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         print(f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
         print(f'Certificate is in date:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
 
-        cert_date = datetime.strptime(cert_0.get("valid_until"), '%Y-%m-%d %H:%M:%S')
-        print(f'Days until expiry:\t\t  {cert_date - datetime.today()}')
+        print(f'Days until expiry:\t\t  {cert_0.get("days_left")}')
         print(f'Valid From:\t\t\t  {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t\t  {cert_0.get("valid_until")}')
         print('')
@@ -252,9 +251,14 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('RECOMMENDATIONS')
     print('-------------------------------------')
 
-    tls_recommendations = tls_data.get('recommendations')
+    tls_recommendations = tls_data.get('tls_recommendations')
     for key, value in tls_recommendations.items():
         print (f'{key} {value}')
+
+    cert_recommendations = tls_data.get('cert_recommendations')
+    if cert_recommendations is not None:
+        for key, value in cert_recommendations.items():
+            print (f'{key} {value}')
 
 
 def scanner_driver(input_data):

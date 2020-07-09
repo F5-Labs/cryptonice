@@ -23,9 +23,9 @@ command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_sui
                 'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
 """
 
-warning_bad_ciphers = {"_RC4_": ["HIGH - RC4\t\t", "The RC4 symmetric cipher is considered weak and should not be used"],
-                        "_MD5": ["HIGH - MD5\t\t", "The MD5 message authentication code is considered weak and should not be used"],
-                        "_3DES_": ["HIGH - 3DES\t\t", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
+warning_bad_ciphers = {"_RC4_": ["HIGH - RC4", "The RC4 symmetric cipher is considered weak and should not be used"],
+                        "_MD5": ["HIGH - MD5", "The MD5 message authentication code is considered weak and should not be used"],
+                        "_3DES_": ["HIGH - 3DES", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
 
 def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan):
     """
@@ -70,6 +70,7 @@ def getCertificateResults(certificate):
     :return: dictionary containing key-value pairs for all certificate information
     """
     cert_data = {}
+    recommendations_data = {}
     # utf8 is more compatible with python3 so running an earlier version might cause an issue here...
     # cert is an object of the x509 Certificate class with attributes that can be found
     # here: https://cryptography.io/en/latest/x509/reference/#x-509-certificate-object
@@ -109,6 +110,19 @@ def getCertificateResults(certificate):
     not_valid_after = cert.not_valid_after.__str__()
     cert_data.update({'valid_until': not_valid_after})
 
+    cert_days_left = ((datetime.strptime(not_valid_after, '%Y-%m-%d %H:%M:%S')) - datetime.today()).days
+    cert_data.update({'days_left': cert_days_left})
+
+    if cert_days_left < 0:
+        recommendations_data.update({'CRITICAL - Cert Expiry': 'Certificate has expired!'})
+    elif cert_days_left < 1:
+        recommendations_data.update({'HIGH - Cert Expiry': 'Certificate has less than 1 day remaining'})
+    elif cert_days_left < 7:
+        recommendations_data.update({'WARN - Cert Expiry': 'Certificate has less than 7 days remaining'})
+    elif cert_days_left < 14:
+        recommendations_data.update({'INFO - Cert Expiry': 'Certificate has less than 14 days remaining'})
+
+
     # Certificate SHA (signature_hash_algorithm returns a HashAlgorithm object with the attribute 'name')
     sha = cert.signature_hash_algorithm.name
     cert_data.update({'signature_algorithm': sha})
@@ -123,6 +137,10 @@ def getCertificateResults(certificate):
     except x509.ExtensionNotFound:
         cert_data.update({'subject_alt_names': []})
 
+
+    print (recommendations_data)
+    connection_data.update({'cert_recommendations': recommendations_data})
+
     return cert_data
 
 
@@ -131,6 +149,8 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
     #print('-------------------------------------')
     servers_to_scan = []
     start_date = datetime.today()
+
+    global connection_data
 
     # Loop through all hostnames and attempt to connect
     # if error message is returned (ie scanner could not connect, return error message and exit function)
@@ -269,7 +289,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in ssl2_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
-                    recommendations_data.update({'CRITICAL - SSLv2\t': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
+                    recommendations_data.update({'CRITICAL - SSLv2': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
                 ssl2_data.update({'accepted_ssl_2_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_2_0': ssl2_data})
             except KeyError:
@@ -289,7 +309,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in ssl3_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
-                    recommendations_data.update({'CRITICAL - SSLv3\t': 'You may be vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
+                    recommendations_data.update({'CRITICAL - SSLv3': 'You may be vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
                 ssl3_data.update({'accepted_ssl_3_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_3_0': ssl3_data})
             except KeyError:
@@ -439,8 +459,10 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 # server_info.tls_probing_result.highest_tls_version_supported.name
                 if int_robot_results == 1:
                     test_results.update({'vulnerable_to_robot': [True, 'Weak oracle']})
+                    recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
                 elif int_robot_results == 2:
                     test_results.update({'vulnerable_to_robot': [True, 'Strong oracle']})
+                    recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
                 elif int_robot_results == 3:
                     test_results.update({'vulnerable_to_robot': [False, 'No oracle']})
                 elif int_robot_results == 4:
@@ -449,7 +471,6 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     test_results.update({'vulnerable_to_robot': [False, '']})
                 else:
                     test_results.update({'vulnerable_to_robot': [False, 'Test failed']})
-                recommendations_data.update({'CRITICAL - ROBOT\t': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
             except KeyError:
                 pass
 
@@ -564,7 +585,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
         connection_data.update({'scan_information': metadata})
 
         # Add recommendations data to overall information dictionary
-        connection_data.update({'recommendations': recommendations_data})
+        connection_data.update({'tls_recommendations': recommendations_data})
 
         return connection_data
 
