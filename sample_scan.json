@@ -1,7 +1,7 @@
 {
 	"id": "test.py",
 	"port": 443,
-	"scans": ["TLS"],
+	"scans": ["TLS", "DNS", "HTTP2", "HTTP"],
 	"tls_params": [],
 	"http_body": false,
 	"force_redirect": true,

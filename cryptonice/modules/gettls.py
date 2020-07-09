@@ -23,9 +23,9 @@ command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_sui
                 'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
 """
 
-warning_bad_ciphers = {"_RC4_": ["HIGH - RC4", "The RC4 symmetric cipher is considered weak and should not be used"],
-                        "_MD5": ["HIGH - MD5", "The MD5 message authentication code is considered weak and should not be used"],
-                        "_3DES_": ["HIGH - 3DES", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
+warning_bad_ciphers = {"_RC4_": ["HIGH - RC4\t\t", "The RC4 symmetric cipher is considered weak and should not be used"],
+                        "_MD5": ["HIGH - MD5\t\t", "The MD5 message authentication code is considered weak and should not be used"],
+                        "_3DES_": ["HIGH - 3DES\t\t", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
 
 def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan):
     """
@@ -269,9 +269,9 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in ssl2_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'CRITICAL - SSLv2\t': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
                 ssl2_data.update({'accepted_ssl_2_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_2_0': ssl2_data})
-                recommendations_data.update({'CRITICAL - SSLv2': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
             except KeyError:
                 pass
 
@@ -289,9 +289,9 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in ssl3_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'CRITICAL - SSLv3\t': 'You may be vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
                 ssl3_data.update({'accepted_ssl_3_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_3_0': ssl3_data})
-                recommendations_data.update({'CRITICAL - SSLv3': 'You may be vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
             except KeyError:
                 pass
 
@@ -449,7 +449,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     test_results.update({'vulnerable_to_robot': [False, '']})
                 else:
                     test_results.update({'vulnerable_to_robot': [False, 'Test failed']})
-                recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
+                recommendations_data.update({'CRITICAL - ROBOT\t': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
             except KeyError:
                 pass
 

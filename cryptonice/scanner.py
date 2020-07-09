@@ -254,7 +254,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
     tls_recommendations = tls_data.get('recommendations')
     for key, value in tls_recommendations.items():
-        print (f'{key.upper()}:\t\t\t  {value}')
+        print (f'{key} {value}')
 
 
 def scanner_driver(input_data):
