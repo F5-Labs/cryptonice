@@ -237,14 +237,24 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
 
     try:
-        print('CAA Restrictions:')
         if dns_data.get("DNS").get("CAA"):
+            print('\nCAA Restrictions:')
             for record in dns_data.get("DNS").get("CAA"):
                 print(f'\t {record}')
         else:
             print('None')
     except:
         pass
+
+
+    # PRINT RECOMMENDATIONS
+    print('')
+    print('RECOMMENDATIONS')
+    print('-------------------------------------')
+
+    tls_recommendations = tls_data.get('recommendations')
+    for key, value in tls_recommendations.items():
+        print (f'{key.upper()}:\t\t\t   {value}')
 
 
 def scanner_driver(input_data):

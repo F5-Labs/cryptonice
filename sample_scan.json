@@ -6,6 +6,6 @@
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
-	"generate_json": false,
+	"generate_json": true,
 	"targets": ["001ru.ru"]
 }

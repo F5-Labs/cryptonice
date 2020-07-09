@@ -143,6 +143,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
 
     for server_scan_result in scanner.get_results():
         connection_data = {}  # Dictionary to hold data until it is written to JSON file
+        recommendations_data = {}
 
         # Get IP address hostname
         hostname = server_scan_result.server_info.server_location.hostname
@@ -266,6 +267,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
                 ssl2_data.update({'accepted_ssl_2_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_2_0': ssl2_data})
+                recommendations_data.update({'CRITICAL': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
             except KeyError:
                 pass
 
@@ -285,6 +287,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
                 ssl3_data.update({'accepted_ssl_3_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_3_0': ssl3_data})
+                recommendations_data.update({'CRITICAL': 'SSLv3 is vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
             except KeyError:
                 pass
 
@@ -434,6 +437,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     test_results.update({'vulnerable_to_robot': [False, '']})
                 else:
                     test_results.update({'vulnerable_to_robot': [False, 'Test failed']})
+                recommendations_data.update({'CRITICAL': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
             except KeyError:
                 pass
 
@@ -546,6 +550,9 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
         metadata.update({'commands_with_errors': commands_with_errors})
         # Add meta data to overall information dictionary
         connection_data.update({'scan_information': metadata})
+
+        # Add recommendations data to overall information dictionary
+        connection_data.update({'recommendations': recommendations_data})
 
         return connection_data
 
