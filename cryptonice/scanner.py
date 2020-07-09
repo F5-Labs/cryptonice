@@ -15,6 +15,9 @@ tls_command_list = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher
                     'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
                     'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers']
 
+tls_defaults = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
+                    'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
+                    'tls_1_3_early_data', 'http_headers']
 
 def writeToJSONFile(filename, data):
     """
@@ -364,13 +367,18 @@ def scanner_driver(input_data):
                     # Read in command list
                     try:
                         tls_params = input_data['tls_params']
-                        for param in tls_params:
-                            # If the tls_params value in the JSON input file is 'all' then apply every TLS scan function automatically
-                            if param.upper() == "ALL":
-                                commands_to_run = tls_command_list
-                            else:
-                                if param in tls_command_list:
-                                    commands_to_run.append(str(param))
+                        # If the TLS parameters are blank but the TLS scan option is present, then assume a default set of scans to run
+                        if len(tls_params) == 0:
+                            commands_to_run = tls_defaults
+                        else:
+                            for param in tls_params:
+                                # If the tls_params value in the JSON input file is 'all' then apply every TLS scan function automatically
+                                if (param.upper() == "ALL"):
+                                    commands_to_run = tls_command_list
+                                else:
+                                    if param in tls_command_list:
+                                        commands_to_run.append(str(param))
+
                         tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
                     except KeyError:
                         tls_data = "No TLS scan parameters provided"
