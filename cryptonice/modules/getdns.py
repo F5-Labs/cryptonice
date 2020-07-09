@@ -27,7 +27,8 @@ def get_dns(hostname, all_checks):
     host_data.update({'hostname': hostname})
     connection_data.update({'Connection': hostname})
 
-    print(f'Fetching A records')
+    # DEBUG
+    # print(f'Fetching A records')
     dns_data.update({'A': getDNSRecord(hostname, 'A')})
 
     if all_checks:

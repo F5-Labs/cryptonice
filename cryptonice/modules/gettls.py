@@ -32,7 +32,8 @@ def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan)
     :param port_to_scan: desired port to attempt connection with
     :return: None
     """
-    print("Attempting connection to " + str(hostname))
+    # DEBUG
+    # print("Attempting connection to " + str(hostname))
     server_location = ServerNetworkLocationViaDirectConnection(str(hostname), port_to_scan, ip_address)
     try:
         server_info = ServerConnectivityTester().perform(server_location)
@@ -145,7 +146,9 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
 
         # Get IP address hostname
         hostname = server_scan_result.server_info.server_location.hostname
-        print(f"Analyzing TLS results for {server_scan_result.server_info.server_location.hostname}")
+
+        # Debug
+        # print(f"Analyzing TLS results for {server_scan_result.server_info.server_location.hostname}")
 
         # Collect relevant information from server_info results
         ip_address = server_scan_result.server_info.server_location.ip_address

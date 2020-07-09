@@ -235,15 +235,16 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-    print('CAA Restrictions:')
+
     try:
+        print('CAA Restrictions:')
         if dns_data.get("DNS").get("CAA"):
             for record in dns_data.get("DNS").get("CAA"):
                 print(f'\t {record}')
         else:
             print('None')
     except:
-        print('Did not collect DNS data')
+        pass
 
 
 def scanner_driver(input_data):

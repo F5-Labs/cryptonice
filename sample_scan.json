@@ -1,11 +1,11 @@
 {
 	"id": "test.py",
 	"port": 443,
-	"scans": ["TLS", "HTTP2"],
+	"scans": ["TLS"],
 	"tls_params": [],
 	"http_body": false,
-	"force_redirect": false,
+	"force_redirect": true,
 	"print_out": true,
 	"generate_json": false,
-	"targets": ["gmail.com"]
+	"targets": ["001ru.ru"]
 }
