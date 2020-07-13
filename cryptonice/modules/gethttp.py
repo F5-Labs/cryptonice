@@ -123,11 +123,14 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
                 # The SSLyze functions will catch and report on legacy and broken protocols...
                 return [str_host, str_path, b_httptohttps], []
         else:
-            # print(f'Attemping HTTP connection to {ip_address} using HOST header of {str_host}')
-            conn = http.client.HTTPConnection(ip_address, int_port, timeout=5)
-            conn.request('GET', str_path, headers={"Host": hostname})
-            res = conn.getresponse()
-            conn.close()
+            try:
+                # print(f'Attemping HTTP connection to {ip_address} using HOST header of {str_host}')
+                conn = http.client.HTTPConnection(ip_address, int_port, timeout=5)
+                conn.request('GET', str_path, headers={"Host": hostname})
+                res = conn.getresponse()
+                conn.close()
+            except:
+                return [str_host, str_path, b_httptohttps], []
 
         if force_redirect:
             # If we get a redirection then update the new path (str_path) to wherever we're being told to go by the

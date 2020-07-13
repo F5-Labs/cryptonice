@@ -236,9 +236,9 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
 
     try:
-        if dns_data.get("DNS").get("CAA"):
+        if dns_data.get("records").get("CAA"):
             print('\nCAA Restrictions:')
-            for record in dns_data.get("DNS").get("CAA"):
+            for record in dns_data.get("records").get("CAA"):
                 print(f'\t {record}')
         else:
             print('None')
@@ -251,14 +251,26 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('RECOMMENDATIONS')
     print('-------------------------------------')
 
-    tls_recommendations = tls_data.get('tls_recommendations')
-    for key, value in tls_recommendations.items():
-        print (f'{key} {value}')
+    try:
+        tls_recommendations = tls_data.get('tls_recommendations')
+        for key, value in tls_recommendations.items():
+            print (f'{key} {value}')
+    except:
+        pass
 
-    cert_recommendations = tls_data.get('cert_recommendations')
-    if cert_recommendations is not None:
+    try:
+        cert_recommendations = tls_data.get('cert_recommendations')
         for key, value in cert_recommendations.items():
             print (f'{key} {value}')
+    except:
+        pass
+
+    try:
+        dns_recommendations = dns_data.get('dns_recommendations')
+        for key, value in dns_recommendations.items():
+            print (f'{key} {value}')
+    except:
+        pass
 
 
 def scanner_driver(input_data):
@@ -337,7 +349,7 @@ def scanner_driver(input_data):
                 dns_data = get_dns(hostname, False)
 
             if dns_data:
-                ip_address = dns_data.get('DNS').get('A')[0]  # get first IP in list
+                ip_address = dns_data.get('records').get('A')[0]  # get first IP in list
                 print(f'{hostname} resolves to {ip_address}')
         #########################################################################################################
 
@@ -399,7 +411,7 @@ def scanner_driver(input_data):
                     except KeyError:
                         tls_data = "No TLS scan parameters provided"
                 else:
-                    tls_data = "Port closed - no TLS data available"
+                    tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
             if 'HTTP2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)

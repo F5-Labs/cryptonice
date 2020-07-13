@@ -1,1 +1,0 @@
-{"scan_metadata": {"job_id": "test.py", "hostname": "www.f5.com", "port": 443, "node_name": "Cocumba", "http_to_https": true, "status": "Successful", "start": "2020-07-09 10:09:33.229561", "end": "2020-07-09 10:09:33.400717"}, "tls_scan": "Port closed - no TLS data available"}

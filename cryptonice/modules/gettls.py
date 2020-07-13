@@ -330,6 +330,8 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_warning = []
                 for accepted_cipher_suite in tls1_0_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'HIGH - TLSv1.0': 'Major browsers are disabling this TLS 1.0 immenently. Carefully monitor if clients still use this protocol. '})
+
                     # See if this cipher suite is in the dictionary of weak ciphers
                     for key, dict_warning in warning_bad_ciphers.items():
                         # Check if a bad cipher is in the list of ciphers support, but ignore if we've already come across it
@@ -356,6 +358,15 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in tls1_1_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'HIGH - TLSv1.1': 'Major browsers are disabling this TLS 1.1 immenently. Carefully monitor if clients still use this protocol. '})
+
+                    # See if this cipher suite is in the dictionary of weak ciphers
+                    for key, dict_warning in warning_bad_ciphers.items():
+                        # Check if a bad cipher is in the list of ciphers support, but ignore if we've already come across it
+                        if (key in accepted_cipher_suite.cipher_suite.name) and not (key in cipher_suite_warning):
+                            cipher_suite_warning.append(key)
+                            recommendations_data.update({dict_warning[0]: dict_warning[1]})
+
                 tls1_1_data.update({'accepted_tls_1_1_cipher_suites': cipher_suite_list})
                 connection_data.update({'tls_1_1': tls1_1_data})
             except KeyError:

@@ -2,10 +2,10 @@
 	"id": "test.py",
 	"port": 443,
 	"scans": ["TLS", "DNS", "HTTP2", "HTTP"],
-	"tls_params": ["all"],
+	"tls_params": [],
 	"http_body": false,
 	"force_redirect": true,
-	"print_out": true,
+	"print_out": false,
 	"generate_json": true,
-	"targets": ["https://expired.badssl.com/"]
+	"targets": ["db.ebanking-services.com"]
 }

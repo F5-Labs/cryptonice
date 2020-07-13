@@ -23,6 +23,7 @@ def get_dns(hostname, all_checks):
     connection_data = {}
     host_data = {}
     dns_data = {}
+    dns_recommendations = {}
 
     host_data.update({'hostname': hostname})
     connection_data.update({'Connection': hostname})
@@ -41,11 +42,17 @@ def get_dns(hostname, all_checks):
             root_host = root_domain
 
         print(f'Fetching additional records for {root_host}')
-        dns_data.update({'CAA': getDNSRecord(root_host, 'CAA')})
+
+        dns_caa = getDNSRecord(root_host, 'CAA')
+        if len(dns_caa) == 0:
+            dns_recommendations.update({'Low - CAA': 'Consider creating DNS CAA records to prevent accidental or malicious certificate issuance.'})
+
+        dns_data.update({'CAA': dns_caa})
         dns_data.update({'TXT': getDNSRecord(root_host, 'TXT')})
         dns_data.update({'MX': getDNSRecord(root_host, 'MX')})
 
-    connection_data.update({'DNS': dns_data})
+    connection_data.update({'dns_recommendations': dns_recommendations})
+    connection_data.update({'records': dns_data})
 
     return connection_data
 
