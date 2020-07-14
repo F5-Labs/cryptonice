@@ -268,7 +268,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     try:
         dns_recommendations = dns_data.get('dns_recommendations')
         for key, value in dns_recommendations.items():
-            print (f'{key} {value}')
+            print(f'{key} {value}')
     except:
         pass
 
