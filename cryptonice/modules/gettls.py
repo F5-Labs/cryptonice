@@ -330,7 +330,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_warning = []
                 for accepted_cipher_suite in tls1_0_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
-                    recommendations_data.update({'HIGH - TLSv1.0': 'Major browsers are disabling this TLS 1.0 immenently. Carefully monitor if clients still use this protocol. '})
+                    recommendations_data.update({'HIGH - TLSv1.0': 'Major browsers are disabling TLS 1.0 imminently. Carefully monitor if clients still use this protocol. '})
 
                     # See if this cipher suite is in the dictionary of weak ciphers
                     for key, dict_warning in warning_bad_ciphers.items():

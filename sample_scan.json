@@ -5,7 +5,7 @@
 	"tls_params": [],
 	"http_body": false,
 	"force_redirect": true,
-	"print_out": false,
+	"print_out": true,
 	"generate_json": true,
-	"targets": ["db.ebanking-services.com"]
+	"targets": ["fsc.db.com"]
 }
