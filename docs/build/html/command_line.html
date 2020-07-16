@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Line &#8212; cryptonice  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modules" href="modules.html" />
+    <link rel="prev" title="Making crypto… nice!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line">
+<h1>Command Line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h1>
+<p>The default command for cryptonice is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cryptonice</span> <span class="o">&lt;</span><span class="n">domain_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This results in the following commands being run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">443</span><span class="p">,</span>
+    <span class="s2">&quot;scans&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TLS&quot;</span><span class="p">,</span> <span class="s2">&quot;HTTP&quot;</span><span class="p">,</span> <span class="s2">&quot;HTTP2&quot;</span><span class="p">,</span> <span class="s2">&quot;DNS&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;tls_params&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;certificate_information&quot;</span><span class="p">,</span> <span class="s2">&quot;ssl_2_0_cipher_suites&quot;</span><span class="p">,</span> <span class="s2">&quot;ssl_3_0_cipher_suites&quot;</span><span class="p">,</span><span class="s2">&quot;tls_1_0_cipher_suites&quot;</span><span class="p">,</span> <span class="s2">&quot;tls_1_1_cipher_suites&quot;</span><span class="p">,</span> <span class="s2">&quot;tls_1_2_cipher_suites&quot;</span><span class="p">,</span><span class="s2">&quot;tls_1_3_cipher_suites&quot;</span><span class="p">,</span> <span class="s2">&quot;http_headers&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;http_body&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;force_redirect&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;print_out&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;generate_json&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;targets&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">domain_name</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The user can choose to specify custom commands. Each custom command must be preceded with the name of the option (ex: to specify the scans TLS and HTTP to run, the user must add –scans TLS HTTP to the command line parameters)</p>
+<blockquote>
+<div><ul>
+<li><p>–PORT: port to perform the scan on (default = 443)</p></li>
+<li><p>–SCANS: scans to perform</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>TLS scan, HTTP headers, HTTP2 check, DNS data (default = None)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>–TLS_PARAMETERS: TLS specific scans to perform (should be listed as specified below, with no commas between options):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>all, no_vuln_tests, certificate_info, ssl_2_0_cipher_suites, ssl_3_0_cipher_suites, tls_1_0_cipher_suites, tls_1_1_cipher_suites, tls_1_2_cipher_suites, tls_1_3_cipher_suites, tls_compression, tls_1_3_early_data, openssl_ccs_injection, heartbleed, robot, tls_fallback_scsv, session_renegotiation, session_resumption, session_resumption_rate, http_headers</p></li>
+<li><p>all results in all commands being run, no_vuln_tests results in certificate_info, http_headers and the cipher_suites commands being run.</p></li>
+<li><p>More information on each of these scan options can be found at: <a class="reference external" href="https://nabla-c0d3.github.io/sslyze/documentation/available-scan-commands.html">https://nabla-c0d3.github.io/sslyze/documentation/available-scan-commands.html</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>–HTTP_BODY: Y/y or N/n - sets a Boolean variable to include or exclude HTTP pages information</p></li>
+<li><p>–FORCE_REDIRECTS: Y/y or N/n - sets a Boolean variable to check for automatic redirects from port 80 to 443 in a TLS scan (default = Y)</p></li>
+<li><p>–PRINT_OUT: Y/y or N/n - sets a Boolean variable to print scan results to console (default = Y)</p></li>
+<li><p>–JSON_OUT: Y/y or N/n - sets a Boolean variable to print scan results to JSON output file (default = Y)</p></li>
+</ul>
+</div></blockquote>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cryptonice</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">Search</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Making crypto… nice!</a></li>
+      <li>Next: <a href="modules.html" title="next chapter">Modules</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, F5 Labs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/command_line.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
