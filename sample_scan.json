@@ -7,5 +7,5 @@
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"targets": ["fsc.db.com"]
+	"targets": ["f5.com"]
 }
