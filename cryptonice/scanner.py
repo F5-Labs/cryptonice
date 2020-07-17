@@ -22,7 +22,6 @@ tls_defaults = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_sui
 def writeToJSONFile(filename, data):
     """
     Write contents of dictionary with hostname: certificate key-value pairs to a json file
-    :param path: path to destination file
     :param filename: name of destination filegit ad
     :param data: dictionary with key value pairs
     :return: None
@@ -38,9 +37,9 @@ def writeToJSONFile(filename, data):
 
 def print_errors(error):
     try:
-        return error.__str__()
+        return {"ERROR": error.__str__()}
     except:
-        return "Not JSON serializable"
+        return {"ERROR": "Not JSON serializable"}
 
 
 def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):

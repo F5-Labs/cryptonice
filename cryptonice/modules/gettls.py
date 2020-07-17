@@ -16,16 +16,11 @@ from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec, ed448, ed255
 from datetime import datetime
 from typing import List, cast
 
-"""Dictionary of boolean variables to track which commands to run
-command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
-                'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
-                'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
-                'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
-"""
 
 warning_bad_ciphers = {"_RC4_": ["HIGH - RC4", "The RC4 symmetric cipher is considered weak and should not be used"],
                         "_MD5": ["HIGH - MD5", "The MD5 message authentication code is considered weak and should not be used"],
                         "_3DES_": ["HIGH - 3DES", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
+
 
 def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan):
     """
@@ -36,8 +31,6 @@ def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan)
     :param port_to_scan: desired port to attempt connection with
     :return: None
     """
-    # DEBUG
-    # print("Attempting connection to " + str(hostname))
     server_location = ServerNetworkLocationViaDirectConnection(str(hostname), port_to_scan, ip_address)
     try:
         server_info = ServerConnectivityTester().perform(server_location)
@@ -137,16 +130,12 @@ def getCertificateResults(certificate):
     except x509.ExtensionNotFound:
         cert_data.update({'subject_alt_names': []})
 
-
-    print (recommendations_data)
     connection_data.update({'cert_recommendations': recommendations_data})
 
     return cert_data
 
 
 def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
-    #print('\nPerforming TLS tests')
-    #print('-------------------------------------')
     servers_to_scan = []
     start_date = datetime.today()
 
@@ -171,9 +160,6 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
 
         # Get IP address hostname
         hostname = server_scan_result.server_info.server_location.hostname
-
-        # Debug
-        # print(f"Analyzing TLS results for {server_scan_result.server_info.server_location.hostname}")
 
         # Collect relevant information from server_info results
         ip_address = server_scan_result.server_info.server_location.ip_address
