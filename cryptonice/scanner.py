@@ -342,7 +342,7 @@ def scanner_driver(input_data):
             print(f'{hostname} is already a valid IP')
         except:
             # Determine if we are only using DNS to get an IP address, or whether we should query for all records
-            if 'DNS' in input_data['scans']:
+            if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
                 dns_data = get_dns(hostname, True)
             else:
                 dns_data = get_dns(hostname, False)
@@ -387,7 +387,7 @@ def scanner_driver(input_data):
                 str_path = redirection_results[1]  # updated path
                 b_httptohttps = redirection_results[2]  # updated http to https redirect
 
-            if 'TLS' in input_data['scans']:
+            if 'TLS' in input_data['scans'] or 'tls' in input_data['scans']:
                 if target_tlsopen:
                     # List to hold desired ScanCommands for later
                     commands_to_run = []
@@ -412,7 +412,7 @@ def scanner_driver(input_data):
                 else:
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
-            if 'HTTP2' in input_data['scans']:
+            if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
 
             metadata.update({'http_to_https': b_httptohttps})
@@ -427,11 +427,11 @@ def scanner_driver(input_data):
         scan_data.update({'scan_metadata': metadata})  # add metadata to beginning of dictionary
 
         # Add results of scans (boolean defaults to false if dictionary is empty)
-        if 'HTTP' in input_data['scans']:
+        if 'HTTP' in input_data['scans'] or 'http' in input_data['scans']:
             scan_data.update({'http_headers': http_data})
         if tls_data:
             scan_data.update({'tls_scan': tls_data})
-        if 'DNS' in input_data['scans']:
+        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
