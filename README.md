@@ -1,12 +1,18 @@
 # cryptonice
-Built using the sslyze API and ssl, http-client and dns libraries, _cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS. 
+Built using the sslyze API and ssl, http-client and dns libraries, _cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS.
+
+### Installation
+
+The easiest way to get started is by using PIP to install Cryptonice:
+
+`pip install cryptonice`
 
 ### User Guide
 
 _cryptonice_ requires a domain name (like www.github.com).
 
 Providing only a domain name and no other command line input will result in the following default dictionary of commands being run.
-   
+
     {
 	    "id": "default",
 	    "port": 443,
@@ -21,7 +27,7 @@ Providing only a domain name and no other command line input will result in the 
 
 The user can also choose to specify custom commands. Each custom command must be preceded with the name of the option (ex: to specify the scans TLS and HTTP to run, the user must add _--scans TLS HTTP_ to the command line parameters)
 - _--PORT_: port to perform the scan on (default = 443)
-- _--SCANS_: scans to perform 
+- _--SCANS_: scans to perform
     - _TLS_ scan, _HTTP_ headers, _HTTP2_ check, _DNS_ data
 - _--TLS_PARAMETERS_: TLS specific scans to perform (should be listed as specified below, with no commas between options):
     - all, no_vuln_tests, certificate_info, ssl_2_0_cipher_suites, ssl_3_0_cipher_suites, tls_1_0_cipher_suites,
