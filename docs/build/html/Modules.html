@@ -1,22 +1,23 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Modules &#8212; cryptonice  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to cryptonice’s documentation!" href="index.html" />
+    <link rel="prev" title="Command Line" href="command_line.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,26 +42,26 @@
 <p>Scanner_driver is the main function of the library from which all other modules can be accessed. It will call functions to collect the requested data, based on the input provided in the input_data dictionary. As results are collected from each module, scanner_driver builds an output dictionary called scan_data with the information. This dictionary is then used to print output to the console, written to a JSON file, and returned to the function that called scanner driver (i.e. a function in another project or from a separate __main__ file).</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>input_data</em>: dictionary formatted with all necessary scan information (see documentation for example)</p></li>
-<li><p><em>return</em>: dictionary of scan data, hostname</p></li>
+<li><em>input_data</em>: dictionary formatted with all necessary scan information (see documentation for example)</li>
+<li><em>return</em>: dictionary of scan data, hostname</li>
 </ul>
 </div></blockquote>
 <p><strong>def print_output_to_console(scan_data, b_httptohttps)</strong></p>
 <p>Print_output_to_console is the function used to print the scan results to the console. This is a useful function to make the data more readable, especially because the JSON output (if created), is written on a single line. Print_output_to_console also generates recommendations to improve the TLS configuration of the target host.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>scan_data</em>: dictionary of all output from each module called from scanner_driver</p></li>
-<li><p><em>b_httptohttps</em>: Boolean variable noting automatic redirect to HTTPS from HTTP (collected from gethttp.get_http)</p></li>
-<li><p><em>return</em>: None</p></li>
+<li><em>scan_data</em>: dictionary of all output from each module called from scanner_driver</li>
+<li><em>b_httptohttps</em>: Boolean variable noting automatic redirect to HTTPS from HTTP (collected from gethttp.get_http)</li>
+<li><em>return</em>: None</li>
 </ul>
 </div></blockquote>
 <p><strong>def writeToJSONFile(filename, data)</strong></p>
 <p>WriteToJSONFile receives a filename and a dictionary of scan data, and writes it to a single-line JSON file in the same directory as the scanner.py function. If any of the data is not immediately JSON serializable, WriteToJSONFile will call a helper function called print_errors that will attempt to return a string representation of the error. If this fails, it will return a message saying the particular input was not JSON serializable.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>filename</em>: string of hostname</p></li>
-<li><p><em>data</em>: dictionary of all scan data to convert to JSON</p></li>
-<li><p><em>return</em>: None</p></li>
+<li><em>filename</em>: string of hostname</li>
+<li><em>data</em>: dictionary of all scan data to convert to JSON</li>
+<li><em>return</em>: None</li>
 </ul>
 </div></blockquote>
 </div>
@@ -70,9 +71,9 @@
 <p>Port_open is a quick way to check that the port the user would like to scan is open. If it isn’t open for connections, the program will terminate early. The function also checks to see if the hostname can also make a TLS connection.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>hostname</em>: string</p></li>
-<li><p><em>port</em>: int</p></li>
-<li><p><em>return</em>: Boolean open_port, open_tls (true if provided port is open, true if TLS is available aka port 443 is open)</p></li>
+<li><em>hostname</em>: string</li>
+<li><em>port</em>: int</li>
+<li><em>return</em>: Boolean open_port, open_tls (true if provided port is open, true if TLS is available aka port 443 is open)</li>
 </ul>
 </div></blockquote>
 </div>
@@ -82,40 +83,40 @@
 <p>Tls_scan is the main function of the TLS module. A server connection is created and scan commands are queued for the connection. The data from each of the scan commands is appended to a dictionary object which is returned at the end of the function. Certificate information is collected first, including various leaf certificate validity checks, and trust store information. Cryptonice currently only trusts Mozilla certificates, information that is recorded in the cert_errors portion of the tls_scan dictionary data. Cipher suite information is collected, if requested, and the accepted cipher suites for the selected SSL/TLS versions are listed. The vulnerability tests for TLS configuration are recorded largely as boolean variables (true if vulnerable, false if not), except for the ROBOT tests which provides a message related to why it is or isn’t vulnerable to ROBOT. After the tests are completed, the data is added to the larger tls_scan dictionary. Metadata is appended and it is returned to the function that called the tls_scan function.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>ip_address</em>: string host IP address to scan</p></li>
-<li><p><em>str_host</em>: string hostname (SNI)</p></li>
-<li><p><em>commands_to_run</em>: list of scan parameters</p></li>
-<li><p><em>port_to_scan</em>: int port to scan</p></li>
-<li><p><em>return</em>: dictionary of TLS data</p></li>
+<li><em>ip_address</em>: string host IP address to scan</li>
+<li><em>str_host</em>: string hostname (SNI)</li>
+<li><em>commands_to_run</em>: list of scan parameters</li>
+<li><em>port_to_scan</em>: int port to scan</li>
+<li><em>return</em>: dictionary of TLS data</li>
 </ul>
 </div></blockquote>
 <p><strong>def createServerConnection(ip_address, str_host, servers_to_scan, port_to_scan)</strong></p>
 <p>CreateServerConnection sets up a connection to the host server. The server connection information is stored in a list called servers_to_scan, which is accessible from the main tls_scan function. The function will return a string error message if the connection failed.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>ip_address</em>: string IP address to scan</p></li>
-<li><p><em>str_host</em>: string hostname (SNI)</p></li>
-<li><p><em>servers_to_scan</em>: empty list to contain server connection information</p></li>
-<li><p><em>port_to_scan</em>: int port to scan</p></li>
-<li><p><em>return</em>: string “success” or error message</p></li>
+<li><em>ip_address</em>: string IP address to scan</li>
+<li><em>str_host</em>: string hostname (SNI)</li>
+<li><em>servers_to_scan</em>: empty list to contain server connection information</li>
+<li><em>port_to_scan</em>: int port to scan</li>
+<li><em>return</em>: string “success” or error message</li>
 </ul>
 </div></blockquote>
 <p><strong>def addScanRequests(scanner, servers_to_scan, commands)</strong></p>
 <p>AddScanRequests queues and runs the requested scan commands. This step can take a little while, especially if vulnerability tests are included. The scanner object is updated to hold the results of the scan requests.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>scanner</em>: object of sslyze Scanner() class</p></li>
-<li><p><em>servers_to_scan</em>: list of open connections</p></li>
-<li><p><em>commands</em>: list of string commands</p></li>
-<li><p><em>return</em>: None</p></li>
+<li><em>scanner</em>: object of sslyze Scanner() class</li>
+<li><em>servers_to_scan</em>: list of open connections</li>
+<li><em>commands</em>: list of string commands</li>
+<li><em>return</em>: None</li>
 </ul>
 </div></blockquote>
 <p><strong>def getCertificateResults(certificate)</strong></p>
 <p>GetCertificateResults is a helper function dedicated to building the dictionary for the certificate data. Each certificate in the deployment chain (usually 2) is sent to this function and parsed for serial numbers, public key, validity dates, signature hash algorithms, and subject alternative names. The</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>certificate</em>: string literal certificate in PEM format</p></li>
-<li><p><em>return</em>: dictionary of certificate data</p></li>
+<li><em>certificate</em>: string literal certificate in PEM format</li>
+<li><em>return</em>: dictionary of certificate data</li>
 </ul>
 </div></blockquote>
 </div>
@@ -125,18 +126,18 @@
 <p>Get_dns performs a quick DNS check on the specified hostname. The ‘A’ records are always collected because the IP addresses for the hostname are stored there. If all_checks is set to true, records for CAA, TXT and MX records will also be collected by the getDNSRecord helper function. The dictionary of DNS data is returned.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>hostname</em>: string hostname</p></li>
-<li><p><em>all_checks</em>: Boolean variable, true if all DNS checks should be performed, false if they should not be</p></li>
-<li><p><em>return</em>: dictionary of DNS data</p></li>
+<li><em>hostname</em>: string hostname</li>
+<li><em>all_checks</em>: Boolean variable, true if all DNS checks should be performed, false if they should not be</li>
+<li><em>return</em>: dictionary of DNS data</li>
 </ul>
 </div></blockquote>
 <p><strong>def getDNSRecord(hostname, record_type)</strong></p>
 <p>GetDNSRecord specifically collects the DNS records for a specified record type using the dns.resolver Python library. The list of collected records is returned.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>hostname</em>: string hostname</p></li>
-<li><p><em>record_type</em>: string record type (A, CAA, TXT, MX)</p></li>
-<li><p><em>return</em>: list of records</p></li>
+<li><em>hostname</em>: string hostname</li>
+<li><em>record_type</em>: string record type (A, CAA, TXT, MX)</li>
+<li><em>return</em>: list of records</li>
 </ul>
 </div></blockquote>
 </div>
@@ -146,19 +147,19 @@
 <p>Get_http has three main purposes: 1. check if the server automatically reroutes a port 80 connection (HTTP) to a port 443 connection (HTTPS), 2. follow redirects for the hostname, and 3. collects HTTP header information for the hostname. Connections are created using the http.client library, and redirects either generate a 200 status or terminate after 10 loops.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>ip_address</em>: string IP address to connect to</p></li>
-<li><p><em>hostname</em>: string hostname</p></li>
-<li><p><em>int_port</em>: int port to connect to</p></li>
-<li><p><em>usetls</em>: Boolean, true if function should connect using HTTPS (TLS), false for HTTP</p></li>
-<li><p><em>http_pages</em>: Boolean if HTTP pages information should be included in output</p></li>
-<li><p><em>return</em>: [host, path, http_to_https redirection], dictionary of HTTP data</p></li>
+<li><em>ip_address</em>: string IP address to connect to</li>
+<li><em>hostname</em>: string hostname</li>
+<li><em>int_port</em>: int port to connect to</li>
+<li><em>usetls</em>: Boolean, true if function should connect using HTTPS (TLS), false for HTTP</li>
+<li><em>http_pages</em>: Boolean if HTTP pages information should be included in output</li>
+<li><em>return</em>: [host, path, http_to_https redirection], dictionary of HTTP data</li>
 </ul>
 </div></blockquote>
 <p><strong>def split_location(location)</strong></p>
 <p>Split_location receives a header location and splits it into protocol, domain name and path.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>location</em>: header location</p></li>
+<li><em>location</em>: header location</li>
 </ul>
 </div></blockquote>
 </div>
@@ -168,9 +169,9 @@
 <p>Check_http2 will return true if the selected application-layer protocol negotiation is h2 (HTTP/2), and false otherwise.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><em>domain_name</em>: string hostname</p></li>
-<li><p><em>conn_port</em>: port to connect to</p></li>
-<li><p><em>return</em>: Boolean true if port supports HTTP2, false if not</p></li>
+<li><em>domain_name</em>: string hostname</li>
+<li><em>conn_port</em>: port to connect to</li>
+<li><em>return</em>: Boolean true if port supports HTTP2, false if not</li>
 </ul>
 </div></blockquote>
 </div>
@@ -194,6 +195,7 @@
 
 <h3>Navigation</h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="command_line.html">Command Line</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#scanner-py">scanner.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#checkport-py">checkport.py</a></li>
@@ -210,21 +212,23 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to cryptonice’s documentation!</a></li>
+      <li>Previous: <a href="command_line.html" title="previous chapter">Command Line</a></li>
       <li>Next: <a href="search.html" title="next chapter">Search</a></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -241,7 +245,7 @@
       &copy;2020, F5 Labs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
