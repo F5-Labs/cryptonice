@@ -24,7 +24,7 @@ copyright = u'2020, F5 Labs'
 author = u'F5 Labs'
 
 # The short X.Y version
-version = u'1.0'
+version = u''
 # The full version, including alpha/beta/rc tags
 release = u''
 
@@ -40,8 +40,6 @@ release = u''
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx.ext.githubpages',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -77,11 +75,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-import sphinx_glpi_theme
-
-html_theme = "glpi"
-
-html_theme_path = sphinx_glpi_theme.get_html_themes_path()
+html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
