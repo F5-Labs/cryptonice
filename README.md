@@ -11,6 +11,8 @@ The easiest way to get started is by using PIP to install Cryptonice:
 
 _cryptonice_ requires a domain name (like www.github.com).
 
+`cryptonice www.github.com`
+
 Providing only a domain name and no other command line input will result in the following default dictionary of commands being run.
 
     {
