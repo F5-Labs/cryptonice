@@ -9,7 +9,7 @@ by using default parameters or specifically (and only) scanning for the website 
 
 **Using Cryptonice to check for expired certificates at expired.badssl.com**:
 ::
-  cryptonice f5.com --scans tls --tls_parameters certificate_info
+  cryptonice expired.badssl.com --scans tls --tls_parameters certificate_info
 
 Results:
 ::
