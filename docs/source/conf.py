@@ -83,6 +83,7 @@ pygments_style = None
 #html_theme_path = sphinx_glpi_theme.get_html_themes_path()
 
 html_theme = 'default'
+RTD_NEW_THEME = True
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
