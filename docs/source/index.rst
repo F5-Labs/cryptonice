@@ -28,20 +28,17 @@ Getting help
 ============
 Need some help? Start here...
 
-* `Introduction Cryptonice` on F5 Labs
+* `Introducing Cryptonice`_ on F5 Labs
 * View the code, fork the project and submit issues on the `Cryptonice Github repo`_.
-* Ask or search questions on the `Cryptonice Slack channel`_.
 
-.. _Introduction Cryptonice: https://www.f5.com/labs/cryptonice
+.. _Introducing Cryptonice: https://www.f5.com/labs/cryptonice
 .. _Cryptonice Github repo: https://github.com/F5-Labs/cryptonice
-.. _Cryptonice Slack channel: https://f5.com
 
 
 Getting Started
 ^^^^^^^^^^^^^^^
 
 .. toctree::
-   :caption: Getting Started
    :maxdepth: 3
    :hidden:
 
@@ -63,18 +60,21 @@ Getting Started
    See some examples of basic command line usage of Cryptonice.
 
 
-Advanced Usage
-^^^^^^^^^^^^^^
+Advanced API Use
+^^^^^^^^^^^^^^^^
 
 .. toctree::
-  :caption: Advanced Usage
-  :maxdepth: 3
+  :maxdepth: 1
   :hidden:
 
+  api/advanced
   api/modules
 
+:doc:`api/advanced`
+  Using the Cryptonice library in your own code.
+
 :doc:`api/modules`
-  Get Cryptonice installed on your computer.
+  A description of each of the scanning and testing modules within Cryptonice.
 
 
 Indices and tables
