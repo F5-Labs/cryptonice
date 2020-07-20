@@ -9,7 +9,7 @@ The easiest way to get started is by using PIP to install Cryptonice:
 
 ### User Guide
 
-_cryptonice_ requires a domain name (like www.github.com).
+_cryptonice_ requires a domain name (such as www.github.com).
 
 `cryptonice www.github.com`
 
