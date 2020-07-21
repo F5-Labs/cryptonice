@@ -16,11 +16,10 @@ from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec, ed448, ed255
 from datetime import datetime
 from typing import List, cast
 
-"""Dictionary of boolean variables to track which commands to run"""
-command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
-                'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
-                'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
-                'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
+
+warning_bad_ciphers = {"_RC4_": ["HIGH - RC4", "The RC4 symmetric cipher is considered weak and should not be used"],
+                        "_MD5": ["HIGH - MD5", "The MD5 message authentication code is considered weak and should not be used"],
+                        "_3DES_": ["HIGH - 3DES", "The 3DES symmetric cipher is vulnerable to the Sweet32 attack"]}
 
 
 def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan):
@@ -32,7 +31,6 @@ def createServerConnections(ip_address, hostname, servers_to_scan, port_to_scan)
     :param port_to_scan: desired port to attempt connection with
     :return: None
     """
-    print("Attempting connection to " + str(hostname))
     server_location = ServerNetworkLocationViaDirectConnection(str(hostname), port_to_scan, ip_address)
     try:
         server_info = ServerConnectivityTester().perform(server_location)
@@ -50,7 +48,7 @@ def addScanRequests(scanner, servers_to_scan, commands):
     :param commands: set of string scan commands (like 'certificate_info' and 'tls_1_0_cipher_suites'
     :return: None
     """
-    print('Queueing scan commands (this can take a little while...)')
+    print('Queueing TLS scans (this might take a little while...)')
     for server_info in servers_to_scan:
         server_scan_req = ServerScanRequest(
             server_info=server_info, scan_commands=commands
@@ -65,6 +63,7 @@ def getCertificateResults(certificate):
     :return: dictionary containing key-value pairs for all certificate information
     """
     cert_data = {}
+    recommendations_data = {}
     # utf8 is more compatible with python3 so running an earlier version might cause an issue here...
     # cert is an object of the x509 Certificate class with attributes that can be found
     # here: https://cryptography.io/en/latest/x509/reference/#x-509-certificate-object
@@ -83,16 +82,16 @@ def getCertificateResults(certificate):
     # Certificate public key
     public_key = cert.public_key()
     if isinstance(public_key, rsa.RSAPublicKey):
-        cert_data.update({'public_key_algorithm': "RSAPublicKey"})
+        cert_data.update({'public_key_algorithm': "RSA"})
     elif isinstance(public_key, dsa.DSAPublicKey):
-        cert_data.update({'public_key_algorithm': "DSAPublicKey"})
+        cert_data.update({'public_key_algorithm': "DSA"})
     elif isinstance(public_key, ec.EllipticCurvePublicKey):
-        cert_data.update({'public_key_algorithm': "EllipticCurvePublicKey"})
+        cert_data.update({'public_key_algorithm': "EllipticCurve"})
         cert_data.update({'curve_algorithm': public_key.curve.name})
     elif isinstance(public_key, ed25519.Ed25519PublicKey):
-        cert_data.update({'public_key_algorithm': "Ed25519PublicKey"})
+        cert_data.update({'public_key_algorithm': "Ed25519"})
     elif isinstance(public_key, ed448.Ed448PublicKey):
-        cert_data.update({'public_key_algorithm': "Ed448PublicKey"})
+        cert_data.update({'public_key_algorithm': "Ed448"})
     else:
         cert_data.update({'public_key_algorithm': "UNKNOWN"})
     # Certificate public key size (attribute of public key object)
@@ -103,6 +102,19 @@ def getCertificateResults(certificate):
     cert_data.update({'valid_from': not_valid_before})
     not_valid_after = cert.not_valid_after.__str__()
     cert_data.update({'valid_until': not_valid_after})
+
+    cert_days_left = ((datetime.strptime(not_valid_after, '%Y-%m-%d %H:%M:%S')) - datetime.today()).days
+    cert_data.update({'days_left': cert_days_left})
+
+    if cert_days_left < 0:
+        recommendations_data.update({'CRITICAL - Cert Expiry': 'Certificate has expired!'})
+    elif cert_days_left < 1:
+        recommendations_data.update({'HIGH - Cert Expiry': 'Certificate has less than 1 day remaining'})
+    elif cert_days_left < 7:
+        recommendations_data.update({'WARN - Cert Expiry': 'Certificate has less than 7 days remaining'})
+    elif cert_days_left < 14:
+        recommendations_data.update({'INFO - Cert Expiry': 'Certificate has less than 14 days remaining'})
+
 
     # Certificate SHA (signature_hash_algorithm returns a HashAlgorithm object with the attribute 'name')
     sha = cert.signature_hash_algorithm.name
@@ -118,14 +130,16 @@ def getCertificateResults(certificate):
     except x509.ExtensionNotFound:
         cert_data.update({'subject_alt_names': []})
 
+    connection_data.update({'cert_recommendations': recommendations_data})
+
     return cert_data
 
 
 def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
-    print('\nPerforming TLS tests')
-    print('-------------------------------------')
     servers_to_scan = []
     start_date = datetime.today()
+
+    global connection_data
 
     # Loop through all hostnames and attempt to connect
     # if error message is returned (ie scanner could not connect, return error message and exit function)
@@ -142,10 +156,10 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
 
     for server_scan_result in scanner.get_results():
         connection_data = {}  # Dictionary to hold data until it is written to JSON file
+        recommendations_data = {}
 
         # Get IP address hostname
         hostname = server_scan_result.server_info.server_location.hostname
-        print(f"Analyzing TLS results for {server_scan_result.server_info.server_location.hostname}")
 
         # Collect relevant information from server_info results
         ip_address = server_scan_result.server_info.server_location.ip_address
@@ -206,24 +220,31 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                         all_certificates_info.update(
                             {'ocsp_response_is_trusted': cert_deployment.ocsp_response_is_trusted})
 
-                    # Check for certificate errors
+                    # Create a dictionary with the path validation results for each validated trust store
+                    trust_store_checks = {}
+                    for path_validation_result in cert_deployment.path_validation_results:
+                        if path_validation_result.was_validation_successful:
+                            trust_store_checks.update(
+                                {path_validation_result.trust_store.name: path_validation_result.openssl_error_string})
+
+                    # Code from sslyze for reference (we can use the was_validation_successful variable if needed)
+                    # for path_validation_result in all_path_validation_results:
+                    #     if path_validation_result.was_validation_successful:
+                    #         trust_store_that_can_build_verified_chain = path_validation_result.trust_store
+                    #         verified_certificate_chain = path_validation_result.verified_certificate_chain
+                    #         break
+
+                    # Check for certificate errors (using Mozilla as the trust store to check against)
                     certificate_errors = {}
-                    path_validation = cert_deployment.path_validation_results[count]
-
-                    if path_validation.openssl_error_string is not None:
-                        certificate_errors.update({'cert_trusted': False})
-                        certificate_errors.update({'cert_error': path_validation.openssl_error_string})
-                    else:
+                    if "Mozilla" in trust_store_checks.keys() and trust_store_checks.get("Mozilla") is None:
                         certificate_errors.update({'cert_trusted': True})
-
-                    """
-                    if path_validation.trust_store is not None:
-                        # Only set up to trust Windows or Mozilla, and not others (including Android, Apple, Java)
-                        if path_validation.trust_store.name == "Windows" or path_validation.trust_store.name == "Mozilla":
-                            certificate_errors.update({'cert_trusted': True})
-                        else:
-                            certificate_errors.update({'cert_trusted': False})
-                    """
+                    elif "Mozilla" in trust_store_checks.keys():
+                        certificate_errors.update({'cert_trusted': False})
+                        certificate_errors.update({'cert_error': trust_store_checks.get("Mozilla")})
+                    else:
+                        certificate_errors.update({'cert_trusted': False})
+                        certificate_errors.update({'cert_error': "Mozilla not trusted"})
+                    certificate_errors.update({'hostname_matches': cert_deployment.leaf_certificate_subject_matches_hostname})
 
                     # Collect certificate (returns a string literal from CertificateDeploymentAnalysisResult class)
                     certificate = cert_deployment.received_certificate_chain_as_pem[count]
@@ -254,6 +275,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in ssl2_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'CRITICAL - SSLv2': 'SSLv2 is severely broken and should be disabled. Recommend disabling SSLv2 immediately. '})
                 ssl2_data.update({'accepted_ssl_2_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_2_0': ssl2_data})
             except KeyError:
@@ -273,6 +295,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in ssl3_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'CRITICAL - SSLv3': 'You may be vulnerable to the POODLE attack. Recommend disabling SSLv3 immediately. '})
                 ssl3_data.update({'accepted_ssl_3_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'ssl_3_0': ssl3_data})
             except KeyError:
@@ -290,8 +313,18 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                     tls1_0_data.update({'preferred_cipher_suite': None})
 
                 cipher_suite_list = []
+                cipher_suite_warning = []
                 for accepted_cipher_suite in tls1_0_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'HIGH - TLSv1.0': 'Major browsers are disabling TLS 1.0 imminently. Carefully monitor if clients still use this protocol. '})
+
+                    # See if this cipher suite is in the dictionary of weak ciphers
+                    for key, dict_warning in warning_bad_ciphers.items():
+                        # Check if a bad cipher is in the list of ciphers support, but ignore if we've already come across it
+                        if (key in accepted_cipher_suite.cipher_suite.name) and not (key in cipher_suite_warning):
+                            cipher_suite_warning.append(key)
+                            recommendations_data.update({dict_warning[0]: dict_warning[1]})
+
                 tls1_0_data.update({'accepted_tls_1_0_cipher_suites': cipher_suite_list})
                 connection_data.update({'tls_1_0': tls1_0_data})
             except KeyError:
@@ -311,6 +344,15 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 cipher_suite_list = []
                 for accepted_cipher_suite in tls1_1_result.accepted_cipher_suites:
                     cipher_suite_list.append(accepted_cipher_suite.cipher_suite.name)
+                    recommendations_data.update({'HIGH - TLSv1.1': 'Major browsers are disabling this TLS 1.1 immenently. Carefully monitor if clients still use this protocol. '})
+
+                    # See if this cipher suite is in the dictionary of weak ciphers
+                    for key, dict_warning in warning_bad_ciphers.items():
+                        # Check if a bad cipher is in the list of ciphers support, but ignore if we've already come across it
+                        if (key in accepted_cipher_suite.cipher_suite.name) and not (key in cipher_suite_warning):
+                            cipher_suite_warning.append(key)
+                            recommendations_data.update({dict_warning[0]: dict_warning[1]})
+
                 tls1_1_data.update({'accepted_tls_1_1_cipher_suites': cipher_suite_list})
                 connection_data.update({'tls_1_1': tls1_1_data})
             except KeyError:
@@ -414,8 +456,10 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 # server_info.tls_probing_result.highest_tls_version_supported.name
                 if int_robot_results == 1:
                     test_results.update({'vulnerable_to_robot': [True, 'Weak oracle']})
+                    recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
                 elif int_robot_results == 2:
                     test_results.update({'vulnerable_to_robot': [True, 'Strong oracle']})
+                    recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
                 elif int_robot_results == 3:
                     test_results.update({'vulnerable_to_robot': [False, 'No oracle']})
                 elif int_robot_results == 4:
@@ -536,6 +580,9 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
         metadata.update({'commands_with_errors': commands_with_errors})
         # Add meta data to overall information dictionary
         connection_data.update({'scan_information': metadata})
+
+        # Add recommendations data to overall information dictionary
+        connection_data.update({'tls_recommendations': recommendations_data})
 
         return connection_data
 

@@ -10,16 +10,18 @@ from cryptonice.modules.gethttp2 import check_http2
 from cryptonice.checkport import port_open
 from datetime import datetime
 
-tls_command_list = {'certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
+tls_command_list = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
                     'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
-                    'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers'}
+                    'session_renegotiation', 'session_resumption', 'session_resumption_rate', 'http_headers']
 
+tls_defaults = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
+                    'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
+                    'tls_1_3_early_data', 'http_headers']
 
 def writeToJSONFile(filename, data):
     """
     Write contents of dictionary with hostname: certificate key-value pairs to a json file
-    :param path: path to destination file
     :param filename: name of destination filegit ad
     :param data: dictionary with key value pairs
     :return: None
@@ -35,16 +37,16 @@ def writeToJSONFile(filename, data):
 
 def print_errors(error):
     try:
-        return error.__str__()
+        return {"ERROR": error.__str__()}
     except:
-        return "Not JSON serializable"
+        return {"ERROR": "Not JSON serializable"}
 
 
 def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('\n')
     print('RESULTS')
     print('-------------------------------------')
-    print(f'Hostname:\t\t\t {str_host}\n')
+    print(f'Hostname:\t\t\t  {str_host}\n')
 
     tls_data = scan_data.get('tls_scan')
     http2_data = scan_data.get('http2')
@@ -139,18 +141,22 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
             pass
 
         cert_errors = cert_0.get("certificate_errors")
-        print(f'Certificate is trusted:\t\t  {cert_errors.get("cert_trusted")}')
+        cert_error = ""
         try:
-            print(f'Certificate trust error:\t  {cert_errors.get("cert_error")}')
+            cert_error = cert_errors.get("cert_error")
+            if cert_error is None:
+                cert_error = "No errors"
         except KeyError:
             pass
 
-        print(
-            f'Certificate is valid:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+        print(f'Certificate is trusted:\t\t  {cert_errors.get("cert_trusted")} ({cert_error})')
+        print(f'Hostname Validation:\t\t  {"OK - Certificate matches server hostname" if cert_errors.get("hostname_matches") else "FAILED - Certificate does NOT match server hostname"}')
+        print(f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
+        print(f'Certificate is in date:\t\t  {True if cert_0.get("valid_from") < datetime.today().__str__() < cert_0.get("valid_until") else False}')
+
+        print(f'Days until expiry:\t\t  {cert_0.get("days_left")}')
         print(f'Valid From:\t\t\t  {cert_0.get("valid_from")}')
         print(f'Valid Until:\t\t\t  {cert_0.get("valid_until")}')
-        print(
-            f'Extended Validation:\t\t  {True if tls_data.get("certificate_info").get("leaf_certificate_is_ev") else False}')
         print('')
 
         try:
@@ -175,20 +181,19 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
             if vuln_tests.get("compression_supported") is not None:
                 other_test_run = True
                 print(f'Supports TLS Compression:\t  {vuln_tests.get("compression_supported")}')
-            if vuln_tests.get("CVE-2014-0224_vulnerable") is not None:
-                other_test_run = True
-                print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
             if vuln_tests.get("supports_tls_fallback") is not None:
                 other_test_run = True
                 print(f'Supports TLS Fallback:\t\t  {vuln_tests.get("supports_tls_fallback")}')
+            if vuln_tests.get("CVE-2014-0224_vulnerable") is not None:
+                other_test_run = True
+                print(f'Vulnerable to CVE-2014-0224:\t  {vuln_tests.get("CVE-2014-0224_vulnerable")}')
             if vuln_tests.get("vulnerable_to_heartbleed") is not None:
                 other_test_run = True
                 print(f'Vulnerable to Heartbleed:\t  {vuln_tests.get("vulnerable_to_heartbleed")}')
             if vuln_tests.get('vulnerable_to_robot') is not None:
                 other_test_run = True
                 robot = vuln_tests.get('vulnerable_to_robot')
-                print(f'Vulnerable to ROBOT:\t\t  {robot[0]}')
-                print(f'ROBOT Test Result:\t\t  {robot[1]}')
+                print(f'Vulnerable to ROBOT:\t\t  {robot[0]} ({robot[1]})')
 
             if not other_test_run:
                 print("No vulnerability tests were run")
@@ -228,15 +233,43 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-    print('CAA Restrictions:')
+
     try:
-        if dns_data.get("DNS").get("CAA"):
-            for record in dns_data.get("DNS").get("CAA"):
+        if dns_data.get("records").get("CAA"):
+            print('\nCAA Restrictions:')
+            for record in dns_data.get("records").get("CAA"):
                 print(f'\t {record}')
         else:
             print('None')
     except:
-        print('Did not collect DNS data')
+        pass
+
+
+    # PRINT RECOMMENDATIONS
+    print('')
+    print('RECOMMENDATIONS')
+    print('-------------------------------------')
+
+    try:
+        tls_recommendations = tls_data.get('tls_recommendations')
+        for key, value in tls_recommendations.items():
+            print (f'{key} {value}')
+    except:
+        pass
+
+    try:
+        cert_recommendations = tls_data.get('cert_recommendations')
+        for key, value in cert_recommendations.items():
+            print (f'{key} {value}')
+    except:
+        pass
+
+    try:
+        dns_recommendations = dns_data.get('dns_recommendations')
+        for key, value in dns_recommendations.items():
+            print(f'{key} {value}')
+    except:
+        pass
 
 
 def scanner_driver(input_data):
@@ -257,13 +290,6 @@ def scanner_driver(input_data):
         print("ERROR: No scan commands supplied")
         return None, None
 
-    # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
-    # HTTP redirect checks
-    try:
-        host_sni = input_data['sni']
-    except KeyError:
-        host_sni = ""
-
     tls_data = {}
     http_data = {}
     dns_data = {}
@@ -271,6 +297,13 @@ def scanner_driver(input_data):
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
+        print ('Pre-scan checks\n-------------------------------------')
+        # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
+        # HTTP redirect checks
+        try:
+            host_sni = input_data['sni']
+        except KeyError:
+            host_sni = ""
 
         """
         Quick and dirty checks to strip out protocol and any remaining slashes.
@@ -285,7 +318,7 @@ def scanner_driver(input_data):
             host_sni = hostname
         ip_address = ""
 
-        print(f'\nScanning {hostname} on port {port}...')
+        print(f'Scanning {hostname} on port {port}...')
 
         start_time = datetime.today()  # added to scan metadata later
         scan_data = {}  # final dictionary with metadata and scan results
@@ -309,13 +342,13 @@ def scanner_driver(input_data):
             print(f'{hostname} is already a valid IP')
         except:
             # Determine if we are only using DNS to get an IP address, or whether we should query for all records
-            if 'DNS' in input_data['scans']:
+            if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
                 dns_data = get_dns(hostname, True)
             else:
                 dns_data = get_dns(hostname, False)
 
             if dns_data:
-                ip_address = dns_data.get('DNS').get('A')[0]  # get first IP in list
+                ip_address = dns_data.get('records').get('A')[0]  # get first IP in list
                 print(f'{hostname} resolves to {ip_address}')
         #########################################################################################################
 
@@ -354,23 +387,32 @@ def scanner_driver(input_data):
                 str_path = redirection_results[1]  # updated path
                 b_httptohttps = redirection_results[2]  # updated http to https redirect
 
-            if 'TLS' in input_data['scans']:
+            if 'TLS' in input_data['scans'] or 'tls' in input_data['scans']:
                 if target_tlsopen:
                     # List to hold desired ScanCommands for later
                     commands_to_run = []
                     # Read in command list
                     try:
                         tls_params = input_data['tls_params']
-                        for param in tls_params:
-                            if param in tls_command_list:
-                                commands_to_run.append(str(param))
+                        # If the TLS parameters are blank but the TLS scan option is present, then assume a default set of scans to run
+                        if len(tls_params) == 0:
+                            commands_to_run = tls_defaults
+                        else:
+                            for param in tls_params:
+                                # If the tls_params value in the JSON input file is 'all' then apply every TLS scan function automatically
+                                if (param.upper() == "ALL"):
+                                    commands_to_run = tls_command_list
+                                else:
+                                    if param in tls_command_list:
+                                        commands_to_run.append(str(param))
+
                         tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
                     except KeyError:
                         tls_data = "No TLS scan parameters provided"
                 else:
-                    tls_data = "Port closed - no TLS data available"
+                    tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
-            if 'HTTP2' in input_data['scans']:
+            if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
 
             metadata.update({'http_to_https': b_httptohttps})
@@ -385,11 +427,11 @@ def scanner_driver(input_data):
         scan_data.update({'scan_metadata': metadata})  # add metadata to beginning of dictionary
 
         # Add results of scans (boolean defaults to false if dictionary is empty)
-        if 'HTTP' in input_data['scans']:
+        if 'HTTP' in input_data['scans'] or 'http' in input_data['scans']:
             scan_data.update({'http_headers': http_data})
         if tls_data:
             scan_data.update({'tls_scan': tls_data})
-        if 'DNS' in input_data['scans']:
+        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
@@ -400,6 +442,9 @@ def scanner_driver(input_data):
         print('\nScans complete')
         print('-------------------------------------')
         print(f'Total run time: {end_time - start_time}')
+
+        if input_data['generate_json']:
+            writeToJSONFile(str_host, scan_data)
 
     return scan_data, hostname
 

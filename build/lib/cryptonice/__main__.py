@@ -1,4 +1,4 @@
-from cryptonice.scanner import writeToJSONFile, scanner_driver
+from cryptonice.scanner import scanner_driver
 import argparse
 
 default_dict = {'id': 'default',
@@ -9,6 +9,7 @@ default_dict = {'id': 'default',
                                "tls_1_3_cipher_suites", "http_headers"],
                 'http_body': False,
                 'print_out': True,
+                'generate_json': True,
                 'force_redirect': True
                 }
 
@@ -60,6 +61,14 @@ def main():
         input_data.update({'port': port})
 
         tls_parameters = args.tls_parameters
+
+        if not args.scans and tls_parameters:  # if user provided TLS parameters, perform TLS scan
+            input_data.update({'scans': ["TLS"]})
+        elif not args.scans:  # if nothing was provided, queue no scans
+            input_data.update({'scans': []})
+        else:  # queue scans provided in command line
+            input_data.update({'scans': args.scans})
+
         if not tls_parameters:
             input_data.update({'tls_params': []})
         elif 'all' in tls_parameters:
@@ -68,13 +77,6 @@ def main():
             input_data.update({'tls_params': no_vuln_tests})
         else:
             input_data.update({'tls_params': tls_parameters})
-
-        if not args.scans and tls_parameters:  # if user provided TLS parameters, perform TLS scan
-            input_data.update({'scans': ["TLS"]})
-        elif not args.scans:  # if nothing was provided, queue no scans
-            input_data.update({'scans': []})
-        else:  # queue scans provided in command line
-            input_data.update({'scans': args.scans})
 
         http_body = args.http_body
         if http_body == 'y' or http_body == 'Y':
@@ -93,20 +95,16 @@ def main():
             print_to_console = False
         input_data.update({'print_out': print_to_console})
 
+        generate_json = True
+        if args.json_out == "N" or args.json_out == "n":
+            generate_json = False
+        input_data.update({'generate_json': generate_json})
+
         input_data.update({'targets': domain_name})
 
         output_data, hostname = scanner_driver(input_data)
-
-    generate_json = True
-    if args.json_out == "N" or args.json_out == "n":
-        generate_json = False
-
-    # The command line version of cryptonice should never get None back
-    if output_data is not None and hostname is not None:
-        if generate_json:
-            writeToJSONFile(hostname, output_data)
-    else:
-        print("Error with input - scan was not completed")
+        if output_data is None and hostname is None:
+            print('Error with input - scan was not completed')
 
 
 if __name__ == "__main__":
