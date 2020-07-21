@@ -13,7 +13,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="cryptonice",
-    version="0.1.16",
+    version="0.1.18",
     description="Perform TLS scan of single domain",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -26,18 +26,15 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
+    python_requires='>=3',
     packages=["cryptonice"],
     include_package_data=True,
     install_requires=["sslyze>=3.0.0",
-                      "cryptography>=2.6",
-                      "nassl>=3.0.0",
                       "dnspython>=1.16.0",
                       "http-client>=0.1.21",
-                      "tls-parser>=1.2.1",
                       "urllib3>=1.25.9",
                       "ipaddress>=1.0.22"
-                      "pathlib~=1.0.1",
-                      "pycurl~=7.43.0.5"],
+                      "pathlib~=1.0.1"],
     entry_points={
         "console_scripts": [
             "cryptonice=cryptonice.__main__:main",

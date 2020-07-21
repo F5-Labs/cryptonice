@@ -2,6 +2,4 @@ pathlib~=1.0.1
 setuptools~=41.2.0
 dnspython~=1.16.0
 sslyze~=3.0.4
-cryptography>=2.6,<=2.9
 ipaddress~=1.0.23
-pycurl~=7.43.0.5
