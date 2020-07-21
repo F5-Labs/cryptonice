@@ -14,7 +14,7 @@ def port_open(hostname, port):
     Also check for TLS handshake
     """
     open_port = False
-    open_tls = False
+    open_tls = True  # change to False later
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock_result = sock.connect_ex((hostname, port))
