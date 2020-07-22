@@ -11,7 +11,7 @@ Python 3
 You should have `Python 3.7`_ (or later) and the Python installer `PIP`_ already installed. Using
 PIP simply install Cryptonice by entering the following command::
 
-    pip install cryptonicedoc
+    pip install cryptonice
 
 
 
