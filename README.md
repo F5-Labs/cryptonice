@@ -5,7 +5,7 @@ Cryptonice is currently supported on Windows and Mac OS with Linux support comin
 
 For detailed and up to date documentation, check out our ReadTheDocs pages:
 
-https://cryptonice.readthedocs.io/en/latest/index.html
+https://cryptonice.readthedocs.io/
 
 
 ### Installation
