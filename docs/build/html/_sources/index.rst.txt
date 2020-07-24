@@ -21,8 +21,32 @@ Using default arguments Cryptonice will scan the target site on port 443, check 
 look for DNS CAA records, test the TLS connection and certificate and check for the availability of HTTP/2,
 HSTS and other security headers.
 
+*Currently Supported:*
+
+* Windows Python app and library
+* Mac Python app and library
+
+*Coming Soon:*
+
+* Linux support
+* Standalone executables
+
 .. _SSLyze: https://github.com/nabla-c0d3/sslyze
 .. _Cryptography: https://github.com/pyca/cryptography
+
+
+**Sample output of Cryptonice command line usage**:
+::
+  cryptonice untrusted-root.badssl.com
+
+.. image:: cryptonice_example.png
+  :width: 568px
+  :align: center
+  :height: 552px
+  :alt: Cryptonice sample output
+
+
+For more ideas on how to use Cryptonice view the Examples pages.
 
 Getting help
 ============
