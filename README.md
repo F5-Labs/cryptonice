@@ -1,6 +1,13 @@
 # cryptonice
 Built using the sslyze API and ssl, http-client and dns libraries, _cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS.
 
+Cryptonice is currently supported on Windows and Mac OS with Linux support coming soon.
+
+For detailed and up to date documentation, check out our ReadTheDocs pages:
+
+https://cryptonice.readthedocs.io/en/latest/index.html
+
+
 ### Installation
 
 The easiest way to get started is by using PIP to install Cryptonice:
