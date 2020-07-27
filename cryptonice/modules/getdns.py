@@ -23,7 +23,11 @@ def getDNSRecord(hostname, record_type):
             if answer.rrset is None:
                 result = answer.response.authority[0].to_text()
                 if "SOA" in result:
-                    hostname = result.split('. ')[0]
+                    #Check for SOA's pointing to the same hostname and exit loop, if so
+                    if result.split('. ')[0] == hostname:
+                        got_record = True
+                    else:
+                        hostname = result.split('. ')[0]
             else:
                 for ipval in answer:
                     record_list.append(ipval.to_text())
