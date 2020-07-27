@@ -293,7 +293,6 @@ def scanner_driver(input_data):
     tls_data = {}
     http_data = {}
     dns_data = {}
-    geolocation_data = {}
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
@@ -340,7 +339,7 @@ def scanner_driver(input_data):
             # If we have a valid IP, skip the DNS lookup...
             ip_address = hostname
             print(f'{hostname} is already a valid IP')
-        except:
+        except ValueError:
             # Determine if we are only using DNS to get an IP address, or whether we should query for all records
             if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
                 dns_data = get_dns(hostname, True)

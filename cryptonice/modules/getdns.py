@@ -23,7 +23,7 @@ def getDNSRecord(hostname, record_type):
             if answer.rrset is None:
                 result = answer.response.authority[0].to_text()
                 if "SOA" in result:
-                    #Check for SOA's pointing to the same hostname and exit loop, if so
+                    # Check for SOA's pointing to the same hostname and exit loop, if so
                     if result.split('. ')[0] == hostname:
                         got_record = True
                     else:
@@ -49,7 +49,6 @@ def get_dns(hostname, all_checks):
     connection_data.update({'Connection': hostname})
 
     # DEBUG
-    # print(f'Fetching A records')
     dns_data.update({'A': getDNSRecord(hostname, 'A')})
 
     if all_checks:
