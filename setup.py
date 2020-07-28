@@ -32,7 +32,7 @@ else:
 # This call to setup() does all the work
 setup(
     name="cryptonice",
-    version="1.0.5",
+    version="1.0.6",
     description="Perform TLS scan of a domain",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -59,8 +59,9 @@ setup(
             "cryptonice=cryptonice.__main__:main",
         ]
     },
-    # cx_freeze info for Windows builds with Python embedded
-    options={"build_exe": {"packages": ["sslyze", "urllib3", "dns", "http_client", "ipaddress", "pathlib"]}},
+    # cx_freeze info for executable builds with Python embedded
+    options={"build_exe": {"packages": ["sslyze", "urllib3", "dns", "http_client", "ipaddress", "pathlib"],
+                           "include_files": ["cryptonice"]}},
     executables=[Executable(path.join("cryptonice", "__main__.py"), targetName="cryptonice.exe")],
 )
 #
