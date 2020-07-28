@@ -60,7 +60,7 @@ setup(
         ]
     },
     # cx_freeze info for executable builds with Python embedded
-    options={"build_exe": {"packages": ["sslyze", "urllib3", "dns", "http_client", "ipaddress", "pathlib"],
+    options={"build_exe": {"packages": ["sslyze", "urllib3", "dns", "http_client", "ipaddress", "pathlib", "cryptography"],
                            "include_files": ["cryptonice"]}},
     executables=[Executable(path.join("cryptonice", "__main__.py"), targetName="cryptonice.exe")],
 )
