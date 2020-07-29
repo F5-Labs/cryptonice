@@ -7,7 +7,7 @@ Windows
 Cryptonice for Windows depends on `Visual C++ Redistributable for Visual Studio 2015`_. Most people are likely to have this installed but if you receive an error about missing
 file **vcruntime140.dll** then make sure this is installed first.
 
-.. Visual C++ Redistributable for Visual Studio 2015_ : https://www.microsoft.com/en-us/download/details.aspx?id=48145
+.. _Visual C++ Redistributable for Visual Studio 2015: https://www.microsoft.com/en-us/download/details.aspx?id=48145
 
 **Standalone executable**
 
