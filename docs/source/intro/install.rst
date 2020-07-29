@@ -3,8 +3,30 @@ Install
 
 Windows
 ^^^^^^^
+**Standalone executable**
 
-*Python app and Library*
+If you do not have Python installed, and can't or won't install it, you may be able to use the standalone Windows executable.
+
+#. Head over to the `Cryptonice Releases`_ section of the Github repo and download the latest version you find.
+#. Once the file has downloaded open it to begin installation (we recommend you install in to a folder that your user has write access to, e.g. C:/\Cryptonice)
+#. After installation, open a terminal window and navigate in to the installation folder and the version folder found within (e.g. c:/\Cryptonice\cryptonice-1.0.6)
+
+You may now use Cryptonice by entering the name of the executable and any parameters you need. For example::
+
+  c:\cryptonice\cryptonice-1.0.6\cryptonice.exe example.com
+
+In order to run Cryptonice from any directory you may want to add the installation location to your path, for example::
+
+  set path=%path%;c:\cryptonice\cryptonice-1.0.6
+
+
+.. _Cryptonice Releases: https://github.com/F5-Labs/cryptonice/releases
+
+
+**Python app and Library**
+
+Installing Cryptonice via pip ensures that you can easily update the tool whenever new versions are released. The other advantage is that Cryptonice should be available to be executed
+from any directory that you are currently in without modifying your path.
 
 For those that don't yet have Python 3 installed, follow these simple steps.
 
@@ -24,6 +46,9 @@ Now issue the 'pip' command to install Cryptonice::
 
 Mac
 ^^^
+
+**Python app and Library**
+
 Mac OS comes with Python 2 pre-installed. Since Cryptonice requires Python 3.7 or later and you will need
 to ensure that this is installed.
 
@@ -40,4 +65,8 @@ Python 2 will be used and Cryptonice will fail::
 
 Ubuntu
 ^^^^^^
-Install instructions to come.
+Cryptonice currently supports Ubuntu 20.04. Since this distribution comes with Python 3.8.2 preinstalled we need only install PIP and one dependency manually::
+
+  sudo apt install python3-pip
+  sudo apt install python3-pycurl
+  pip3 install cryptonice

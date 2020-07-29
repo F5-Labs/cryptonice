@@ -23,13 +23,14 @@ HSTS and other security headers.
 
 *Currently Supported:*
 
-* Windows Python app and library
-* Mac Python app and library
+* Windows: Executable, Python scripts and library
+* Mac: Python scripts and library
+* Ubuntu 20.04: Python scripts and library
 
 *Coming Soon:*
 
-* Linux support
-* Standalone executables
+* Mac executables
+* Other Linux distros
 
 .. _SSLyze: https://github.com/nabla-c0d3/sslyze
 .. _Cryptography: https://github.com/pyca/cryptography

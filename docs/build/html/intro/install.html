@@ -46,7 +46,24 @@
 <h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
-<p><em>Python app and Library</em></p>
+<p><strong>Standalone executable</strong></p>
+<p>If you do not have Python installed, and can’t or won’t install it, you may be able to use the standalone Windows executable.</p>
+<ol class="arabic simple">
+<li><p>Head over to the <a class="reference external" href="https://github.com/F5-Labs/cryptonice/releases">Cryptonice Releases</a> section of the Github repo and download the latest version you find.</p></li>
+<li><p>Once the file has downloaded open it to begin installation (we recommend you install in to a folder that your user has write access to, e.g. C:/Cryptonice)</p></li>
+<li><p>After installation, open a terminal window and navigate in to the installation folder and the version folder found within (e.g. c:/Cryptonicecryptonice-1.0.6)</p></li>
+</ol>
+<p>You may now use Cryptonice by entering the name of the executable and any parameters you need. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="p">:</span>\<span class="n">cryptonice</span>\<span class="n">cryptonice</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">6</span>\<span class="n">cryptonice</span><span class="o">.</span><span class="n">exe</span> <span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>In order to run Cryptonice from any directory you may want to add the installation location to your path, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">path</span><span class="o">=%</span><span class="n">path</span><span class="o">%</span><span class="p">;</span><span class="n">c</span><span class="p">:</span>\<span class="n">cryptonice</span>\<span class="n">cryptonice</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">6</span>
+</pre></div>
+</div>
+<p><strong>Python app and Library</strong></p>
+<p>Installing Cryptonice via pip ensures that you can easily update the tool whenever new versions are released. The other advantage is that Cryptonice should be available to be executed
+from any directory that you are currently in without modifying your path.</p>
 <p>For those that don’t yet have Python 3 installed, follow these simple steps.</p>
 <ol class="arabic simple">
 <li><p>Download <a class="reference external" href="https://www.python.org/downloads/">Python 3.7</a> or later (select <em>Windows x86-64 executable installer</em>)</p></li>
@@ -62,6 +79,7 @@
 </div>
 <div class="section" id="mac">
 <h2>Mac<a class="headerlink" href="#mac" title="Permalink to this headline">¶</a></h2>
+<p><strong>Python app and Library</strong></p>
 <p>Mac OS comes with Python 2 pre-installed. Since Cryptonice requires Python 3.7 or later and you will need
 to ensure that this is installed.</p>
 <ol class="arabic simple">
@@ -78,7 +96,12 @@ Python 2 will be used and Cryptonice will fail:</p>
 </div>
 <div class="section" id="ubuntu">
 <h2>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h2>
-<p>Install instructions to come.</p>
+<p>Cryptonice currently supports Ubuntu 20.04. Since this distribution comes with Python 3.8.2 preinstalled we need only install PIP and one dependency manually:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pycurl</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="n">cryptonice</span>
+</pre></div>
+</div>
 </div>
 </div>
 
