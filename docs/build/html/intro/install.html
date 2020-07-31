@@ -1,19 +1,20 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Install &#8212; cryptonice  documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -32,8 +33,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">cryptonice  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Install</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">cryptonice  documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,9 +52,9 @@ file <strong>vcruntime140.dll</strong> then make sure this is installed first.</
 <p><strong>Standalone executable</strong></p>
 <p>If you do not have Python installed, and can’t or won’t install it, you may be able to use the standalone Windows executable.</p>
 <ol class="arabic simple">
-<li><p>Head over to the <a class="reference external" href="https://github.com/F5-Labs/cryptonice/releases">Cryptonice Releases</a> section of the Github repo and download the latest version you find.</p></li>
-<li><p>Once the file has downloaded open it to begin installation (we recommend you install in to a folder that your user has write access to, e.g. C:/Cryptonice)</p></li>
-<li><p>After installation, open a terminal window and navigate in to the installation folder and the version folder found within (e.g. c:/Cryptonicecryptonice-1.0.6)</p></li>
+<li>Head over to the <a class="reference external" href="https://github.com/F5-Labs/cryptonice/releases">Cryptonice Releases</a> section of the Github repo and download the latest version you find.</li>
+<li>Once the file has downloaded open it to begin installation (we recommend you install in to a folder that your user has write access to, e.g. C:/Cryptonice)</li>
+<li>After installation, open a terminal window and navigate in to the installation folder and the version folder found within (e.g. c:/Cryptonicecryptonice-1.0.6)</li>
 </ol>
 <p>You may now use Cryptonice by entering the name of the executable and any parameters you need. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="p">:</span>\<span class="n">cryptonice</span>\<span class="n">cryptonice</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">6</span>\<span class="n">cryptonice</span><span class="o">.</span><span class="n">exe</span> <span class="n">example</span><span class="o">.</span><span class="n">com</span>
@@ -69,11 +69,11 @@ file <strong>vcruntime140.dll</strong> then make sure this is installed first.</
 from any directory that you are currently in without modifying your path.</p>
 <p>For those that don’t yet have Python 3 installed, follow these simple steps.</p>
 <ol class="arabic simple">
-<li><p>Download <a class="reference external" href="https://www.python.org/downloads/">Python 3.7</a> or later (select <em>Windows x86-64 executable installer</em>)</p></li>
-<li><p>It is recommended that you leave installation options on default but (optionally) also select…
+<li>Download <a class="reference external" href="https://www.python.org/downloads/">Python 3.7</a> or later (select <em>Windows x86-64 executable installer</em>)</li>
+<li>It is recommended that you leave installation options on default but (optionally) also select…
 * Select Install for All Users
-* Select Precompile standard library</p></li>
-<li><p>Open a command prompt and type ‘python’. This will send you in to a Python interpreter and also display the version you have installed. This should be 3.7 or later.</p></li>
+* Select Precompile standard library</li>
+<li>Open a command prompt and type ‘python’. This will send you in to a Python interpreter and also display the version you have installed. This should be 3.7 or later.</li>
 </ol>
 <p>Now issue the ‘pip’ command to install Cryptonice:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cryptonice</span>
@@ -86,10 +86,10 @@ from any directory that you are currently in without modifying your path.</p>
 <p>Mac OS comes with Python 2 pre-installed. Since Cryptonice requires Python 3.7 or later and you will need
 to ensure that this is installed.</p>
 <ol class="arabic simple">
-<li><p>Download <a class="reference external" href="https://www.python.org/downloads/">Python 3.7</a> or later (select <em>macOS 64-bit installer</em>)</p></li>
-<li><p>Open the downloaded file and follow the installation prompts</p></li>
-<li><p>The install will pop open a file window. Double-click the file <em>Install Certificates.command</em> in order to install default root certificates</p></li>
-<li><p>Open up a new terminal window so that we can install Cryptonice</p></li>
+<li>Download <a class="reference external" href="https://www.python.org/downloads/">Python 3.7</a> or later (select <em>macOS 64-bit installer</em>)</li>
+<li>Open the downloaded file and follow the installation prompts</li>
+<li>The install will pop open a file window. Double-click the file <em>Install Certificates.command</em> in order to install default root certificates</li>
+<li>Open up a new terminal window so that we can install Cryptonice</li>
 </ol>
 <p>Finally, make sure to use ‘pip3’ so that the Python 3 version is used. If you issue the ‘pip’ command then
 Python 2 will be used and Cryptonice will fail:</p>
@@ -100,16 +100,59 @@ Python 2 will be used and Cryptonice will fail:</p>
 <div class="section" id="ubuntu">
 <h2>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h2>
 <p>Cryptonice currently supports Ubuntu 20.04. Since this distribution comes with Python 3.8.2 preinstalled we need only install PIP and one dependency manually:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
-<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pycurl</span>
-<span class="n">pip3</span> <span class="n">install</span> <span class="n">cryptonice</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sudo apt install python3-pip</span>
+<span class="c1"># sudo apt install python3-pycurl</span>
+<span class="c1"># pip3 install cryptonice</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="centos">
+<h2>CentOS<a class="headerlink" href="#centos" title="Permalink to this headline">¶</a></h2>
+<p>With a little hand-holding Cryptonice will work on CentOS. It just requires a few manual steps. Currently,
+CentOS 8 is confirmed to be working. CentOS 8 comes bundled with Python 3.6.8 but we require 3.7 or newer.</p>
+<p><strong>Prerequisites</strong></p>
+<p>First off, we need to install required development libraries for Python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sudo dnf install gcc openssl-devel bzip2-devel libffi-devel</span>
+</pre></div>
+</div>
+<p><strong>Download Python 3.8</strong></p>
+<p>Once that’s complete, we’ll now download Python 3.8.5 (or any version of Python 3.7 or newer) to your machine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd /opt</span>
+<span class="c1"># wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz</span>
+</pre></div>
+</div>
+<p>Extract it with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># tar xzf Python-3.8.5.tgz</span>
+</pre></div>
+</div>
+<p><strong>Building and installing</strong></p>
+<p>We’re now going to configure the source files based on your system and then compile Python on using the altinstall method so
+that we don’t overwrite your current version of Python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd Python-3.8.5</span>
+<span class="c1"># sudo ./configure --enable-optimizations</span>
+<span class="c1"># sudo make altinstall</span>
+</pre></div>
+</div>
+<p>You can now test that Python 3.8 is installed and working by issuing the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># python3.8 -V</span>
+
+<span class="n">Python</span> <span class="mf">3.8</span><span class="o">.</span><span class="mi">5</span>
+</pre></div>
+</div>
+<p><strong>Installing libcurl*</strong></p>
+<p>Installation of Cryptonice will still fail as it cannot find the required version of <em>libcurl</em>. Use <strong>yum</strong> to install libcurl:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sudo yum install libcurl-devel</span>
+</pre></div>
+</div>
+<p><strong>Installing Cryptonice</strong></p>
+<p>Now we can finally use Python 3.8 to install Cryptonice:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip3.8 install cryptonice</span>
 </pre></div>
 </div>
 </div>
 </div>
 
 
-            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -121,6 +164,7 @@ Python 2 will be used and Cryptonice will fail:</p>
 <li><a class="reference internal" href="#windows">Windows</a></li>
 <li><a class="reference internal" href="#mac">Mac</a></li>
 <li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+<li><a class="reference internal" href="#centos">CentOS</a></li>
 </ul>
 </li>
 </ul>
@@ -139,15 +183,17 @@ Python 2 will be used and Cryptonice will fail:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -164,13 +210,12 @@ Python 2 will be used and Cryptonice will fail:</p>
         <li class="right" >
           <a href="overview.html" title="Overview"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">cryptonice  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Install</a></li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">cryptonice  documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, F5 Labs.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>
