@@ -71,7 +71,8 @@ def getCertificateResults(certificate):
 
     try:
         common_name = cert.subject.get_attributes_for_oid(x509.NameOID.COMMON_NAME)[0].value
-        cert_data.update({'common_name': common_name})
+        issuer_name = cert.issuer.get_attributes_for_oid(x509.NameOID.COMMON_NAME)[0].value
+        cert_data.update({'common_name': common_name, 'issuer_name': issuer_name})
     except:
         pass
 
