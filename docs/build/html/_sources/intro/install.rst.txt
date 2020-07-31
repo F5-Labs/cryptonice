@@ -73,9 +73,9 @@ Ubuntu
 ^^^^^^
 Cryptonice currently supports Ubuntu 20.04. Since this distribution comes with Python 3.8.2 preinstalled we need only install PIP and one dependency manually::
 
-  # sudo apt install python3-pip
-  # sudo apt install python3-pycurl
-  # pip3 install cryptonice
+  sudo apt install python3-pip
+  sudo apt install python3-pycurl
+  pip3 install cryptonice
 
 
 CentOS
@@ -87,42 +87,42 @@ CentOS 8 is confirmed to be working. CentOS 8 comes bundled with Python 3.6.8 bu
 
 First off, we need to install required development libraries for Python::
 
-  # sudo dnf install gcc openssl-devel bzip2-devel libffi-devel
+  sudo dnf install gcc openssl-devel bzip2-devel libffi-devel
 
 **Download Python 3.8**
 
 Once that's complete, we'll now download Python 3.8.5 (or any version of Python 3.7 or newer) to your machine::
 
-  # cd /opt
-  # wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
+  cd /opt
+  wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz
 
 Extract it with the following command::
 
-  # tar xzf Python-3.8.5.tgz
+  tar xzf Python-3.8.5.tgz
 
 **Building and installing**
 
 We're now going to configure the source files based on your system and then compile Python on using the altinstall method so
 that we don't overwrite your current version of Python::
 
-  # cd Python-3.8.5
-  # sudo ./configure --enable-optimizations
-  # sudo make altinstall
+  cd Python-3.8.5
+  sudo ./configure --enable-optimizations
+  sudo make altinstall
 
 You can now test that Python 3.8 is installed and working by issuing the following command::
 
-  # python3.8 -V
+  python3.8 -V
 
-  Python 3.8.5
+  # Python 3.8.5
 
 **Installing libcurl***
 
 Installation of Cryptonice will still fail as it cannot find the required version of *libcurl*. Use **yum** to install libcurl::
 
-  # sudo yum install libcurl-devel
+  sudo yum install libcurl-devel
 
 **Installing Cryptonice**
 
 Now we can finally use Python 3.8 to install Cryptonice::
 
-  # pip3.8 install cryptonice
+  pip3.8 install cryptonice

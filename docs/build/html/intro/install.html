@@ -100,9 +100,9 @@ Python 2 will be used and Cryptonice will fail:</p>
 <div class="section" id="ubuntu">
 <h2>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h2>
 <p>Cryptonice currently supports Ubuntu 20.04. Since this distribution comes with Python 3.8.2 preinstalled we need only install PIP and one dependency manually:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sudo apt install python3-pip</span>
-<span class="c1"># sudo apt install python3-pycurl</span>
-<span class="c1"># pip3 install cryptonice</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">pycurl</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="n">cryptonice</span>
 </pre></div>
 </div>
 </div>
@@ -112,41 +112,41 @@ Python 2 will be used and Cryptonice will fail:</p>
 CentOS 8 is confirmed to be working. CentOS 8 comes bundled with Python 3.6.8 but we require 3.7 or newer.</p>
 <p><strong>Prerequisites</strong></p>
 <p>First off, we need to install required development libraries for Python:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sudo dnf install gcc openssl-devel bzip2-devel libffi-devel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">dnf</span> <span class="n">install</span> <span class="n">gcc</span> <span class="n">openssl</span><span class="o">-</span><span class="n">devel</span> <span class="n">bzip2</span><span class="o">-</span><span class="n">devel</span> <span class="n">libffi</span><span class="o">-</span><span class="n">devel</span>
 </pre></div>
 </div>
 <p><strong>Download Python 3.8</strong></p>
 <p>Once that’s complete, we’ll now download Python 3.8.5 (or any version of Python 3.7 or newer) to your machine:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd /opt</span>
-<span class="c1"># wget https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">opt</span>
+<span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">ftp</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="mf">3.8</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">Python</span><span class="o">-</span><span class="mf">3.8</span><span class="o">.</span><span class="mf">5.</span><span class="n">tgz</span>
 </pre></div>
 </div>
 <p>Extract it with the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># tar xzf Python-3.8.5.tgz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="n">xzf</span> <span class="n">Python</span><span class="o">-</span><span class="mf">3.8</span><span class="o">.</span><span class="mf">5.</span><span class="n">tgz</span>
 </pre></div>
 </div>
 <p><strong>Building and installing</strong></p>
 <p>We’re now going to configure the source files based on your system and then compile Python on using the altinstall method so
 that we don’t overwrite your current version of Python:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># cd Python-3.8.5</span>
-<span class="c1"># sudo ./configure --enable-optimizations</span>
-<span class="c1"># sudo make altinstall</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">Python</span><span class="o">-</span><span class="mf">3.8</span><span class="o">.</span><span class="mi">5</span>
+<span class="n">sudo</span> <span class="o">./</span><span class="n">configure</span> <span class="o">--</span><span class="n">enable</span><span class="o">-</span><span class="n">optimizations</span>
+<span class="n">sudo</span> <span class="n">make</span> <span class="n">altinstall</span>
 </pre></div>
 </div>
 <p>You can now test that Python 3.8 is installed and working by issuing the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># python3.8 -V</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="o">.</span><span class="mi">8</span> <span class="o">-</span><span class="n">V</span>
 
-<span class="n">Python</span> <span class="mf">3.8</span><span class="o">.</span><span class="mi">5</span>
+<span class="c1"># Python 3.8.5</span>
 </pre></div>
 </div>
 <p><strong>Installing libcurl*</strong></p>
 <p>Installation of Cryptonice will still fail as it cannot find the required version of <em>libcurl</em>. Use <strong>yum</strong> to install libcurl:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sudo yum install libcurl-devel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">libcurl</span><span class="o">-</span><span class="n">devel</span>
 </pre></div>
 </div>
 <p><strong>Installing Cryptonice</strong></p>
 <p>Now we can finally use Python 3.8 to install Cryptonice:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip3.8 install cryptonice</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span><span class="o">.</span><span class="mi">8</span> <span class="n">install</span> <span class="n">cryptonice</span>
 </pre></div>
 </div>
 </div>
