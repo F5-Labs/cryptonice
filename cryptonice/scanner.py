@@ -126,6 +126,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
         print(f'\nCERTIFICATE')
         print(f'Common Name:\t\t\t  {cert_0.get("common_name")}')
+        print(f'Issuer Name:\t\t\t  {cert_0.get("issuer_name")}')
         print(f'Public Key Algorithm:\t\t  {cert_0.get("public_key_algorithm")}')
         print(f'Public Key Size:\t\t  {cert_0.get("public_key_size")}')
         if cert_0.get("public_key_algorithm") == "EllipticCurvePublicKey":
