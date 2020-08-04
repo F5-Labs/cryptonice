@@ -1,11 +1,11 @@
 {
 	"id": "test.py",
 	"port": 443,
-	"scans": ["TLS", "DNS", "HTTP2", "HTTP"],
+	"scans": ["DNS", "HTTP2", "HTTP"],
 	"tls_params": [],
 	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"targets": ["f5.com"]
+	"targets": ["www.f5.com"]
 }
