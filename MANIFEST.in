@@ -1,1 +1,2 @@
 include cryptonice/modules/*.py
+include cryptonice/modules/*.json
