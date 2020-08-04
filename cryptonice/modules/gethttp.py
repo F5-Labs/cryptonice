@@ -3,7 +3,6 @@
 
 import http.client
 import ssl
-import requests
 
 #Wappalyzer Requirements
 import json
