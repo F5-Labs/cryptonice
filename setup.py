@@ -32,7 +32,7 @@ else:
 # This call to setup() does all the work
 setup(
     name="cryptonice",
-    version="1.0.8",
+    version="1.0.9",
     description="Perform TLS scan of a domain",
     long_description=README,
     long_description_content_type="text/markdown",
