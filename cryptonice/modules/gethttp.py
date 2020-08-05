@@ -4,10 +4,10 @@
 import http.client
 import ssl
 
-#Wappalyzer Requirements
+# Wappalyzer Requirements
 import json
 import re
-#import warnings
+# import warnings
 import pkg_resources
 from bs4 import BeautifulSoup
 
@@ -32,8 +32,8 @@ def split_location(location):
     except:
         return [location]
 
-def _prepare_app(app):
 
+def _prepare_app(app):
     for key in ['url', 'html', 'script', 'implies']:
         try:
             value = app[key]
@@ -64,6 +64,7 @@ def _prepare_app(app):
         obj = app[key]
         for name, pattern in obj.items():
             obj[name] = _prepare_pattern(obj[name])
+
 
 def _prepare_pattern(pattern):
     regex, _, rest = pattern.partition('\\;')
@@ -98,8 +99,8 @@ def _has_app(app, webpage):
         if regex.search(webpage['response']):
             return True
 
-def _get_implied_apps(detected_apps, apps1):
 
+def _get_implied_apps(detected_apps, apps1):
     def __get_implied_apps(detect, apps):
         _implied_apps = set()
         for detected in detect:
@@ -163,7 +164,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     if True:
         ###############################################################################################
         # First check for HTTP > HTTPS redirects (so we force port 80 regardless of what the target is)
-        #print(f'Checking for HTTP > HTTPS redirects...')
+        # print(f'Checking for HTTP > HTTPS redirects...')
         int_redirect = 0
         int_status = 0
 
@@ -194,7 +195,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
                     str_path = str_location[2]
             else:
                 pass
-                #print(f'{int_redirect}: Finished. Status = {int_status}')
+                # print(f'{int_redirect}: Finished. Status = {int_status}')
 
             conn.close()
             """
@@ -220,13 +221,14 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
         prev_host = str_host
         prev_path = str_path
 
-        #DEBUG
-        #print(f'{int_redirect}: Checking {str_host} at {str_path}')
+        # DEBUG
+        # print(f'{int_redirect}: Checking {str_host} at {str_path}')
 
         if usetls:
             # print(f'Attempting HTTPS connection to {ip_address} using SNI of {str_host}')
             try:
-                conn = http.client.HTTPSConnection(str_host, int_port, timeout=5, context=ssl._create_unverified_context())
+                conn = http.client.HTTPSConnection(str_host, int_port, timeout=5,
+                                                   context=ssl._create_unverified_context())
                 conn.request("GET", str_path)
                 res = conn.getresponse()
                 pagebody = res.read()
@@ -282,7 +284,6 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     connection_data = {}
     host_data = {}
     header_data = {}
-    cookie_data = {}
 
     host_data.update({'hostname': str_host})
     host_data.update({'path': str_path})
@@ -341,16 +342,38 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
 
     # The server may not return any cookies, so we need to see what there is
     try:
-        cookies = res.getheader('Set-Cookie').split("; ")
-        for things in cookies:
-            str_cookie_name = (things.split("="))[0]
-            try:
-                str_cookie_value = (things.split("="))[1]
-            except:
-                str_cookie_value = 'null'
-            # data from sites that have multiple cookies are not all being recorded
-            cookie_data.update({str_cookie_name: str_cookie_value})
-        connection_data.update({'Cookies': cookie_data})
+        # cookies = res.getheader('Set-Cookie').split("; ")
+        cookies = res.getheader('Set-Cookie')
+        cookies = cookies.replace('Mon, ', '')
+        cookies = cookies.replace('Tue, ', '')
+        cookies = cookies.replace('Wed, ', '')
+        cookies = cookies.replace('Thu, ', '')
+        cookies = cookies.replace('Fri, ', '')
+        cookies = cookies.replace('Sat, ', '')
+        cookies = cookies.replace('Sun, ', '')
+
+        cookies = cookies.split(', ')
+        all_cookies = {}
+        count = 1
+        for cookie in cookies:
+            index = cookie.split("; ")
+            cookie_data = {}
+            for tag in index:
+                str_cookie_name = (tag.split("=", 1))[0]
+                try:
+                    if str_cookie_name == "Secure":
+                        str_cookie_value = True
+                    elif str_cookie_name == "HttpOnly":
+                        str_cookie_value = True
+                    else:
+                        str_cookie_value = (tag.split("=", 1))[1]
+                except:
+                    str_cookie_value = 'null'
+                # data from sites that have multiple cookies are not all being recorded
+                cookie_data.update({str_cookie_name: str_cookie_value})
+            all_cookies.update({f'cookie_{count}': cookie_data})
+            count += 1
+        connection_data.update({'Cookies': all_cookies})
     except:
         connection_data.update({'Cookies': ''})
 
@@ -369,7 +392,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     webpage['html'] = BeautifulSoup(str(pagebody), 'html.parser')
     webpage['scripts'] = [script['src'] for script in webpage['html'].findAll('script', src=True)]
     webpage['metatags'] = {meta['name'].lower(): meta['content']
-        for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
+                           for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
 
     page = {}
     page['scripts'] = webpage['scripts']
