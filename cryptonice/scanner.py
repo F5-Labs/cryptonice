@@ -48,9 +48,9 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('-------------------------------------')
     print(f'Hostname:\t\t\t  {str_host}\n')
 
-    tls_data = scan_data.get('tls_scan')
+    tls_data = scan_data.get('tls')
     http2_data = scan_data.get('http2')
-    http_data = scan_data.get('http_headers')
+    http_data = scan_data.get('http')
     dns_data = scan_data.get('dns')
 
     if tls_data == "Port closed - no TLS data available":
@@ -428,13 +428,14 @@ def scanner_driver(input_data):
 
         # Add results of scans (boolean defaults to false if dictionary is empty)
         if 'HTTP' in input_data['scans'] or 'http' in input_data['scans']:
-            scan_data.update({'http_headers': http_data})
-        if tls_data:
-            scan_data.update({'tls_scan': tls_data})
-        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
-            scan_data.update({'dns': dns_data})
+            scan_data.update({'http': http_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
+        if tls_data:
+            scan_data.update({'tls': tls_data})
+        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
+            scan_data.update({'dns': dns_data})
+
 
         if input_data['print_out']:
             print_to_console(str_host, scan_data, b_httptohttps, force_redirect)

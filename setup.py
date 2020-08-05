@@ -32,7 +32,7 @@ else:
 # This call to setup() does all the work
 setup(
     name="cryptonice",
-    version="1.0.6",
+    version="1.0.8",
     description="Perform TLS scan of a domain",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -53,7 +53,9 @@ setup(
                       "http-client>=0.1.21",
                       "urllib3>=1.25.9",
                       "ipaddress>=1.0.22",
-                      "pathlib~=1.0.1"],
+                      "pathlib~=1.0.1",
+                      "bs4>=0.0.1",
+                      "regex>=2020.5.14"],
     entry_points={
         "console_scripts": [
             "cryptonice=cryptonice.__main__:main",
