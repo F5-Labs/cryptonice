@@ -229,10 +229,10 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-        try:
-            print(f'Secure Cookies:\t\t\t  {True if http_data.get("Cookies") != "" else False}\n')
-        except:
-            pass
+        # try:
+        #     print(f'Secure Cookies:\t\t\t  {True if http_data.get("Cookies") != "" else False}\n')
+        # except:
+        #     pass
 
 
     try:
