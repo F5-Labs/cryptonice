@@ -217,17 +217,17 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-        try:
-            public_key_pins = http_data.get("Headers").get("Public-Key-Pins")
-            if public_key_pins is not None:
-                print(f'HTTP Public Key Pinning:\t  True')
-                for pin in public_key_pins:
-                    print(f'\t\t {pin}')
-            else:
-                print(f'HTTP Public Key Pinning:\t  False')
-            print('')
-        except:
-            pass
+        # try:
+        #     public_key_pins = http_data.get("Headers").get("Public-Key-Pins")
+        #     if public_key_pins is not None:
+        #         print(f'HTTP Public Key Pinning:\t  True')
+        #         for pin in public_key_pins:
+        #             print(f'\t\t {pin}')
+        #     else:
+        #         print(f'HTTP Public Key Pinning:\t  False')
+        #     print('')
+        # except:
+        #     pass
 
         # try:
         #     print(f'Secure Cookies:\t\t\t  {True if http_data.get("Cookies") != "" else False}\n')
