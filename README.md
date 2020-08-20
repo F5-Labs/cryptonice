@@ -14,6 +14,9 @@ The easiest way to get started is by using PIP to install Cryptonice:
 
 `pip install cryptonice`
 
+[![asciicast](https://asciinema.org/a/354489.svg)](https://asciinema.org/a/354489)
+
+
 ### User Guide
 
 _cryptonice_ requires a domain name (such as www.github.com).
@@ -49,6 +52,8 @@ The user can also choose to specify custom commands. Each custom command must be
 - _--FORCE_REDIRECTS_: Y/y or N/n - sets a Boolean variable to check for automatic redirects from port 80 to 443 in a TLS scan (default = Y)
 - _--PRINT_OUT_: Y/y or N/n - sets a Boolean variable to print scan results to console (default = Y)
 - _--JSON_OUT_: Y/y or N/n - sets a Boolean variable to print scan results to JSON output file (default = Y)
+
+[![asciicast](https://asciinema.org/a/354498.svg)](https://asciinema.org/a/354498)
 
 ### Output
 _cryptonice_ generates a JSON output file with the information requested by the input parameters. Output files will be named after the domain name and port provided (ex: target = www.github.com, port = 443, output = www.github.com-443.json)
