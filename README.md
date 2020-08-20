@@ -14,7 +14,7 @@ The easiest way to get started is by using PIP to install Cryptonice:
 
 `pip install cryptonice`
 
-[![asciicast](https://asciinema.org/a/354489.svg)](https://asciinema.org/a/354489)
+[![asciicast](https://asciinema.org/a/354489.svg)](https://asciinema.org/a/354489?speed=3&autoplay=1)
 
 
 ### User Guide
