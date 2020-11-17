@@ -131,6 +131,8 @@ def wappalyze(webpage):
     detected = set(detected).union(_get_implied_apps(detected, apps))
     category_wise = {}
     for app_name in detected:
+        app_name = app_name.split(';', 1)[0]
+        app_name = app_name.replace('\\', '')
         cats = apps[app_name]['cats']
         for cat in cats:
             category_wise[app_name] = obj['categories'][str(cat)]['name']
