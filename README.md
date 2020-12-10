@@ -1,5 +1,9 @@
 # Cryptonice
-Built using the sslyze API and ssl, http-client and dns libraries, _cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS.
+_Cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS. It makes heavy use of open source libraries and code including:
+
+- **SSLyze** for TLS testing
+- **JARM**  for TLS fingerprinting https://github.com/salesforce/jarm
+- **Wappalyzer** for server components checks
 
 Cryptonice is currently supported under Python 3.8 and later on the following platforms:
 
