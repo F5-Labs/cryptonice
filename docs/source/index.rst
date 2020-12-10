@@ -26,11 +26,8 @@ HSTS and other security headers.
 * Windows: Executable, Python scripts and library
 * Mac: Python scripts and library
 * Ubuntu 20.04: Python scripts and library
-
-*Coming Soon:*
-
-* Mac executables
-* Other Linux distros
+* CentOS 8
+* Docker container (for Linux)
 
 .. _SSLyze: https://github.com/nabla-c0d3/sslyze
 .. _Cryptography: https://github.com/pyca/cryptography

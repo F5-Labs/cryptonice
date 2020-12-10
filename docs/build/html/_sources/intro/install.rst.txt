@@ -3,7 +3,7 @@ Install
 
 Docker
 ^^^^^^
-Cryptonice is now available as ae executable Docker image for Linux systems, meaning it will create the container, run Cryptonice and then close down once it is complete.
+Cryptonice is now available as an executable Docker image for Linux systems, meaning it will create the container, run Cryptonice and then close down once it is complete.
 Using a container avoids the need to install Python, download dependencies or play around with virtual environments. It has been built on a Python 3.7 base image.
 
 *Requirements*
