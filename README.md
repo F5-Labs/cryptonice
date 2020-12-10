@@ -1,7 +1,20 @@
 # Cryptonice
 Built using the sslyze API and ssl, http-client and dns libraries, _cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS.
 
-Cryptonice is currently supported on **Windows**, **Mac OS**, **Ubuntu 20.04** and **CentOS 8** (other Linux distros coming soon).
+Cryptonice is currently supported under Python 3.8 and later on the following platforms:
+
+- **Windows**
+- **Mac OS**
+- **Ubuntu 20.04**
+- **CentOS 8** (other Linux distros coming soon).
+
+A Linux compatible **Docker** container is also now available for those that prefer not to rely on installations of Python or any dependencies. With Docker already installed, first pull down the image:
+
+`docker pull f5labs/cryptonice`
+
+To run from the container, use the following command:
+
+`docker run f5labs/cryptonice www.f5.com`
 
 For detailed and up to date documentation, check out our ReadTheDocs pages:
 

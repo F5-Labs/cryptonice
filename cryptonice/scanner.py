@@ -7,6 +7,7 @@ from cryptonice.modules.gettls import tls_scan
 from cryptonice.modules.gethttp import get_http
 from cryptonice.modules.getdns import get_dns
 from cryptonice.modules.gethttp2 import check_http2
+from cryptonice.modules.jarm import check_jarm
 from cryptonice.checkport import port_open
 from datetime import datetime
 
@@ -52,6 +53,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     http2_data = scan_data.get('http2')
     http_data = scan_data.get('http')
     dns_data = scan_data.get('dns')
+    jarm_data = scan_data.get('jarm')
 
     if tls_data == "Port closed - no TLS data available":
         print('***TLS Results***')
@@ -108,7 +110,16 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-        # SSL 2.0 results
+
+        # JARM TLS fingerprint results
+        if isinstance(jarm_data, str):
+            print(jarm_data)
+        elif jarm_data:
+            print(f'\nTLS fingerprint:\t\t  {jarm_data.get("fingerprint")}')
+        print('')
+
+
+        # HTTP/2 results
         if isinstance(http2_data, str):
             print(http2_data)
         elif http2_data:
@@ -415,6 +426,9 @@ def scanner_driver(input_data):
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
 
+            if 'JARM' in input_data['scans'] or 'jarm' in input_data['scans']:
+                jarm_data = check_jarm(host_path, port)
+
             metadata.update({'http_to_https': b_httptohttps})
             metadata.update({'status': "Successful"})
         else:
@@ -433,6 +447,8 @@ def scanner_driver(input_data):
             scan_data.update({'http2': http2_data})
         if tls_data:
             scan_data.update({'tls': tls_data})
+        if jarm_data:
+            scan_data.update({'jarm': jarm_data})
         if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})
 
