@@ -1,9 +1,5 @@
 # Cryptonice
-_Cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS. It makes heavy use of open source code and libraries, including:
-
-- **SSLyze** library for TLS testing https://github.com/nabla-c0d3/sslyze
-- **JARM**  code for TLS fingerprinting https://github.com/salesforce/jarm
-- **Wappalyzer** code for server components checks https://github.com/AliasIO/Wappalyzer
+_Cryptonice_ collects data on a given domain and performs a series of tests to check TLS configuration and supporting protocols such as HTTP2 and DNS. It makes heavy use of open source code and libraries, including [**SSLyze**](https://github.com/nabla-c0d3/sslyze) library for TLS testing, [**JARM**](https://github.com/salesforce/jarm) code for TLS fingerprinting and [**Wappalyzer**](https://github.com/AliasIO/Wappalyzer) code for server components checks.
 
 Cryptonice is currently supported under Python 3.8 and later on the following platforms:
 
@@ -11,6 +7,8 @@ Cryptonice is currently supported under Python 3.8 and later on the following pl
 - **Mac OS**
 - **Ubuntu 20.04**
 - **CentOS 8** (other Linux distros coming soon).
+
+### Docker
 
 A Linux compatible **Docker** container is also now available for those that prefer not to rely on installations of Python or any dependencies. With Docker already installed, first pull down the image:
 
