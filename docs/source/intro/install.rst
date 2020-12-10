@@ -1,6 +1,25 @@
 Install
 =======
 
+Docker
+^^^^^^
+Cryptonice is now available as ae executable Docker image for Linux systems, meaning it will create the container, run Cryptonice and then close down once it is complete.
+Using a container avoids the need to install Python, download dependencies or play around with virtual environments. It has been built on a Python 3.7 base image.
+
+*Requirements*
+You must already have Docker installed on your system.
+
+**Download the Docker container**
+
+To grab the latest Docker image::
+
+  docker pull f5labs/cryptonice
+
+To run Cryptonice in the container::
+
+  docker run f5labs/cryptonice www.f5.com
+
+
 Windows
 ^^^^^^^
 *Requirements*

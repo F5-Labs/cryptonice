@@ -43,7 +43,7 @@ Providing only a domain name and no other command line input will result in the 
     {
 	    "id": "default",
 	    "port": 443,
-	    "scans": ["TLS", "HTTP", "HTTP2", "DNS"],
+	    "scans": ["TLS", "HTTP", "HTTP2", "DNS", "JARM"],
 	    "tls_params": ["certificate_information", "ssl_2_0_cipher_suites", "ssl_3_0_cipher_suites","tls_1_0_cipher_suites", "tls_1_1_cipher_suites", "tls_1_2_cipher_suites","tls_1_3_cipher_suites", "http_headers"],
 	    "http_body": false,
 	    "force_redirect": true,

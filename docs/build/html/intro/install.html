@@ -44,6 +44,22 @@
             
   <div class="section" id="install">
 <h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<p>Cryptonice is now available as ae executable Docker image for Linux systems, meaning it will create the container, run Cryptonice and then close down once it is complete.
+Using a container avoids the need to install Python, download dependencies or play around with virtual environments. It has been built on a Python 3.7 base image.</p>
+<p><em>Requirements</em>
+You must already have Docker installed on your system.</p>
+<p><strong>Download the Docker container</strong></p>
+<p>To grab the latest Docker image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">f5labs</span><span class="o">/</span><span class="n">cryptonice</span>
+</pre></div>
+</div>
+<p>To run Cryptonice in the container:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span> <span class="n">f5labs</span><span class="o">/</span><span class="n">cryptonice</span> <span class="n">www</span><span class="o">.</span><span class="n">f5</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="windows">
 <h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
 <p><em>Requirements</em>
@@ -161,6 +177,7 @@ that we don’t overwrite your current version of Python:</p>
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Install</a><ul>
+<li><a class="reference internal" href="#docker">Docker</a></li>
 <li><a class="reference internal" href="#windows">Windows</a></li>
 <li><a class="reference internal" href="#mac">Mac</a></li>
 <li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
