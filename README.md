@@ -53,20 +53,20 @@ Providing only a domain name and no other command line input will result in the 
     }
 
 The user can also choose to specify custom commands. Each custom command must be preceded with the name of the option (ex: to specify the scans TLS and HTTP to run, the user must add _--scans TLS HTTP_ to the command line parameters)
-_--PORT_: port to perform the scan on (default = 443)
-_--SCANS_: scans to perform
+- _--PORT_: port to perform the scan on (default = 443)
+- _--SCANS_: scans to perform
     - _TLS_ scan, _HTTP_ headers, _HTTP2_ check, _DNS_ data
-_--TLS_PARAMETERS_: TLS specific scans to perform (should be listed as specified below, with no commas between options):
+- _--TLS_PARAMETERS_: TLS specific scans to perform (should be listed as specified below, with no commas between options):
     - all, no_vuln_tests, certificate_info, ssl_2_0_cipher_suites, ssl_3_0_cipher_suites, tls_1_0_cipher_suites,
       tls_1_1_cipher_suites, tls_1_2_cipher_suites, tls_1_3_cipher_suites, tls_compression,
       tls_1_3_early_data, openssl_ccs_injection, heartbleed, robot, tls_fallback_scsv,
       session_renegotiation, session_resumption, session_resumption_rate, http_headers
     - **all** results in all commands being run, **no_vuln_tests** results in certificate_info, http_headers and the cipher_suites commands being run.
     - More information on each of these scan options can be found at: https://nabla-c0d3.github.io/sslyze/documentation/available-scan-commands.html
-_--HTTP_BODY_: Y/y or N/n - sets a Boolean variable to include or exclude HTTP pages information
-_--FORCE_REDIRECTS_: Y/y or N/n - sets a Boolean variable to check for automatic redirects from port 80 to 443 in a TLS scan (default = Y)
-_--PRINT_OUT_: Y/y or N/n - sets a Boolean variable to print scan results to console (default = Y)
-_--JSON_OUT_: Y/y or N/n - sets a Boolean variable to print scan results to JSON output file (default = Y)
+- _--HTTP_BODY_: Y/y or N/n - sets a Boolean variable to include or exclude HTTP pages information
+- _--FORCE_REDIRECTS_: Y/y or N/n - sets a Boolean variable to check for automatic redirects from port 80 to 443 in a TLS scan (default = Y)
+- _--PRINT_OUT_: Y/y or N/n - sets a Boolean variable to print scan results to console (default = Y)
+- _--JSON_OUT_: Y/y or N/n - sets a Boolean variable to print scan results to JSON output file (default = Y)
 
 [![asciicast](https://asciinema.org/a/354498.svg)](https://asciinema.org/a/354498)
 
