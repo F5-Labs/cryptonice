@@ -458,7 +458,6 @@ def scanner_driver(input_data):
         if tls_data:
             scan_data.update({'tls': tls_data})
         if jarm_data:
-            print('YES JARM')
             scan_data.update({'jarm': jarm_data})
         if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})
