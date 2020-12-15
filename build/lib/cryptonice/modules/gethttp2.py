@@ -11,8 +11,7 @@ from urllib.parse import urlparse
 
 socket.setdefaulttimeout(5)
 
-headers = {"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 "
-                         "Safari/537.36"}
+#headers = {"user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
 
 
 def check_http2(domain_name, conn_port):

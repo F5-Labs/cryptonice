@@ -1,5 +1,5 @@
 from cryptonice.scanner import scanner_driver
-from __init__ import __version__
+from cryptonice.__init__ import __version__
 import argparse
 
 cryptonice_version=__version__
