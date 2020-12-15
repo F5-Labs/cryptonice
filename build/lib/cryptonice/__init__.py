@@ -2,4 +2,4 @@
 # __init__.py
 
 # Version of cryptonice package
-__version__ = "0.1.16"
+__version__ = "1.2.1"

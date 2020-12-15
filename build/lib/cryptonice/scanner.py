@@ -7,8 +7,13 @@ from cryptonice.modules.gettls import tls_scan
 from cryptonice.modules.gethttp import get_http
 from cryptonice.modules.getdns import get_dns
 from cryptonice.modules.gethttp2 import check_http2
+from cryptonice.modules.jarm import check_jarm
 from cryptonice.checkport import port_open
 from datetime import datetime
+
+from cryptonice.__init__ import __version__
+
+cryptonice_version=__version__
 
 tls_command_list = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
@@ -48,10 +53,11 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
     print('-------------------------------------')
     print(f'Hostname:\t\t\t  {str_host}\n')
 
-    tls_data = scan_data.get('tls_scan')
+    tls_data = scan_data.get('tls')
     http2_data = scan_data.get('http2')
-    http_data = scan_data.get('http_headers')
+    http_data = scan_data.get('http')
     dns_data = scan_data.get('dns')
+    jarm_data = scan_data.get('jarm')
 
     if tls_data == "Port closed - no TLS data available":
         print('***TLS Results***')
@@ -108,7 +114,16 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-        # SSL 2.0 results
+
+        # JARM TLS fingerprint results
+        if isinstance(jarm_data, str):
+            print(jarm_data)
+        elif jarm_data:
+            print(f'\nTLS fingerprint:\t\t  {jarm_data.get("fingerprint")}')
+        print('')
+
+
+        # HTTP/2 results
         if isinstance(http2_data, str):
             print(http2_data)
         elif http2_data:
@@ -126,6 +141,7 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
         print(f'\nCERTIFICATE')
         print(f'Common Name:\t\t\t  {cert_0.get("common_name")}')
+        print(f'Issuer Name:\t\t\t  {cert_0.get("issuer_name")}')
         print(f'Public Key Algorithm:\t\t  {cert_0.get("public_key_algorithm")}')
         print(f'Public Key Size:\t\t  {cert_0.get("public_key_size")}')
         if cert_0.get("public_key_algorithm") == "EllipticCurvePublicKey":
@@ -216,22 +232,22 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
         except:
             pass
 
-        try:
-            public_key_pins = http_data.get("Headers").get("Public-Key-Pins")
-            if public_key_pins is not None:
-                print(f'HTTP Public Key Pinning:\t  True')
-                for pin in public_key_pins:
-                    print(f'\t\t {pin}')
-            else:
-                print(f'HTTP Public Key Pinning:\t  False')
-            print('')
-        except:
-            pass
+        # try:
+        #     public_key_pins = http_data.get("Headers").get("Public-Key-Pins")
+        #     if public_key_pins is not None:
+        #         print(f'HTTP Public Key Pinning:\t  True')
+        #         for pin in public_key_pins:
+        #             print(f'\t\t {pin}')
+        #     else:
+        #         print(f'HTTP Public Key Pinning:\t  False')
+        #     print('')
+        # except:
+        #     pass
 
-        try:
-            print(f'Secure Cookies:\t\t\t  {True if http_data.get("Cookies") != "" else False}\n')
-        except:
-            pass
+        # try:
+        #     print(f'Secure Cookies:\t\t\t  {True if http_data.get("Cookies") != "" else False}\n')
+        # except:
+        #     pass
 
 
     try:
@@ -274,8 +290,10 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
 def scanner_driver(input_data):
     b_httptohttps = False
+    cryptonice_version = input_data['cn_version']
     job_id = input_data['id']
     port = input_data['port']
+
     if port is None:
         port = 443  # default to 443 if none is supplied in input file
 
@@ -293,7 +311,6 @@ def scanner_driver(input_data):
     tls_data = {}
     http_data = {}
     dns_data = {}
-    geolocation_data = {}
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
@@ -323,6 +340,8 @@ def scanner_driver(input_data):
         start_time = datetime.today()  # added to scan metadata later
         scan_data = {}  # final dictionary with metadata and scan results
         metadata = {}  # track metadata
+        metadata.update({'cryptonice_version': cryptonice_version})
+        metadata.update({'test': 'wah'})
         metadata.update({'job_id': job_id})
         metadata.update({'hostname': hostname})
         metadata.update({'port': port})
@@ -340,7 +359,7 @@ def scanner_driver(input_data):
             # If we have a valid IP, skip the DNS lookup...
             ip_address = hostname
             print(f'{hostname} is already a valid IP')
-        except:
+        except ValueError:
             # Determine if we are only using DNS to get an IP address, or whether we should query for all records
             if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
                 dns_data = get_dns(hostname, True)
@@ -415,6 +434,9 @@ def scanner_driver(input_data):
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
 
+            #if 'JARM' in input_data['scans'] or 'jarm' in input_data['scans']:
+            jarm_data = check_jarm(host_path, port)
+
             metadata.update({'http_to_https': b_httptohttps})
             metadata.update({'status': "Successful"})
         else:
@@ -424,17 +446,23 @@ def scanner_driver(input_data):
         end_time = datetime.today()
         metadata.update({'start': start_time.__str__()})
         metadata.update({'end': end_time.__str__()})
-        scan_data.update({'scan_metadata': metadata})  # add metadata to beginning of dictionary
+
+        # add metadata to beginning of dictionary
+        scan_data.update({'scan_metadata': metadata})
 
         # Add results of scans (boolean defaults to false if dictionary is empty)
         if 'HTTP' in input_data['scans'] or 'http' in input_data['scans']:
-            scan_data.update({'http_headers': http_data})
-        if tls_data:
-            scan_data.update({'tls_scan': tls_data})
-        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
-            scan_data.update({'dns': dns_data})
+            scan_data.update({'http': http_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
+        if tls_data:
+            scan_data.update({'tls': tls_data})
+        if jarm_data:
+            print('YES JARM')
+            scan_data.update({'jarm': jarm_data})
+        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
+            scan_data.update({'dns': dns_data})
+
 
         if input_data['print_out']:
             print_to_console(str_host, scan_data, b_httptohttps, force_redirect)

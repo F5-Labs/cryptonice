@@ -6,10 +6,32 @@ import dns.resolver
 
 def getDNSRecord(hostname, record_type):
     record_list = []
+    got_record = False
+    #testdomain = dns.name.from_text(hostname)
+    #print(testdomain.labels)
+
     try:
-        result = dns.resolver.query(hostname, record_type)
-        for ipval in result:
-            record_list.append(ipval.to_text())
+        while not got_record:
+            '''
+            1. Lookup record type
+            2. Detect if SOA exists
+            3. Update hostname to target of SOA
+            4. Iterate with this new hostname
+            '''
+            answer = dns.resolver.resolve(hostname, record_type, raise_on_no_answer=False)
+
+            if answer.rrset is None:
+                result = answer.response.authority[0].to_text()
+                if "SOA" in result:
+                    # Check for SOA's pointing to the same hostname and exit loop, if so
+                    if result.split('. ')[0] == hostname:
+                        got_record = True
+                    else:
+                        hostname = result.split('. ')[0]
+            else:
+                for ipval in answer:
+                    record_list.append(ipval.to_text())
+                    got_record = True
     except:
         record_list = []
 
@@ -27,7 +49,6 @@ def get_dns(hostname, all_checks):
     connection_data.update({'Connection': hostname})
 
     # DEBUG
-    # print(f'Fetching A records')
     dns_data.update({'A': getDNSRecord(hostname, 'A')})
 
     if all_checks:
