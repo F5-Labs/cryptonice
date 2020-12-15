@@ -6,6 +6,7 @@ from setuptools import find_packages
 import sys
 from os import path
 from pathlib import Path
+from cryptonice import __init__
 
 # The directory containing this file
 HERE = Path(__file__).parent
@@ -31,14 +32,14 @@ else:
 
 # This call to setup() does all the work
 setup(
-    name="cryptonice",
-    version="1.0.9",
+    name="Cryptonice",
+    version=cryptonice.__version__,
     description="Perform TLS scan of a domain",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/F5-Labs/cryptonice",
-    author="Katie Newbold",
-    author_email="katiesnewbold@gmail.com",
+    author="F5 Labs",
+    author_email="f5labs@f5.com",
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",

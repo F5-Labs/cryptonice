@@ -11,6 +11,10 @@ from cryptonice.modules.jarm import check_jarm
 from cryptonice.checkport import port_open
 from datetime import datetime
 
+from cryptonice.__init__ import __version__
+
+cryptonice_version=__version__
+
 tls_command_list = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_suites', 'tls_1_0_cipher_suites',
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
                     'tls_1_3_early_data', 'openssl_ccs_injection', 'heartbleed', 'robot', 'tls_fallback_scsv',
@@ -286,8 +290,10 @@ def print_to_console(str_host, scan_data, b_httptohttps, force_redirect):
 
 def scanner_driver(input_data):
     b_httptohttps = False
+    cryptonice_version = input_data['cn_version']
     job_id = input_data['id']
     port = input_data['port']
+
     if port is None:
         port = 443  # default to 443 if none is supplied in input file
 
@@ -334,6 +340,8 @@ def scanner_driver(input_data):
         start_time = datetime.today()  # added to scan metadata later
         scan_data = {}  # final dictionary with metadata and scan results
         metadata = {}  # track metadata
+        metadata.update({'cryptonice_version': cryptonice_version})
+        metadata.update({'test': 'wah'})
         metadata.update({'job_id': job_id})
         metadata.update({'hostname': hostname})
         metadata.update({'port': port})
@@ -426,8 +434,8 @@ def scanner_driver(input_data):
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
 
-            if 'JARM' in input_data['scans'] or 'jarm' in input_data['scans']:
-                jarm_data = check_jarm(host_path, port)
+            #if 'JARM' in input_data['scans'] or 'jarm' in input_data['scans']:
+            jarm_data = check_jarm(host_path, port)
 
             metadata.update({'http_to_https': b_httptohttps})
             metadata.update({'status': "Successful"})
@@ -438,7 +446,9 @@ def scanner_driver(input_data):
         end_time = datetime.today()
         metadata.update({'start': start_time.__str__()})
         metadata.update({'end': end_time.__str__()})
-        scan_data.update({'scan_metadata': metadata})  # add metadata to beginning of dictionary
+
+        # add metadata to beginning of dictionary
+        scan_data.update({'scan_metadata': metadata})
 
         # Add results of scans (boolean defaults to false if dictionary is empty)
         if 'HTTP' in input_data['scans'] or 'http' in input_data['scans']:
@@ -448,6 +458,7 @@ def scanner_driver(input_data):
         if tls_data:
             scan_data.update({'tls': tls_data})
         if jarm_data:
+            print('YES JARM')
             scan_data.update({'jarm': jarm_data})
         if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})

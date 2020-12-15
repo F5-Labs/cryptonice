@@ -2,6 +2,9 @@ from cryptonice import scanner
 import argparse
 import json
 
+from cryptonice.__init__ import __version__
+cryptonice_version=__version__
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -11,6 +14,8 @@ def main():
     input_file = args.input_file
     with open(input_file) as f:
         input_data = json.load(f)
+        input_data.update({'cn_version': cryptonice_version})
+
 
     output_data, hostname = scanner.scanner_driver(input_data)
     if output_data is None and hostname is None:
