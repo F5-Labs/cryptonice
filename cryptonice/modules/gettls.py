@@ -184,10 +184,13 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 # cycle through all certificates (IP may have more than one)
                 count: int = 0
                 for cert_deployment in certinfo_result.certificate_deployments:
+                    print(count)
                     if count == 0:
                         all_certificates_info.update({'leaf_certificate_has_must_staple_extension':
                                                           cert_deployment.leaf_certificate_has_must_staple_extension})
                         all_certificates_info.update({'leaf_certificate_is_ev': cert_deployment.leaf_certificate_is_ev})
+                        all_certificates_info.update({'received_chain_has_valid_order': cert_deployment.received_chain_has_valid_order})
+                        all_certificates_info.update({'received_chain_has_contains_root': cert_deployment.received_chain_contains_anchor_certificate})
                         all_certificates_info.update({'leaf_certificate_signed_certificate_timestamps_count':
                                                           cert_deployment.leaf_certificate_signed_certificate_timestamps_count})
                         all_certificates_info.update({'leaf_certificate_subject_matches_hostname': cert_deployment.

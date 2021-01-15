@@ -11,9 +11,9 @@
 	"port": 443,
 	"scans": ["DNS", "HTTP2", "HTTP", "JARM", "TLS"],
 	"tls_params": [],
-	"http_body": false,
+	"http_body": true,
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"targets": ["www.f5.com"]
+	"targets": ["f5.com"]
 }

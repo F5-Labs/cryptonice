@@ -341,7 +341,6 @@ def scanner_driver(input_data):
         scan_data = {}  # final dictionary with metadata and scan results
         metadata = {}  # track metadata
         metadata.update({'cryptonice_version': cryptonice_version})
-        metadata.update({'test': 'wah'})
         metadata.update({'job_id': job_id})
         metadata.update({'hostname': hostname})
         metadata.update({'port': port})
