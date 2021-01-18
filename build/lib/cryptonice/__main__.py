@@ -35,7 +35,7 @@ def main():
                                                  "tls_1_1_cipher_suites, tls_1_2_cipher_suites, tls_1_3_cipher_suites, "
                                                  "tls_compression, tls_1_3_early_data, openssl_ccs_injection, "
                                                  "heartbleed, robot, tls_fallback_scsv, session_renegotiation, "
-                                                 "session_resumption, session_resumption_rate, http_headers", default="certificate_info")
+                                                 "session_resumption, session_resumption_rate, http_headers", default="no_vuln_tests")
     parser.add_argument("--http_body", help="Include HTTP pages information in output", action='store_true')
     parser.add_argument("--no_redirect", help="Check for redirects from port 80 to 443 automatically", action='store_false')
     parser.add_argument("--no_console", help="Print output to console", action='store_false')

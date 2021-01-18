@@ -375,7 +375,9 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
             count += 1
         connection_data.update({'Cookies': all_cookies})
     except:
-        connection_data.update({'Cookies': ''})
+        #DW 18/01/2021 don't create Cookies field if there are none
+        #connection_data.update({'Cookies': 'null'})
+        pass 
 
     # Include page data in output if requested
     if http_pages:

@@ -459,19 +459,25 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 int_robot_results = obj_robot_result.robot_result.value
                 # server_info.tls_probing_result.highest_tls_version_supported.name
                 if int_robot_results == 1:
-                    test_results.update({'vulnerable_to_robot': [True, 'Weak oracle']})
+                    test_results.update({'vulnerable_to_robot': True})
+                    test_results.update({'vulnerable_to_robot_desc': 'Weak oracle'})
                     recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
                 elif int_robot_results == 2:
-                    test_results.update({'vulnerable_to_robot': [True, 'Strong oracle']})
+                    test_results.update({'vulnerable_to_robot': True})
+                    test_results.update({'vulnerable_to_robot_desc': 'Strong oracle'})
                     recommendations_data.update({'CRITICAL - ROBOT': 'ROBOT vulnerability detected. Recommend disabling RSA encryption and using DH, ECDH, DHE or ECDHE.'})
                 elif int_robot_results == 3:
-                    test_results.update({'vulnerable_to_robot': [False, 'No oracle']})
+                    test_results.update({'vulnerable_to_robot': False})
+                    test_results.update({'vulnerable_to_robot_desc': 'No oracle'})
                 elif int_robot_results == 4:
-                    test_results.update({'vulnerable_to_robot': [False, 'No RSA']})
+                    test_results.update({'vulnerable_to_robot': False})
+                    test_results.update({'vulnerable_to_robot_desc': 'No RSA'})
                 elif int_robot_results == 5:
-                    test_results.update({'vulnerable_to_robot': [False, '']})
+                    test_results.update({'vulnerable_to_robot': False})
+                    test_results.update({'vulnerable_to_robot_desc': ''})
                 else:
-                    test_results.update({'vulnerable_to_robot': [False, 'Test failed']})
+                    test_results.update({'vulnerable_to_robot': False})
+                    test_results.update({'vulnerable_to_robot_desc': 'Test failed'})
             except KeyError:
                 pass
 
