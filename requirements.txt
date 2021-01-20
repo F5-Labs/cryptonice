@@ -1,7 +1,7 @@
 pathlib~=1.0.1
 setuptools~=41.2.0
 dnspython~=1.16.0
-sslyze~=3.0.4
+sslyze<=3.0.8
 ipaddress~=1.0.23
 bs4>=0.0.1
 regex>=2020.5.14

@@ -51,7 +51,7 @@ setup(
     python_requires='>=3',
     packages=["cryptonice"],
     include_package_data=True,
-    install_requires=["sslyze>=3.0.0",
+    install_requires=["sslyze<=3.0.8",
                       "dnspython>=2.0.0",
                       "http-client>=0.1.21",
                       "urllib3>=1.25.9",
