@@ -462,6 +462,11 @@ def scanner_driver(input_data):
         metadata.update({'start': start_time.__str__()})
         metadata.update({'end': end_time.__str__()})
 
+        try:
+            metadata.update({'site_pos': site_pos})
+        except:
+            pass
+
         # add metadata to beginning of dictionary
         scan_data.update({'scan_metadata': metadata})
 
