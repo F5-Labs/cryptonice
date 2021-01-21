@@ -294,6 +294,12 @@ def scanner_driver(input_data):
     job_id = input_data['id']
     port = input_data['port']
 
+    #For mass scanning:
+    try:
+        site_pos = input_data['site_pos']
+    except:
+        pass
+
     if port is None:
         port = 443  # default to 443 if none is supplied in input file
 
@@ -345,6 +351,12 @@ def scanner_driver(input_data):
         metadata.update({'hostname': hostname})
         metadata.update({'port': port})
         metadata.update({'node_name': socket.gethostname()})
+
+        # For mass scanning only
+        try:
+            metadata.update({'site_pos': site_pos})
+        except:
+            pass
 
         #########################################################################################################
         # We can also check DNS regardless of open ports since it's an independent protocol
