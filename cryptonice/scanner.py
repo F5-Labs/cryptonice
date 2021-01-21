@@ -297,7 +297,9 @@ def scanner_driver(input_data):
     #For mass scanning:
     try:
         site_pos = str(input_data['site_pos'])
+        print ('Site pos:' + site_pos)
     except:
+        print ('Unable to get site_pos from input_data')
         pass
 
     if port is None:
@@ -355,7 +357,9 @@ def scanner_driver(input_data):
         # For mass scanning only
         try:
             metadata.update({'site_pos': site_pos})
+            print('Updated site number: ' + site_pos)
         except:
+            print('Unable to update site number')
             pass
 
         #########################################################################################################
