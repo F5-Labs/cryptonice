@@ -299,7 +299,7 @@ def scanner_driver(input_data):
         site_pos = str(input_data['site_pos'])
         print ('Site pos:' + site_pos)
     except:
-        print ('Unable to get site_pos from input_data')
+        print ('Unable to get the site_pos from input_data')
         pass
 
     if port is None:
