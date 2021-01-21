@@ -296,7 +296,7 @@ def scanner_driver(input_data):
 
     #For mass scanning:
     try:
-        site_pos = input_data['site_pos']
+        site_pos = str(input_data['site_pos'])
     except:
         pass
 
