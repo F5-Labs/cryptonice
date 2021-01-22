@@ -297,10 +297,8 @@ def scanner_driver(input_data):
     #For mass scanning:
     site_pos = 0
     try:
-        site_pos = input_data['site_pos']
-        print ('Site pos:' + str(site_pos))
+        site_pos = int(input_data['site_pos'])
     except:
-        print ('Unable to get the site_pos from input_data')
         pass
 
     if port is None:
