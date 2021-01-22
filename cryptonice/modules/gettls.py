@@ -184,7 +184,7 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 # cycle through all certificates (IP may have more than one)
                 count: int = 0
                 for cert_deployment in certinfo_result.certificate_deployments:
-                    print(count)
+                    #print(count)
                     if count == 0:
                         all_certificates_info.update({'leaf_certificate_has_must_staple_extension':
                                                           cert_deployment.leaf_certificate_has_must_staple_extension})

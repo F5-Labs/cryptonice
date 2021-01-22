@@ -295,9 +295,10 @@ def scanner_driver(input_data):
     port = input_data['port']
 
     #For mass scanning:
+    site_pos = 0
     try:
-        site_pos = str(input_data['site_pos'])
-        print ('Site pos:' + site_pos)
+        site_pos = input_data['site_pos']
+        print ('Site pos:' + str(site_pos))
     except:
         print ('Unable to get the site_pos from input_data')
         pass
@@ -355,12 +356,7 @@ def scanner_driver(input_data):
         metadata.update({'node_name': socket.gethostname()})
 
         # For mass scanning only
-        try:
-            metadata.update({'site_pos': site_pos})
-            print('Updated site number: ' + site_pos)
-        except:
-            print('Unable to update site number')
-            pass
+        metadata.update({'site_pos': site_pos})
 
         #########################################################################################################
         # We can also check DNS regardless of open ports since it's an independent protocol
@@ -461,11 +457,6 @@ def scanner_driver(input_data):
         end_time = datetime.today()
         metadata.update({'start': start_time.__str__()})
         metadata.update({'end': end_time.__str__()})
-
-        try:
-            metadata.update({'site_pos': site_pos})
-        except:
-            pass
 
         # add metadata to beginning of dictionary
         scan_data.update({'scan_metadata': metadata})
