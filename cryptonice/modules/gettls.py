@@ -270,9 +270,11 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
                 ssl2_data = {}
                 ssl2_result = server_scan_result.scan_commands_results[ScanCommand.SSL_2_0_CIPHER_SUITES]
 
-                preferred_cipher_suite = ssl2_result.cipher_suite_preferred_by_server
-                if preferred_cipher_suite is not None:
-                    ssl2_data.update({'preferred_cipher_suite': preferred_cipher_suite.cipher_suite.name})
+                #SSLyze 4.x has (temporarily?) removed the suite order since it was found to be unrealiable
+                try:
+                    preferred_cipher_suite = ssl2_result.cipher_suite_preferred_by_server
+                    if preferred_cipher_suite is not None:
+                        ssl2_data.update({'preferred_cipher_suite': preferred_cipher_suite.cipher_suite.name})
                 else:
                     ssl2_data.update({'preferred_cipher_suite': None})
 
