@@ -3,12 +3,12 @@
 
 import json, socket, ipaddress
 
-from cryptonice.modules.gettls import tls_scan
-from cryptonice.modules.gethttp import get_http
-from cryptonice.modules.getdns import get_dns
-from cryptonice.modules.gethttp2 import check_http2
-from cryptonice.modules.jarm import check_jarm
-from cryptonice.checkport import port_open
+from .gettls import tls_scan
+from .gethttp import get_http
+from .getdns import get_dns
+from .gethttp2 import check_http2
+from .jarm import check_jarm
+from .checkport import port_open
 from datetime import datetime
 
 from cryptonice.__init__ import __version__
