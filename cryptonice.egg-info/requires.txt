@@ -1,0 +1,8 @@
+sslyze<=3.0.8
+dnspython>=2.0.0
+http-client>=0.1.21
+urllib3>=1.25.9
+ipaddress>=1.0.22
+pathlib~=1.0.1
+bs4>=0.0.1
+regex>=2020.5.14

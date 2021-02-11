@@ -51,7 +51,7 @@ setup(
     python_requires='>=3',
     packages=["cryptonice"],
     include_package_data=True,
-    install_requires=["sslyze<=3.0.8",
+    install_requires=["sslyze>=4.0.0",
                       "dnspython>=2.0.0",
                       "http-client>=0.1.21",
                       "urllib3>=1.25.9",
@@ -66,7 +66,7 @@ setup(
     },
     # cx_freeze info for executable builds with Python embedded
     options={"build_exe": {"packages": ["sslyze", "urllib3", "dns", "http_client", "ipaddress", "pathlib", "cryptography"],
-                           "include_files": ["cryptonice"]}},
-    executables=[Executable(path.join("cryptonice", "__main__.py"), targetName="cryptonice.exe")],
+                           "include_files": ["cryptonice"]}}
+    #executables=[Executable(path.join("cryptonice", "__main__.py"), targetName="cryptonice.exe")],
 )
 #
