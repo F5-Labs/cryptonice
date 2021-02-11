@@ -1,4 +1,4 @@
-from .scanner import scanner_driver
+from scanner import scanner_driver
 from .__init__ import __version__
 import argparse
 
