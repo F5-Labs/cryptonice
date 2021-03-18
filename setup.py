@@ -14,6 +14,7 @@ HERE = Path(__file__).parent
 # Setup file based on cryptonice/setup.py
 root_path = Path(__file__).parent.absolute()
 
+print('Root path = ' + str(root_path))
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
@@ -66,7 +67,5 @@ setup(
     },
     # cx_freeze info for executable builds with Python embedded
     options={"build_exe": {"packages": ["sslyze", "urllib3", "dns", "http_client", "ipaddress", "pathlib", "cryptography"],
-                           "include_files": ["cryptonice"]}}
-    #executables=[Executable(path.join("cryptonice", "__main__.py"), targetName="cryptonice.exe")],
-)
+                           "include_files": ["cryptonice"]}})
 #
