@@ -9,6 +9,7 @@ from .getdns import get_dns
 from .gethttp2 import check_http2
 from .jarm import check_jarm
 from .checkport import port_open
+from .pwnedkeys import check_key
 from datetime import datetime
 
 from cryptonice.__init__ import __version__
@@ -441,8 +442,9 @@ def scanner_driver(input_data):
                 else:
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
-            print('Fingerprint...')
-            print(tls_data['certificate_info']['certificate_0']['fingerprint'])
+            if 'PWNED' in input_data['scans']:
+                cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
+                pwned_data = check_key(cert_fingerprint)
 
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
