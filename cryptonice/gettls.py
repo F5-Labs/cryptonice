@@ -80,6 +80,10 @@ def getCertificateResults(certificate):
     serial_num = cert.serial_number.__str__()
     cert_data.update({'serial_number': serial_num})
 
+    # Certificate fingerprint
+    fingerprint = cert.fingerprint.__str__()
+    cert_data.update({'fingerprint': fingerprint})
+
     # Certificate public key
     public_key = cert.public_key()
     if isinstance(public_key, rsa.RSAPublicKey):
