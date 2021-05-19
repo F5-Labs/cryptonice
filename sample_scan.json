@@ -9,7 +9,7 @@
 	                    "tls_1_3_early_data", "http_headers"],
 	"id": "Test scan",
 	"port": 443,
-	"scans": ["DNS", "HTTP2", "HTTP", "JARM", "TLS"],
+	"scans": ["DNS", "HTTP2", "HTTP", "JARM", "TLS", "PWNED"],
 	"tls_params": [],
 	"http_body": true,
 	"force_redirect": true,

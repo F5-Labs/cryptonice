@@ -12,6 +12,7 @@ from sslyze.errors import ConnectionToServerFailed
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec, ed448, ed25519
 from datetime import datetime
 from typing import List, cast
@@ -79,6 +80,11 @@ def getCertificateResults(certificate):
     # Certificate serial number
     serial_num = cert.serial_number.__str__()
     cert_data.update({'serial_number': serial_num})
+
+    # Certificate fingerprint
+    fingerprint = cert.fingerprint(hashes.SHA256())
+    fingerprint = fingerprint.hex()
+    cert_data.update({'fingerprint': fingerprint})
 
     # Certificate public key
     public_key = cert.public_key()
