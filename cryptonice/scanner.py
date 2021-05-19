@@ -446,7 +446,7 @@ def scanner_driver(input_data):
                 cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
                 pwned_data = check_key(cert_fingerprint)
                 tls_data.update(pwned_data)
-                print(tls_data)
+
 
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
@@ -472,6 +472,8 @@ def scanner_driver(input_data):
             scan_data.update({'http': http_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
+        if pwned_data:
+            scan_data.update({'pwnedkeys': pwned_data})
         if tls_data:
             scan_data.update({'tls': tls_data})
         if jarm_data:
