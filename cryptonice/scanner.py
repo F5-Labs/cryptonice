@@ -443,11 +443,10 @@ def scanner_driver(input_data):
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
             if 'PWNED' in input_data['scans']:
-                print('Checking for leaked key')
                 cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
                 pwned_data = check_key(cert_fingerprint)
-                print(pwned_data)
                 tls_data.update(pwned_data)
+                print(tls_data)
 
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
