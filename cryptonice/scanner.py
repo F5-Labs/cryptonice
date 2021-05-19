@@ -442,7 +442,7 @@ def scanner_driver(input_data):
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
             print('Fingerprint...')
-            print(tls_data)
+            print(tls_data['certificate_info']['certificate_0']['fingerprint'])
 
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
