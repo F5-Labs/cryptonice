@@ -82,8 +82,8 @@ def getCertificateResults(certificate):
     cert_data.update({'serial_number': serial_num})
 
     # Certificate fingerprint
-    fingerprint = cert.fingerprint(hashes.SHA256())
-    fingerprint = fingerprint.decode()
+    fingerprint = cert.fingerprint()
+    #fingerprint = fingerprint.decode()
     cert_data.update({'fingerprint': fingerprint})
 
     # Certificate public key
