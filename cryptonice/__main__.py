@@ -29,7 +29,7 @@ def main():
     parser = argparse.ArgumentParser(description="Supply commands to Cryptonice", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("domain", nargs='+', help="Domain name to scan", type=str, default="")
     parser.add_argument("--port", help="Port to perform scans on", type=int, default=443)
-    parser.add_argument("--scans", nargs='+', help="Scans to run as a space delimted string, selecting from: TLS HTTP HTTP2 DNS JARM", default="dns tls http http2 jarm")
+    parser.add_argument("--scans", nargs='+', help="Scans to run as a space delimited string, selecting from: TLS HTTP HTTP2 DNS JARM", default="dns tls http http2 jarm")
     parser.add_argument("--tls", nargs='+', help="all, no_vuln_tests, certificate_info, "
                                                  "ssl_2_0_cipher_suites, ssl_3_0_cipher_suites, tls_1_0_cipher_suites, "
                                                  "tls_1_1_cipher_suites, tls_1_2_cipher_suites, tls_1_3_cipher_suites, "
