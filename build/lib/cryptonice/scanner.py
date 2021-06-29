@@ -9,6 +9,7 @@ from .getdns import get_dns
 from .gethttp2 import check_http2
 from .jarm import check_jarm
 from .checkport import port_open
+from .pwnedkeys import check_key
 from datetime import datetime
 
 from cryptonice.__init__ import __version__
@@ -24,7 +25,7 @@ tls_defaults = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_sui
                     'tls_1_1_cipher_suites', 'tls_1_2_cipher_suites', 'tls_1_3_cipher_suites', 'tls_compression',
                     'tls_1_3_early_data', 'http_headers']
 
-def writeToJSONFile(filename, data):
+def writeToJSONFile(filename, pathToJson, data):
     """
     Write contents of dictionary with hostname: certificate key-value pairs to a json file
     :param filename: name of destination filegit ad
@@ -34,7 +35,10 @@ def writeToJSONFile(filename, data):
     if "/" in filename:
         filename = filename.split("/", 1)[0]
 
-    filePathNameWExt = './' + filename + '.json'
+    if pathToJson[-1] != "/":
+        pathToJson = pathToJson + "/"
+
+    filePathNameWExt = pathToJson + filename + '.json'
     with open(filePathNameWExt, 'w') as fp:
         json.dump(data, fp, default=print_errors)
     print(f'\nOutputting data to {filePathNameWExt}')
@@ -321,6 +325,9 @@ def scanner_driver(input_data):
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
+        pwned_data = False
+        jarm_data = False
+
         print ('Pre-scan checks\n-------------------------------------')
         # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
         # HTTP redirect checks
@@ -435,10 +442,18 @@ def scanner_driver(input_data):
                                         commands_to_run.append(str(param))
 
                         tls_data = tls_scan(ip_address, str_host, commands_to_run, port)
+
                     except KeyError:
                         tls_data = "No TLS scan parameters provided"
                 else:
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
+
+
+            if 'PWNED' in input_data['scans']:
+                cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
+                pwned_data = check_key(cert_fingerprint)
+                tls_data.update(pwned_data)
+
 
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
@@ -464,6 +479,8 @@ def scanner_driver(input_data):
             scan_data.update({'http': http_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
+        if pwned_data:
+            scan_data.update({'pwnedkeys': pwned_data})
         if tls_data:
             scan_data.update({'tls': tls_data})
         if jarm_data:
@@ -480,7 +497,11 @@ def scanner_driver(input_data):
         print(f'Total run time: {end_time - start_time}')
 
         if input_data['generate_json']:
-            writeToJSONFile(str_host, scan_data)
+            try:
+                pathToJson = input_data['json_path']
+            except:
+                pathToJson = "./"
+            writeToJSONFile(hostname, pathToJson, scan_data)
 
     return scan_data, hostname
 

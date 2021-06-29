@@ -55,7 +55,7 @@ setup(
     install_requires=["sslyze>=4.0.0",
                       "dnspython>=2.0.0",
                       "http-client>=0.1.21",
-                      "urllib3~=1.22",
+                      "urllib3>=1.22",
                       "ipaddress>=1.0.22",
                       "pathlib~=1.0.1",
                       "bs4>=0.0.1",

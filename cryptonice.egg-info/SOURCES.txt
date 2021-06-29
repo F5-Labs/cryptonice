@@ -10,6 +10,7 @@ cryptonice/gethttp.py
 cryptonice/gethttp2.py
 cryptonice/gettls.py
 cryptonice/jarm.py
+cryptonice/pwnedkeys.py
 cryptonice/scanner.py
 cryptonice.egg-info/PKG-INFO
 cryptonice.egg-info/SOURCES.txt

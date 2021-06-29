@@ -5,4 +5,4 @@ ipaddress>=1.0.22
 pathlib~=1.0.1
 regex>=2020.5.14
 sslyze>=4.0.0
-urllib3~=1.22
+urllib3>=1.22

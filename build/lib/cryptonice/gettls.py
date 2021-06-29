@@ -12,6 +12,7 @@ from sslyze.errors import ConnectionToServerFailed
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, dsa, ec, ed448, ed25519
 from datetime import datetime
 from typing import List, cast
@@ -79,6 +80,11 @@ def getCertificateResults(certificate):
     # Certificate serial number
     serial_num = cert.serial_number.__str__()
     cert_data.update({'serial_number': serial_num})
+
+    # Certificate fingerprint
+    fingerprint = cert.fingerprint(hashes.SHA256())
+    fingerprint = fingerprint.hex()
+    cert_data.update({'fingerprint': fingerprint})
 
     # Certificate public key
     public_key = cert.public_key()
@@ -547,10 +553,8 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
             try:
                 renegotiation_results = server_scan_result.scan_commands_results[ScanCommand.SESSION_RENEGOTIATION]
                 session_reneg = {}
-                session_reneg.update(
-                    {'accepts_client_renegotiation': renegotiation_results.accepts_client_renegotiation})
-                session_reneg.update(
-                    {'supports_secure_renegotiation': renegotiation_results.supports_secure_renegotiation})
+                session_reneg.update({'accepts_client_renegotiation': renegotiation_results.is_vulnerable_to_client_renegotiation_dos})
+                session_reneg.update({'supports_secure_renegotiation': renegotiation_results.supports_secure_renegotiation})
                 test_results.update({'session_renegotiation': session_reneg})
             except KeyError:
                 pass
