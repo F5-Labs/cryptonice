@@ -36,7 +36,7 @@ def writeToJSONFile(filename, pathToJson, data):
         filename = filename.split("/", 1)[0]
 
     if pathToJson[-1] != "/":
-        pathToJson = pathToJson & "/"
+        pathToJson = pathToJson + "/"
 
     filePathNameWExt = pathToJson + filename + '.json'
     with open(filePathNameWExt, 'w') as fp:
@@ -298,9 +298,6 @@ def scanner_driver(input_data):
     job_id = input_data['id']
     port = input_data['port']
 
-    print("In scanner_driver")
-    print("JSON path = " + input_data[json_path])
-
     #For mass scanning:
     site_pos = 0
     try:
@@ -328,6 +325,9 @@ def scanner_driver(input_data):
     http2_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
+        pwned_data = False
+        jarm_data = False
+
         print ('Pre-scan checks\n-------------------------------------')
         # Check to see if user has supplied an SNI. If so, this SNI will be used for all tests unless overriden by the
         # HTTP redirect checks
@@ -447,6 +447,7 @@ def scanner_driver(input_data):
                         tls_data = "No TLS scan parameters provided"
                 else:
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
+
 
             if 'PWNED' in input_data['scans']:
                 cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']

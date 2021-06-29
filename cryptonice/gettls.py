@@ -553,10 +553,8 @@ def tls_scan(ip_address, str_host, commands_to_run, port_to_scan):
             try:
                 renegotiation_results = server_scan_result.scan_commands_results[ScanCommand.SESSION_RENEGOTIATION]
                 session_reneg = {}
-                session_reneg.update(
-                    {'accepts_client_renegotiation': renegotiation_results.accepts_client_renegotiation})
-                session_reneg.update(
-                    {'supports_secure_renegotiation': renegotiation_results.supports_secure_renegotiation})
+                session_reneg.update({'vulnerable_to_client_renegotiation_dos': renegotiation_results.is_vulnerable_to_client_renegotiation_dos})
+                session_reneg.update({'supports_secure_renegotiation': renegotiation_results.supports_secure_renegotiation})
                 test_results.update({'session_renegotiation': session_reneg})
             except KeyError:
                 pass
