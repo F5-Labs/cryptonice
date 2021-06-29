@@ -39,7 +39,8 @@ def main():
     parser.add_argument("--http_body", help="Include HTTP pages information in output", action='store_true')
     parser.add_argument("--no_redirect", help="Check for redirects from port 80 to 443 automatically", action='store_false')
     parser.add_argument("--no_console", help="Print output to console", action='store_false')
-    parser.add_argument("--json_out", help="Send output to JSON file (must provide name of output file)", action='store_true')
+    parser.add_argument("--json_out", help="Write output to JSON file (True/False)", action='store_true')
+    parser.add_argument("--json_path", help="Send JSON file(s) to specific directory", type=str, default="./")
     parser.add_argument("-v", "--version", help="Display version of Cryptonice", action='version', version=cryptonice_version)
 
     parser._positionals.title = 'Required'
@@ -97,7 +98,9 @@ def main():
     generate_json = False
     if args.json_out:
         generate_json = True
+
     input_data.update({'generate_json': generate_json})
+    input_data.update({'json_path': args.json_path})
 
     input_data.update({'targets': domain_name})
 
