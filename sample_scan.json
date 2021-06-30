@@ -17,6 +17,6 @@
 	"generate_json": true,
 	"json_path" : "./results",
 	"recommendations": false,
-	"targets": ["www.f5.com", "f5.com", "www.f5labs.com", "f5labs.com"],
+	"targets": ["www.f5.com", "f5labs.com"],
 	"site_pos": 1
 }
