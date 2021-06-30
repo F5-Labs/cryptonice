@@ -1,3 +1,0 @@
-[console_scripts]
-cryptonice = cryptonice.__main__:main
-
