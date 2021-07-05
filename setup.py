@@ -52,7 +52,7 @@ setup(
     python_requires='>=3',
     packages=["cryptonice"],
     include_package_data=True,
-    package_data={'cryptonice': ['cryptonice/technologies.json']}
+    package_data={'cryptonice': ['technologies.json']},
     install_requires=["sslyze>=4.0.0",
                       "dnspython>=2.0.0",
                       "http-client>=0.1.21",
