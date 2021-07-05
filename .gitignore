@@ -1,12 +1,5 @@
 
-build/lib/cryptonice/__init__.py
-build/lib/cryptonice/__main__.py
-build/lib/cryptonice/gettls.py
-build/lib/cryptonice/pwnedkeys.py
-build/lib/cryptonice/scanner.py
-cryptonice.egg-info/dependency_links.txt
-cryptonice.egg-info/entry_points.txt
-cryptonice.egg-info/PKG-INFO
-cryptonice.egg-info/requires.txt
-cryptonice.egg-info/SOURCES.txt
-cryptonice.egg-info/top_level.txt
+build/*
+cryptonice/__pychache__/*
+cryptonice.egg-info/*
+dist/*
