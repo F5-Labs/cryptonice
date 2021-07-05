@@ -1,10 +1,12 @@
 import json
 import re
 #import warnings
+#import requests
 import pkg_resources
-import requests
 from bs4 import BeautifulSoup
 
+# Function not needed since the webpage (inc headers, etc) are grabbed in gethttp.py
+'''
 def _parse_webpage(url):
     global webpage
     webpage = {}
@@ -23,6 +25,7 @@ def _parse_webpage(url):
 
     #print(webpage['response'])
     return webpage
+'''
 
 def _prepare_app(app):
 

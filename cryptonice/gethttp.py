@@ -281,16 +281,6 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
 
     webpage = {}
 
-    '''
-    webpage['url'] = str_host + str_path
-    webpage['headers'] = res.getheaders()
-    webpage['response'] = str(pagebody)
-    webpage['html'] = BeautifulSoup(str(pagebody), 'html.parser')
-    webpage['scripts'] = [script['src'] for script in webpage['html'].findAll('script', src=True)]
-    webpage['metatags'] = {meta['name'].lower(): meta['content']
-                           for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
-    '''
-
     webpage['url'] = str_host + str_path
     webpage['headers'] = res.headers
     webpage['response'] = str(pagebody)
