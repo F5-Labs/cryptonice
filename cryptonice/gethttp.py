@@ -7,7 +7,7 @@ import ssl
 # Wappalyzer Requirements
 import json
 import re
-from wappalyze import wappalyze
+from .wappalyze import wappalyze
 # import warnings
 import pkg_resources
 from bs4 import BeautifulSoup
