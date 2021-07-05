@@ -41,6 +41,7 @@ def main():
     parser.add_argument("--no_console", help="Print output to console", action='store_false')
     parser.add_argument("--json_out", help="Write output to JSON file (True/False)", action='store_true')
     parser.add_argument("--json_path", help="Send JSON file(s) to specific directory", type=str, default="./")
+    parser.add_argument("--geolocation", help="Use Maxmind DB to perform geolocation lookups", action='store_false')
     parser.add_argument("-v", "--version", help="Display version of Cryptonice", action='version', version=cryptonice_version)
 
     parser._positionals.title = 'Required'
@@ -98,6 +99,9 @@ def main():
     generate_json = False
     if args.json_out:
         generate_json = True
+
+    if args.geolocation:
+        input_data.update({'geolocation': True})
 
     input_data.update({'generate_json': generate_json})
     input_data.update({'json_path': args.json_path})

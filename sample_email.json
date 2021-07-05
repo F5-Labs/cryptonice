@@ -1,0 +1,11 @@
+{
+	"id": "Email scan",
+	"port": 25,
+	"scans": ["EMAIL"],
+	"tls_params": [],
+	"print_out": true,
+	"generate_json": true,
+	"json_path" : "./results",
+	"recommendations": false,
+	"targets": ["www.f5.com"]
+}

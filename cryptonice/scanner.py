@@ -301,9 +301,9 @@ def scanner_driver(input_data):
     port = input_data['port']
 
     try:
-        aws_scan = input_data['aws_scan']
+        geolocation = input_data['geolocation']
     except:
-        aws_scan = False
+        geolocation = False
 
     #For mass scanning:
     site_pos = 0
@@ -398,7 +398,7 @@ def scanner_driver(input_data):
         ############
         # Lookup geolocation using Maxmind database
         # NOTE: This is not enabled by default for public users of Cryptonice
-        if aws_scan:
+        if geolocation:
             geo_data = getlocation(ip_address)
         ###########
 
@@ -501,7 +501,7 @@ def scanner_driver(input_data):
             scan_data.update({'tls': tls_data})
         if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})
-        if geo_data:
+        if geolocation:
             scan_data.update({'geo': geo_data})
 
 

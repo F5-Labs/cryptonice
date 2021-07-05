@@ -18,6 +18,6 @@
 	"json_path" : "./results",
 	"recommendations": false,
 	"targets": ["www.f5.com", "f5labs.com"],
-	"aws_scan": true,
+	"geolocation": true,
 	"site_pos": 1
 }
