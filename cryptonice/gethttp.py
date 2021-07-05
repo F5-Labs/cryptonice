@@ -7,6 +7,7 @@ import ssl
 # Wappalyzer Requirements
 import json
 import re
+from wappalyze import wappalyze
 # import warnings
 import pkg_resources
 from bs4 import BeautifulSoup
@@ -275,11 +276,12 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     if http_pages:
         connection_data.update({'Page': pagebody})
 
-    conn.close()
 
     #### Wappalyzer build #####
 
     webpage = {}
+
+    '''
     webpage['url'] = str_host + str_path
     webpage['headers'] = res.getheaders()
     webpage['response'] = str(pagebody)
@@ -287,6 +289,17 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     webpage['scripts'] = [script['src'] for script in webpage['html'].findAll('script', src=True)]
     webpage['metatags'] = {meta['name'].lower(): meta['content']
                            for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
+    '''
+
+    webpage['url'] = str_host + str_path
+    webpage['headers'] = res.headers
+    webpage['response'] = str(pagebody)
+    webpage['html'] = BeautifulSoup(str(pagebody), 'html.parser')
+    webpage['scripts'] = [script['src'] for script in webpage['html'].findAll('script', src=True)]
+    webpage['metatags'] = {meta['name'].lower(): meta['content']
+        for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
+
+    conn.close()
 
     page = {}
     page['scripts'] = webpage['scripts']
@@ -301,3 +314,8 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     connection_data.update({'Page': page})
 
     return [str_host, str_path, b_httptohttps], connection_data
+
+
+if __name__ == '__main__':
+    analyzed = get_http('93.184.216.34', 'example.com', 443, True, True, True)
+    print (analyzed)

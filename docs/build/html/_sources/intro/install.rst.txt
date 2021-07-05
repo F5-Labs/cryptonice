@@ -15,9 +15,16 @@ To grab the latest Docker image::
 
   docker pull f5labs/cryptonice
 
-To run Cryptonice in the container::
+To run Cryptonice in the container use the following command (the --rm remove the container once it's completed, and -it makes it interactive so that you can see the output)::
 
-  docker run f5labs/cryptonice www.f5.com
+  docker run --rm -it f5labs/cryptonice www.f5.com
+
+If you want to output the JSON results to a folder on your local machine you must tell Docker to map a local path to a path within the container. The following example maps a folder in C:\Scratch to a new folder called /results within the container)::
+
+  docker run --rm -it --volume //c/scratch:/results f5labs/cryptonice www.f5.com --json_out --json_path /results
+
+Once the scan is complete you should find the resulting www.f5.com.json file in your C:\Scratch folder.
+
 
 
 Windows
