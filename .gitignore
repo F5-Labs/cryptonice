@@ -2,4 +2,3 @@ build/*
 cryptonice/__pychache__/*
 cryptonice.egg-info/*
 dist/*
-cryptonice/maxmind/*

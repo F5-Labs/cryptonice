@@ -3,6 +3,8 @@
 
 import json, socket, ipaddress
 
+from .getgeo import getlocation
+
 from .gettls import tls_scan
 from .gethttp import get_http
 from .getdns import get_dns
@@ -298,6 +300,11 @@ def scanner_driver(input_data):
     job_id = input_data['id']
     port = input_data['port']
 
+    try:
+        aws_scan = input_data['aws_scan']
+    except:
+        aws_scan = False
+
     #For mass scanning:
     site_pos = 0
     try:
@@ -387,6 +394,15 @@ def scanner_driver(input_data):
                 print(f'{hostname} resolves to {ip_address}')
         #########################################################################################################
 
+
+        ############
+        # Lookup geolocation using Maxmind database
+        # NOTE: This is not enabled by default for public users of Cryptonice
+        if aws_scan:
+            geo_data = getlocation(ip_address)
+        ###########
+
+
         str_host = hostname  # will allow data to be outputted even if port is closed
         # Now we begin the proper scans based on the port we've been asked to connect to
         target_portopen, target_tlsopen = port_open(ip_address, port)
@@ -452,8 +468,6 @@ def scanner_driver(input_data):
             if 'PWNED' in input_data['scans']:
                 cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
                 pwned_data = check_key(cert_fingerprint)
-                tls_data.update(pwned_data)
-
 
             if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
                 http2_data = check_http2(host_path, port)
@@ -480,13 +494,15 @@ def scanner_driver(input_data):
         if http2_data:
             scan_data.update({'http2': http2_data})
         if pwned_data:
-            scan_data.update({'pwnedkeys': pwned_data})
+            tls_data.update({'pwnedkeys': pwned_data})
+        if jarm_data:
+            tls_data.update({'jarm': jarm_data})
         if tls_data:
             scan_data.update({'tls': tls_data})
-        if jarm_data:
-            scan_data.update({'jarm': jarm_data})
         if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
             scan_data.update({'dns': dns_data})
+        if geo_data:
+            scan_data.update({'geo': geo_data})
 
 
         if input_data['print_out']:
