@@ -115,19 +115,23 @@ def scanner_driver(input_data):
         # If it is, set the IP address to the 'hostname',
         # if not, perform a DNS lookup
         try:
+            print("Hostname = " + str(hostname))
             ipaddress.ip_address(hostname)
             # If we have a valid IP, skip the DNS lookup...
             ip_address = hostname
             print(f'{hostname} is already a valid IP')
         except ValueError:
             # Determine if we are only using DNS to get an IP address, or whether we should query for all records
-            if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
+            if 'DNS' in str(input_data['scans']).upper():
                 dns_data = get_dns(hostname, True)
             else:
                 dns_data = get_dns(hostname, False)
 
             if dns_data:
                 ip_address = dns_data.get('records').get('A')[0]  # get first IP in list
+                if 'EMAIL' in str(input_data['scans']).upper():
+                    mx_addresses = {}
+                    mx_addresses = dns_data.get('records').get('MX')
                 print(f'{hostname} resolves to {ip_address}')
         #########################################################################################################
 
@@ -163,8 +167,7 @@ def scanner_driver(input_data):
             except KeyError:
                 http_body = False
 
-            redirection_results, http_data = get_http(ip_address, host_sni, port, target_tlsopen, http_body,
-                                                      force_redirect)
+            redirection_results, http_data = get_http(ip_address, host_sni, port, target_tlsopen, http_body, force_redirect)
 
             if redirection_results == 'ERROR: Connection failed':
                 str_host = hostname  # default to original hostname if redirects failed
@@ -175,7 +178,15 @@ def scanner_driver(input_data):
                 str_path = redirection_results[1]  # updated path
                 b_httptohttps = redirection_results[2]  # updated http to https redirect
 
-            if 'TLS' in input_data['scans'] or 'tls' in input_data['scans']:
+            ### NEW EMAIL FUNCTIONS
+            # Gets the MX value with the lowest value (i.e. highest priority MX server)
+            if 'EMAIL' in str(input_data['scans']).upper():
+                str_mxaddress = str((min(mx_addresses)))
+                pos_mxspace = str_mxaddress.find(' ') + 1
+                str_mxaddress = str_mxaddress[pos_mxspace:-1]
+
+
+            if 'TLS' in str(input_data['scans']).upper():
                 if target_tlsopen:
                     # List to hold desired ScanCommands for later
                     commands_to_run = []
@@ -201,16 +212,15 @@ def scanner_driver(input_data):
                 else:
                     tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
-
-            if 'PWNED' in input_data['scans']:
+            if 'PWNED' in str(input_data['scans']).upper():
                 cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
                 pwned_data = check_key(cert_fingerprint)
 
-            if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
+            if 'HTTP2' in str(input_data['scans']).upper():
                 http2_data = check_http2(host_path, port)
 
-            #if 'JARM' in input_data['scans'] or 'jarm' in input_data['scans']:
-            jarm_data = check_jarm(host_path, port)
+            if 'JARM' in str(input_data['scans']).upper():
+                jarm_data = check_jarm(host_path, port)
 
             metadata.update({'http_to_https': b_httptohttps})
             metadata.update({'status': "Successful"})
@@ -226,7 +236,7 @@ def scanner_driver(input_data):
         scan_data.update({'scan_metadata': metadata})
 
         # Add results of scans (boolean defaults to false if dictionary is empty)
-        if 'HTTP' in input_data['scans'] or 'http' in input_data['scans']:
+        if 'HTTP' in str(input_data['scans']).upper():
             scan_data.update({'http': http_data})
         if http2_data:
             scan_data.update({'http2': http2_data})
@@ -236,7 +246,7 @@ def scanner_driver(input_data):
             tls_data.update({'jarm': jarm_data})
         if tls_data:
             scan_data.update({'tls': tls_data})
-        if 'DNS' in input_data['scans'] or 'dns' in input_data['scans']:
+        if 'DNS' in str(input_data['scans']).upper():
             scan_data.update({'dns': dns_data})
         if geolocation:
             scan_data.update({'geo': geo_data})
