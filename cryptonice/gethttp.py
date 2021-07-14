@@ -300,7 +300,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
     for x in elements.items():
         wapped.update({str(x[0]): x[1]})
 
-    page.update({'Components': wapped})
+    connection_data.update({'Components': wapped})
     connection_data.update({'Page': page})
 
     return [str_host, str_path, b_httptohttps], connection_data

@@ -1,5 +1,5 @@
 {
-	"_scan_options": ["DNS", "HTTP2", "HTTP", "JARM", "TLS", "EMAIL"],
+	"_scan_options": ["DNS", "HTTP2", "HTTP", "JARM", "TLS"],
 	"_tls_params": ["certificate_info", "ssl_2_0_cipher_suites", "ssl_3_0_cipher_suites", "tls_1_0_cipher_suites",
 	                    "tls_1_1_cipher_suites", "tls_1_2_cipher_suites", "tls_1_3_cipher_suites", "tls_compression",
 	                    "tls_1_3_early_data", "openssl_ccs_injection", "heartbleed", "robot", "tls_fallback_scsv",
@@ -17,5 +17,7 @@
 	"generate_json": true,
 	"json_path" : "./results",
 	"recommendations": false,
-	"targets": ["www.f5.com", "f5labs.com"]
+	"targets": ["www.f5.com", "f5labs.com"],
+	"geolocation": true,
+	"site_pos": 1
 }

@@ -1,5 +1,4 @@
-
 build/*
-cryptonice/__pychache__/*
+cryptonice/__pycache__/*
 cryptonice.egg-info/*
 dist/*
