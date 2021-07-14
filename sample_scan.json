@@ -17,5 +17,5 @@
 	"generate_json": true,
 	"json_path" : "./results",
 	"recommendations": false,
-	"targets": ["www.f5.com", "f5labs.com"]
+	"targets": ["www.buzzfeed.com"]
 }
