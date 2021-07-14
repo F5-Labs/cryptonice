@@ -17,5 +17,5 @@
 	"generate_json": true,
 	"json_path" : "./results",
 	"recommendations": false,
-	"targets": ["www.buzzfeed.com"]
+	"targets": ["1rx.io"]
 }
