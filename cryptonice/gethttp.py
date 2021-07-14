@@ -3,13 +3,11 @@
 
 import http.client
 import ssl
-
-# Wappalyzer Requirements
 import json
 import re
-from .wappalyze import wappalyze
-# import warnings
 import pkg_resources
+
+from .wappalyze import wappalyze
 from bs4 import BeautifulSoup
 
 
@@ -118,10 +116,9 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
         # print(f'{int_redirect}: Checking {str_host} at {str_path}')
 
         if usetls:
-            # print(f'Attempting HTTPS connection to {ip_address} using SNI of {str_host}')
+            print(f'Attempting HTTPS connection to {ip_address} using SNI of {str_host}')
             try:
-                conn = http.client.HTTPSConnection(str_host, int_port, timeout=5,
-                                                   context=ssl._create_unverified_context())
+                conn = http.client.HTTPSConnection(str_host, int_port, timeout=5, context=ssl._create_unverified_context())
                 conn.request("GET", str_path)
                 res = conn.getresponse()
                 pagebody = res.read()
@@ -159,6 +156,17 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
                     str_protocol = str_location[0]
                     str_host = str_location[1]
                     str_path = str_location[2]
+
+                #Occassionally a redirect will include a port number. We need to strip this from the host but
+                #we can use it to update the int_port variable just in case we get redirected to a non-standard HTTPS port.
+                int_colon = str_host.find(":")
+                if int_colon > 0:
+                    int_port = int(str_host[int_colon+1:len(str_host)])
+                    str_host = str_host[0:str_host.find(":")]
+
+                # DEBUG
+                print(f'{int_redirect}: Found new location at {str_host} with path {str_path} on port {int_port}')
+
 
                 # Some redirects will not specify a new domain name
                 # This prevents us having an empty host if only a new path is specified
