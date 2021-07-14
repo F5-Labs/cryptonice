@@ -29,8 +29,6 @@ tls_defaults = ['certificate_info', 'ssl_2_0_cipher_suites', 'ssl_3_0_cipher_sui
                     'tls_1_3_early_data', 'http_headers']
 
 
-
-
 def scanner_driver(input_data):
     b_httptohttps = False
     cryptonice_version = input_data['cn_version']
@@ -148,14 +146,6 @@ def scanner_driver(input_data):
 
         #All subsequent scans are now dependant on the goodToGo variable which is based on having a valid IP or performing a successful DNS lookup
         if goodToGo:
-            ############
-            # Lookup geolocation using Maxmind database
-            # NOTE: This is not enabled by default for public users of Cryptonice
-            if geolocation:
-                geo_data = getlocation(ip_address)
-            ###########
-
-
             str_host = hostname  # will allow data to be outputted even if port is closed
             # Now we begin the proper scans based on the port we've been asked to connect to
             target_portopen, target_tlsopen = port_open(ip_address, port)
@@ -179,8 +169,7 @@ def scanner_driver(input_data):
                 except KeyError:
                     http_body = False
 
-                redirection_results, http_data = get_http(ip_address, host_sni, port, target_tlsopen, http_body,
-                                                          force_redirect)
+                redirection_results, http_data = get_http(ip_address, host_sni, port, target_tlsopen, http_body, force_redirect)
 
                 if redirection_results == 'ERROR: Connection failed':
                     str_host = hostname  # default to original hostname if redirects failed
@@ -191,7 +180,30 @@ def scanner_driver(input_data):
                     str_path = redirection_results[1]  # updated path
                     b_httptohttps = redirection_results[2]  # updated http to https redirect
 
-                if 'TLS' in input_data['scans'] or 'tls' in input_data['scans']:
+                    # Update IP address based on new hostname in case it's changed
+                    new_dns_data = get_dns(str_host, False)
+
+                    if new_dns_data:
+                        try:
+                            ip_address = new_dns_data.get('records').get('A')[0]  # get first IP in list
+                            goodToGo = True
+                            print(f'{str_host} resolves to {ip_address}')
+                        except:
+                            str_error = "ERROR: Unable to resolve " + str_host + "(domain does not exist or may not have any A records)"
+                            new_dns_data = {str_error}
+                            print(str_error)
+
+                    # Recheck redirection on hew host
+                    redirection_results, http_data = get_http(ip_address, str_host, port, target_tlsopen, http_body, force_redirect)
+
+                ############
+                # Lookup geolocation using Maxmind database
+                # NOTE: This is not enabled by default for public users of Cryptonice
+                if geolocation:
+                    geo_data = getlocation(ip_address)
+                ###########
+
+                if 'TLS' in str(input_data['scans']).upper():
                     if target_tlsopen:
                         # List to hold desired ScanCommands for later
                         commands_to_run = []
@@ -217,12 +229,15 @@ def scanner_driver(input_data):
                     else:
                         tls_data = {'ERROR': 'Could not perform TLS handshake'}
 
+                try:
+                    # Failing to get a certificate_0 result, for whatever reason, will cause this to fail so we need to be prepared to skip
+                    if 'PWNED' in str(input_data['scans']).upper():
+                        cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
+                        pwned_data = check_key(cert_fingerprint)
+                except:
+                    pwned_data = {'Error:': 'Failed to retrieve leaf certificate. Unable to obtain fingerprint to check for pwned key.'}
 
-                if 'PWNED' in input_data['scans']:
-                    cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
-                    pwned_data = check_key(cert_fingerprint)
-
-                if 'HTTP2' in input_data['scans'] or 'http2' in input_data['scans']:
+                if 'HTTP2' in str(input_data['scans']).upper():
                     http2_data = check_http2(host_path, port)
 
                 #if 'JARM' in input_data['scans'] or 'jarm' in input_data['scans']:

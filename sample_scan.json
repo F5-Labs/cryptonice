@@ -17,5 +17,5 @@
 	"generate_json": true,
 	"json_path" : "./results",
 	"recommendations": false,
-	"targets": ["1rx.io"]
+	"targets": ["1rx.io", "nike.com", "www.nike.com", "f5.com","www.f5labs.com"]
 }
