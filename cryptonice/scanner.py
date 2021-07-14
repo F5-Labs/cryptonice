@@ -36,11 +36,12 @@ def scanner_driver(input_data):
     cryptonice_version = input_data['cn_version']
     job_id = input_data['id']
     port = input_data['port']
+    geolocation = False
 
     try:
         geolocation = input_data['geolocation']
     except:
-        geolocation = False
+        pass
 
     #For mass scanning:
     site_pos = 0
@@ -67,6 +68,7 @@ def scanner_driver(input_data):
     http_data = {}
     dns_data = {}
     http2_data = {}
+    geo_data = {}
 
     for hostname in input_data['targets']:  # host names to scan
         pwned_data = False
