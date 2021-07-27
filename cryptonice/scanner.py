@@ -3,7 +3,11 @@
 
 import socket, ipaddress
 
-from .getgeo import getlocation
+try:
+    from .getgeo import getlocation
+except ImportError:
+    pass
+
 
 from .output import writeToJSONFile, print_to_console
 from .gettls import tls_scan
@@ -200,7 +204,10 @@ def scanner_driver(input_data):
                 # Lookup geolocation using Maxmind database
                 # NOTE: This is not enabled by default for public users of Cryptonice
                 if geolocation:
-                    geo_data = getlocation(ip_address)
+                    try:
+                        geo_data = getlocation(ip_address)
+                    except:
+                        print('You must have the Maxmind GeoIP 2 module installed to make use of geolocation lookups')
                 ###########
 
                 if 'TLS' in str(input_data['scans']).upper():

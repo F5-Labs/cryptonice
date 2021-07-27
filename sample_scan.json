@@ -15,7 +15,8 @@
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"json_path" : "./results",
+	"json_path" : "./",
 	"recommendations": false,
-	"targets": ["1rx.io", "nike.com", "www.nike.com", "f5.com","www.f5labs.com"]
+	"geolocation": true,
+	"targets": ["feedburner.com"]
 }
