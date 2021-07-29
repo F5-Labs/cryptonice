@@ -140,7 +140,7 @@ def scanner_driver(input_data):
                     print(f'{hostname} resolves to {ip_address}')
                 except:
                     str_error = "Unable to resolve " + hostname + "(domain does not exist or may not have any A records)"
-                    dns_data = {'Error:' : str_error}
+                    dns_data = {str_error}
                     print(str_error)
 
         #########################################################################################################
@@ -194,7 +194,7 @@ def scanner_driver(input_data):
                             print(f'{str_host} resolves to {ip_address}')
                         except:
                             str_error = "Unable to resolve " + str_host + "(domain does not exist or may not have any A records)"
-                            new_dns_data = {'Error': str_error}
+                            new_dns_data = {str_error}
                             print(str_error)
 
                     # Recheck redirection on hew host
@@ -242,7 +242,7 @@ def scanner_driver(input_data):
                         cert_fingerprint = tls_data['certificate_info']['certificate_0']['fingerprint']
                         pwned_data = check_key(cert_fingerprint)
                 except:
-                    pwned_data = {'Error:': 'Failed to retrieve leaf certificate. Unable to obtain fingerprint to check for pwned key.'}
+                    pwned_data = {'Error': 'Failed to retrieve leaf certificate. Unable to obtain fingerprint to check for pwned key.'}
 
                 if 'HTTP2' in str(input_data['scans']).upper():
                     http2_data = check_http2(host_path, port)

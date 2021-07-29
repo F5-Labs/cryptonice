@@ -18,5 +18,5 @@
 	"json_path" : "./results/",
 	"recommendations": false,
 	"geolocation": true,
-	"targets": ["google.com", "apache.org"]
+	"targets": ["hackerone.com"]
 }
