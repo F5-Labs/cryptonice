@@ -52,7 +52,7 @@ def _prepare_app(app):
         obj = app[key]
         app[key] = {k.lower(): v for k, v in obj.items()}
 
-    for key in ['url', 'html', 'script']:
+    for key in ['url', 'html', 'script', 'implies']:
         app[key] = [_prepare_pattern(pattern) for pattern in app[key]]
 
     for key in ['headers', 'meta']:
@@ -61,8 +61,14 @@ def _prepare_app(app):
             obj[name] = _prepare_pattern(obj[name])
 
 def _prepare_pattern(pattern):
-    regex, _, rest = pattern.partition('\\;')
+    #print('Pattern = ' + str(pattern))
+    if isinstance(pattern, list):
+        regex, _, rest = pattern[0].partition('\\;')
+    else:
+        regex, _, rest = pattern.partition('\\;')
+
     try:
+        #print('Returning: ' + str(re.compile(regex, re.I)))
         return re.compile(regex, re.I)
     except re.error as e:
         ###warnings.warn("Caught '{error}' compiling regex: {regex}".format(error=e, regex=regex))
@@ -127,9 +133,14 @@ def wappalyze(webpage):
 
     category_wise = {}
     for app_name in detected:
-        cats = apps[app_name]['cats']
-        for cat in cats:
-            category_wise[app_name] = obj['categories'][str(cat)]['name']
+        # jQuery, as defined in technologies.json _still_ seems to cause errors, so all I can
+        # do at the moment is skip over if we can't complete successfully...
+        try:
+            cats = apps[app_name]['cats']
+            for cat in cats:
+                category_wise[app_name] = obj['categories'][str(cat)]['name']
+        except:
+            pass
     inv_map = {}
     for k, v in category_wise.items():
         inv_map[v] = inv_map.get(v, [])

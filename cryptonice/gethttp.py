@@ -136,6 +136,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
                 conn = http.client.HTTPConnection(ip_address, int_port, timeout=5)
                 conn.request('GET', str_path, headers={"Host": hostname})
                 res = conn.getresponse()
+                pagebody = res.read()
                 conn.close()
             except:
                 return [str_host, str_path, b_httptohttps], []
@@ -285,36 +286,36 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
 
     # Include page data in output if requested
     if http_pages:
-        connection_data.update({'Page': pagebody})
+        connection_data.update({'HTMLbody': pagebody})
 
 
     #### Wappalyzer build #####
-    try:
-        webpage = {}
+    #try:
+    webpage = {}
 
-        webpage['url'] = str_host + str_path
-        webpage['headers'] = res.headers
-        webpage['response'] = str(pagebody)
-        webpage['html'] = BeautifulSoup(str(pagebody), 'html.parser')
-        webpage['scripts'] = [script['src'] for script in webpage['html'].findAll('script', src=True)]
-        webpage['metatags'] = {meta['name'].lower(): meta['content']
-            for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
+    webpage['url'] = str_host + str_path
+    webpage['headers'] = res.headers
+    webpage['response'] = str(pagebody)
+    webpage['html'] = BeautifulSoup(str(pagebody), 'html.parser')
+    webpage['scripts'] = [script['src'] for script in webpage['html'].findAll('script', src=True)]
+    webpage['metatags'] = {meta['name'].lower(): meta['content']
+        for meta in webpage['html'].findAll('meta', attrs=dict(name=True, content=True))}
 
-        conn.close()
+    conn.close()
 
-        page = {}
-        page['scripts'] = webpage['scripts']
-        page['metatags'] = webpage['metatags']
+    page = {}
+    page['scripts'] = webpage['scripts']
+    page['metatags'] = webpage['metatags']
 
-        wapped = {}
-        elements = wappalyze(webpage)
-        for x in elements.items():
-            wapped.update({str(x[0]): x[1]})
+    wapped = {}
+    elements = wappalyze(webpage)
+    for x in elements.items():
+        wapped.update({str(x[0]): x[1]})
 
-        connection_data.update({'Components': wapped})
-        connection_data.update({'Page': page})
-    except:
-        pass
+    connection_data.update({'Components': wapped})
+    connection_data.update({'Page': page})
+    #except:
+        #pass
 
     return [str_host, str_path, b_httptohttps], connection_data
 
