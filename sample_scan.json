@@ -7,16 +7,16 @@
 	"_tls_params_if_blank": ["certificate_info", "ssl_2_0_cipher_suites", "ssl_3_0_cipher_suites", "tls_1_0_cipher_suites",
 	                    "tls_1_1_cipher_suites", "tls_1_2_cipher_suites", "tls_1_3_cipher_suites", "tls_compression",
 	                    "tls_1_3_early_data", "http_headers"],
-	"id": "Test scan",
+	"id": "2021-07-29",
 	"port": 443,
 	"scans": ["DNS", "HTTP2", "HTTP", "JARM", "TLS", "PWNED"],
 	"tls_params": [],
-	"http_body": true,
+	"http_body": false,
 	"force_redirect": true,
 	"print_out": true,
 	"generate_json": true,
-	"json_path" : "./",
+	"json_path" : "./results/",
 	"recommendations": false,
 	"geolocation": true,
-	"targets": ["feedburner.com"]
+	"targets": ["google.com", "apache.org"]
 }
