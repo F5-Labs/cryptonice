@@ -7,8 +7,7 @@ import dns.resolver
 def getDNSRecord(hostname, record_type):
     record_list = []
     got_record = False
-    #testdomain = dns.name.from_text(hostname)
-    #print(testdomain.labels)
+    #print('In getdns.py')
 
     try:
         while not got_record:
@@ -21,13 +20,22 @@ def getDNSRecord(hostname, record_type):
             answer = dns.resolver.resolve(hostname, record_type, raise_on_no_answer=False)
 
             if answer.rrset is None:
+                soa = dns.resolver.resolve(hostname, "SOA", raise_on_no_answer=False)
+                soa = soa[0].to_text().split('. ')[0]
+                print('No A record, attempting to find SOA')
+                '''
                 result = answer.response.authority[0].to_text()
+                print('No A record, found ' + str(result))
                 if "SOA" in result:
                     # Check for SOA's pointing to the same hostname and exit loop, if so
                     if result.split('. ')[0] == hostname:
                         got_record = True
+                        print('SOA points to same domain as original hostname')
                     else:
                         hostname = result.split('. ')[0]
+                        print('SOA points to ' + hostname)
+                '''
+                hostname = soa
             else:
                 for ipval in answer:
                     record_list.append(ipval.to_text())
