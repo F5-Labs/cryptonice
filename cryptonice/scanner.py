@@ -140,7 +140,7 @@ def scanner_driver(input_data):
                     print(f'{hostname} resolves to {ip_address}')
                 except:
                     str_error = "Unable to resolve " + hostname + "(domain does not exist or may not have any A records)"
-                    dns_data = {str_error}
+                    dns_data = ({'Error': str_error})
                     print(str_error)
 
         #########################################################################################################
@@ -194,7 +194,7 @@ def scanner_driver(input_data):
                             print(f'{str_host} resolves to {ip_address}')
                         except:
                             str_error = "Unable to resolve " + str_host + "(domain does not exist or may not have any A records)"
-                            new_dns_data = {str_error}
+                            new_dns_data = ({'Error': str_error})
                             print(str_error)
 
                     # Recheck redirection on hew host

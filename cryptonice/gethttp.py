@@ -286,7 +286,7 @@ def get_http(ip_address, hostname, int_port, usetls, http_pages, force_redirect)
 
     # Include page data in output if requested
     if http_pages:
-        connection_data.update({'HTMLbody': pagebody})
+        connection_data.update({'HTMLbody': str(pagebody)})
 
 
     #### Wappalyzer build #####
